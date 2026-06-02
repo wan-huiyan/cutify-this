@@ -73,6 +73,7 @@ All three ship as a single SVG file. No `.ico`, no PNG fallbacks, no PWA manifes
 - **Live verification loop** — `/tmp/favicon_preview.html` rendering the favicon at 16/32/64/128 px so you iterate against real tab size, not the enlarged SVG
 - **Tab-edge / tab-background diagnosis** — three distinct failure modes (chrome blending, dark-mode mismatch, light-tab silhouette vanish) with decision trees for each
 - **Dark-mode-aware favicons** — the two-file `<link media>` recipe that works in Chrome 92+, Firefox, and Safari (single-file CSS-in-SVG `@media` is ignored by Chrome for favicons — this is documented in the skill)
+- **Cache-bust recipe for *replacing* a favicon** — when you change an already-shipped icon and the live tab stubbornly shows the old one, the fix isn't "tell users to clear their cache." Bump a `?v=N` query on the `<link rel="icon">` href so the new URL re-fetches for everyone (Step 3b)
 
 ## Installation
 
@@ -108,6 +109,21 @@ The skill documents three distinct ways favicons silently break at real tab size
 | 3 | **Light-tab silhouette vanish** | Dark mocks + dark-mode tabs | Light-mode inactive tab (Chrome's grey-sage `#c2c5be`) | Tint body to Tailwind `*-300` tier, or add tile, or add outline |
 
 Failure #3 is the subtle one: `prefers-color-scheme` does NOT fix it — Chrome is technically in light mode while showing the grey-sage inactive tab, so the light-mode variant fires, which is the white body that disappears.
+
+## Replacing a favicon? Cache-bust the link
+
+A *fourth* failure mode, and the one most often mis-diagnosed as "Chrome is just stubborn about its cache": you deploy a new favicon, the server serves it correctly, but every browser tab keeps showing the **old** icon — even after a hard-refresh.
+
+Favicons live in a **separate cache keyed on the icon URL**, not on the page. If you changed `favicon.svg`'s contents but left the `<link rel="icon">` href URL unchanged, the browser sees the same URL and serves the stale icon indefinitely, for every returning user. Incognito shows the new one (proving the server is right) but the normal profile stays stale.
+
+**Fix — one line, ships to all users:** bump a version query on the href.
+
+```html
+<!-- before --> <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<!-- after  --> <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=2">
+```
+
+The query doesn't change what static servers return — it only changes the cache key, forcing a fresh fetch for *every* browser (including already-poisoned ones). Bump the integer on each subsequent swap. See **Step 3b** in the skill.
 
 ## Examples directory
 
@@ -253,6 +269,7 @@ None at runtime — the output is a single SVG file. The skill assumes the user'
 
 ## Version history
 
+- **v1.11.0** (2026-06-02) — Added **Step 3b — cache-bust the favicon link when replacing an existing icon.** Fixes the long-standing gap where the only cache advice was "hard-refresh / incognito," which doesn't help when a *changed* favicon stays stale on returning users' tabs. The deterministic fix is a `?v=N` version query on the `<link rel="icon">` href (new URL = new cache key = forced re-fetch for everyone). Source: field testing — a deployed monkey→butterfly swap was server-correct but tab-stale until `favicon.svg` → `favicon.svg?v=2`.
 - **v1.10.0** (2026-05-28) — Big catalog expansion. Removed 4 mascots that didn't land (`blob_hugg`, `pixel_cat_meow`, `pixel_hyper_cat`, `pixel_monkey`). Added 50 new originals across five families: 15 animals (panda, penguin, fox, owl, pig, duckling, cow, puppy, seal, otter, hedgehog, axolotl, capybara, corgi, quokka), 10 sweets/food (donut, cupcake, ice cream, boba, macaron, pancakes, onigiri, sushi, taiyaki, pudding), 10 nature/objects (mushroom, rainbow, star face, moon, sun, flower, cactus, tea cup, planet, acorn), 5 silhouettes (cat, bunny, heart, star, cloud), and 10 emotion blobs (sparkles, giggle, blush, dreamy, proud, party, cozy, wave, bubble heart, thinking). Catalog now: 56 pixel + 22 blob = 78 starter SVGs.
 - **v1.9.0** (2026-05-28) — Added 10 new starter mascots (6 pixel + 4 blob) inspired by a Slack emoji wishlist. Pixel: `sheep`, `cat_meow`, `cat_love`, `shy_cat`, `hyper_cat`, `monkey`. Blob: `hugg`, `woah`, `cheer`, `love_rays` (no-face radiating heart). IP-protected source emojis were skipped — all designs are original.
 - **v1.8.0** (2026-05-27) — Expanded Technique B emotion vocabulary: swapped `blob_mint` to a wink and added 5 new emotion blobs (heart-eyes, smug, surprise, starry, kissy). Gradient blobs now cover 9 distinct emotions, useful for mood-picker UIs.
