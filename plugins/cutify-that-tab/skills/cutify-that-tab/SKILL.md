@@ -16,8 +16,8 @@ description: |
   a corporate/photographic logo — this skill is for hand-authored, cute,
   low-effort icons.
 author: Claude Code
-version: 1.10.0
-date: 2026-05-28
+version: 1.11.0
+date: 2026-06-02
 ---
 
 # Cutify That Tab ✨
@@ -405,6 +405,53 @@ That's it. **You don't need:**
 For Option A (emoji), put the data URI directly in `href=`. No file
 needed; the `<link>` tag itself is the asset.
 
+### Step 3b — REPLACING an existing favicon: cache-bust the `<link>` href
+
+**This is the single most important step when you're *changing* a
+favicon that has already shipped — not adding a first one.** It is also
+the step most often missed, because it produces the classic false
+report: *"I deployed the new icon but the live tab still shows the old
+one — Chrome is just being stubborn about its cache."* That's only half
+true, and there IS a deterministic fix.
+
+**Why a hard-refresh doesn't fix it.** Browsers cache favicons in a
+**separate, extremely sticky cache**, keyed on the icon **URL** — not
+on the page. Cmd+Shift+R / Ctrl+F5 reload the *page* but routinely do
+**not** evict the favicon. So if you change `favicon.svg`'s *contents*
+but leave the `<link rel="icon">` href URL identical
+(`/static/favicon.svg`), the browser sees the same URL, assumes the
+same icon, and serves the stale one **indefinitely** — for every user
+who ever loaded the old one, not just you. Incognito shows the new icon
+(proving the *server* is correct) but the normal profile stays stale.
+
+**The fix: change the URL so it becomes a new cache key.** Append a
+version query to the href and bump it every time you change the icon:
+
+```html
+<!-- first ship -->
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<!-- after you change favicon.svg's contents, bump the version: -->
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=2">
+```
+
+- The query string does **not** change what the server returns —
+  Flask/Express/nginx static handlers ignore `?v=…` and serve the same
+  file. It only changes the *cache key the browser stores it under*.
+- Because the URL is new, **every** browser re-fetches on next load —
+  including the ones already poisoned with the old icon. No "please
+  clear your cache" instructions to users; the fix ships in the HTML.
+- In a templating engine, keep `url_for`/asset helpers and append the
+  query after: `href="{{ url_for('static', filename='favicon.svg') }}?v=2"`.
+- Bump the number (`?v=2` → `?v=3`) on each subsequent change. (A
+  content hash works too, but a hand-bumped integer is plenty for a
+  favicon.)
+
+**Telling first-add from a replacement:** if the project already has a
+`<link rel="icon">` pointing at an asset that exists, you are
+*replacing* — add/bump `?v=`. If there's no favicon link at all, you're
+adding the first one — no version query needed yet (but adding `?v=1`
+now makes the next swap painless).
+
 ### Step 4 — verify at real tab size
 
 This is the validation step people skip — and the one where pixel-art
@@ -584,8 +631,12 @@ After wiring up:
 
 - [ ] `curl /static/favicon.svg` (or whatever path) returns 200 + the SVG
 - [ ] Page HTML contains `<link rel="icon" type="image/svg+xml" href="..."`
+- [ ] **If replacing an existing favicon:** the href carries a bumped
+      `?v=N` query (Step 3b) — without it, returning users keep the old
+      cached icon even after deploy, and a hard-refresh won't fix it
 - [ ] Browser tab shows the new favicon (force-refresh with Cmd+Shift+R
-      on Mac; Chrome aggressively caches favicons)
+      on Mac; Chrome aggressively caches favicons — if it stays stale
+      after a replace, you forgot the `?v=` bump)
 - [ ] At 1× zoom the icon is legible/recognizable (the tab-size test)
 - [ ] At 2× zoom (retina) the icon is crisp, not blurry
 
@@ -661,9 +712,15 @@ tile, not the mascot.
 
 ### Common gotchas
 
-- **Browser caches favicons aggressively.** After changing the SVG,
-  Cmd+Shift+R (Mac) or Ctrl+F5 (Win/Linux) to force-refresh; or open in
-  incognito. Some browsers cache for 24h+ in normal mode.
+- **Browser caches favicons aggressively — and a hard-refresh often
+  does NOT evict them.** The favicon cache is separate from the page
+  cache and keyed on the icon URL. For a *first* add, Cmd+Shift+R (Mac)
+  / Ctrl+F5 (Win/Linux) or incognito is usually enough. But when you've
+  *changed* an already-shipped favicon and the live tab still shows the
+  old one, don't conclude "Chrome is just stubborn" — the real fix is to
+  **bump a `?v=N` query on the `<link rel="icon">` href** so the URL
+  becomes a new cache key. See **Step 3b** above. This ships the fix to
+  all users in the HTML instead of asking each one to clear their cache.
 - **`<text>` inside SVG favicons uses the system font, not your
   webfonts.** Webfonts load after the favicon does. Pick a font-family
   that resolves immediately: `-apple-system, system-ui, sans-serif`.
@@ -692,6 +749,20 @@ tile, not the mascot.
 
 ### Changelog
 
+- **v1.11.0 (2026-06-02):** Added **Step 3b — cache-bust the `<link>`
+  href when REPLACING an existing favicon.** Corrects the long-standing
+  gap where the skill's only cache advice was "hard-refresh / incognito
+  / caches 24h" — which does NOT fix the common case of a *changed*
+  favicon staying stale on the live tab for returning users. The
+  deterministic fix is a `?v=N` version query on the icon href (new URL
+  = new cache key = forced re-fetch for all users, shipped in the HTML).
+  Updated the "Common gotchas" bullet and the Verification checklist to
+  point at it. Source: field testing 2026-06-02 — a deployed
+  monkey→butterfly favicon swap was correctly served by the server
+  (verified via image-SHA ancestry) but every browser kept the cached
+  monkey in the tab; `favicon.svg` → `favicon.svg?v=2` shipped the fix
+  to all users in one line. Prior guidance had repeatedly mis-attributed
+  this to "Chrome being stubborn" with no real remedy.
 - **v1.10.0 (2026-05-28):** Big catalog expansion. Dropped 4 mascots
   that didn't land (`blob_hugg`, `pixel_cat_meow`, `pixel_hyper_cat`,
   `pixel_monkey`). Added 50 originals across five families: 15 animals
