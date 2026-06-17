@@ -1,9 +1,9 @@
 {
   "name": "cutify-that-tab",
   "description": "Add a cute, hand-authored SVG favicon to a web app. Three techniques (emoji, gradient blob, 16×16 pixel art) — ships with 56 pixel-art mascots and 22 emotion-variant gradient blobs.",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "author": { "name": "Huiyan Wan" },
-  "repository": "https://github.com/wan-huiyan/cutify-that-tab",
+  "repository": "https://github.com/wan-huiyan/cutify-this",
   "license": "MIT",
   "keywords": ["claude-code", "claude-code-skill", "favicon", "svg", "frontend", "pixel-art"]
 }
