@@ -1,25 +1,26 @@
 # cutify-this ✨
 
-> A little **bundle of cute web skills** for Claude Code. Cutify the browser **tab** (hand-authored SVG favicons) and sparkle up the whole **page** (fairy cursor, sparkle trails, scroll progress, confetti, floaters).
+> A little **bundle of cute web skills** for Claude Code. Cutify the browser **tab** (hand-authored SVG favicons), sparkle up the whole **page** (fairy cursor, sparkle trails, scroll progress, confetti, floaters), and pop your repo's **README** (a cute house-style front page).
 
 [![license](https://img.shields.io/github/license/wan-huiyan/cutify-this)](LICENSE)
 [![last commit](https://img.shields.io/github/last-commit/wan-huiyan/cutify-this)](https://github.com/wan-huiyan/cutify-this/commits)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-skills-orange)](https://claude.com/claude-code)
 
-## Two skills in the bundle
+## Three skills in the bundle
 
 | Skill | What it does | Install |
 |---|---|---|
 | 🎀 **cutify-that-tab** | cute hand-authored SVG favicons — emoji / gradient blob / pixel-art mascot (78 starters) | `/plugin install cutify-that-tab@wan-huiyan-cutify-this` |
 | ✨ **sparkle-that-page** | cute zero-dep page effects — fairy cursor, sparkle trail, scroll indicator, tab peekaboo, confetti, floaters, cute-chrome | `/plugin install sparkle-that-page@wan-huiyan-cutify-this` |
+| 🪄 **pop-that-readme** | a cute, high-signal README in the house style — pixel hero, badges, value-prop, emoji feature table, install block, honesty box | `/plugin install pop-that-readme@wan-huiyan-cutify-this` |
 
-Add the marketplace once, then install either (or both):
+Add the marketplace once, then install any (or all):
 
 ```bash
 /plugin marketplace add wan-huiyan/cutify-this
 ```
 
-> Renamed from `cutify-that-tab` → `cutify-this` (the repo now hosts two skills). Old links redirect automatically.
+> Renamed from `cutify-that-tab` → `cutify-this` (the repo now hosts three skills). Old links redirect automatically.
 
 ---
 
@@ -44,6 +45,17 @@ Seven self-contained, **zero-dependency** effects — one short vanilla file eac
 Every motion effect respects `prefers-reduced-motion`, overlays never block clicks, pointer effects no-op on touch, and each exposes `SparkleThatPage.<name>.destroy()` for SPA cleanup. The bundled `examples/demo.html` (the live demo above) toggles all seven and doubles as the verify tool.
 
 **Prior art** — heavier off-the-shelf options if you'd rather not hand-author: [tholman/cursor-effects](https://github.com/tholman/cursor-effects) (the classic fairy-dust / snowflake / bubble cursors), [party.js](https://party.js.org/), [canvas-confetti](https://github.com/catdad/canvas-confetti), [tsParticles](https://github.com/tsparticles/tsparticles). This bundle stays hand-authored & dependency-free so Claude can author + wire it (and pixel-art variants) for you.
+
+---
+
+## 🪄 pop-that-readme — a README that pops
+
+The skill behind *this* README. It gives Claude the recipe + a fill-in template to author a cute, high-signal repo front page in the house style:
+
+- **An 11-section recipe** (hero → badges → bold value-prop → captioned demo → why-it-exists → emoji feature table → install block → usage → contributors → honesty box → footer) — front-load value, stay scannable.
+- **Baked-in hero recipes** — an ASCII box hero (works anywhere) + a copy-paste pixel-SVG hero (`shape-rendering="crispEdges"`); hand off to `pixel-art` / `css-animated-svg-scenes` for animated banners.
+- **Voice rules** — value prop = one bold sentence; every claim earns a number; emoji as wayfinding; an honesty section as a feature.
+- **A fill-in template** (`examples/README.template.md`) + a pre-ship **quality checklist**.
 
 ---
 
