@@ -32,8 +32,10 @@
     }
   }
   var lastMove = 0, mx = 0, my = 0, moved = false;
-  addEventListener("mousemove", function (e) { mx = e.clientX; my = e.clientY; moved = true; }, { passive: true });
-  addEventListener("click", function (e) { spawn(e.clientX, e.clientY, 14, 6); }, { passive: true });
+  function onMove(e) { mx = e.clientX; my = e.clientY; moved = true; }
+  function onClick(e) { spawn(e.clientX, e.clientY, 14, 6); }
+  addEventListener("mousemove", onMove, { passive: true });
+  addEventListener("click", onClick, { passive: true });
 
   var raf;
   function tick() {
@@ -50,5 +52,5 @@
   raf = requestAnimationFrame(tick);
 
   window.SparkleThatPage = window.SparkleThatPage || {};
-  window.SparkleThatPage.sparkleTrail = { destroy: function () { cancelAnimationFrame(raf); layer.remove(); } };
+  window.SparkleThatPage.sparkleTrail = { destroy: function () { cancelAnimationFrame(raf); removeEventListener("mousemove", onMove); removeEventListener("click", onClick); layer.remove(); } };
 })();
