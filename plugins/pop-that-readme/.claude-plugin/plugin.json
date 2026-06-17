@@ -1,0 +1,9 @@
+{
+  "name": "pop-that-readme",
+  "description": "Author a cute, high-signal GitHub README in a polished house style: a pixel/arcade hero, a badge row, a bold one-line value prop, a captioned demo image, an emoji feature table, a copy-paste install block, a contributors shoutout, and an honest limitations section. Ships a fill-in template + baked-in hero recipes (ASCII + pixel SVG).",
+  "version": "1.0.0",
+  "author": { "name": "Huiyan Wan" },
+  "repository": "https://github.com/wan-huiyan/cutify-this",
+  "license": "MIT",
+  "keywords": ["claude-code", "claude-code-skill", "readme", "documentation", "github", "markdown", "pixel-art", "open-source", "cute"]
+}
