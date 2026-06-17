@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>✨ sparkle-that-page — live demo</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%A8%3C/text%3E%3C/svg%3E">
+  <!-- cute-chrome is global (selection / scrollbar) and always on in this demo -->
+  <link rel="stylesheet" href="./cute_chrome.css">
+  <style>
+    :root { color-scheme: light; }
+    body {
+      margin: 0; font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: #4c1d63; background: linear-gradient(180deg, #fdf2f8 0%, #f5f3ff 50%, #eff6ff 100%);
+    }
+    header { text-align: center; padding: 64px 20px 28px; }
+    header h1 { font-size: 2.4rem; margin: 0 0 6px; letter-spacing: -.5px; }
+    header p { margin: 4px auto; max-width: 640px; color: #7c3aed; }
+    code.install {
+      display: inline-block; margin-top: 12px; padding: 8px 14px; border-radius: 10px;
+      background: #fff; border: 1px solid #f0abfc; color: #a21caf; font-size: 13.5px;
+    }
+    main { max-width: 720px; margin: 0 auto; padding: 0 24px 160px; }
+    section {
+      margin: 28px 0; padding: 28px; border-radius: 18px; background: rgba(255,255,255,.7);
+      border: 1px solid #fbcfe8; box-shadow: 0 6px 24px rgba(192,132,252,.12);
+    }
+    section h2 { margin-top: 0; color: #be185d; }
+    .btn {
+      cursor: pointer; border: none; border-radius: 12px; padding: 12px 20px; margin: 6px 6px 0 0;
+      font: inherit; font-weight: 600; color: #fff; background: linear-gradient(135deg, #f472b6, #c084fc);
+      box-shadow: 0 4px 14px rgba(192,132,252,.4);
+    }
+    .spinner-row { display: flex; align-items: center; gap: 18px; margin-top: 14px; }
+    aside#panel {
+      position: fixed; top: 14px; right: 14px; z-index: 2147483640; width: 232px;
+      background: rgba(255,255,255,.96); border: 1px solid #f0abfc; border-radius: 16px;
+      padding: 14px 16px; box-shadow: 0 10px 30px rgba(168,85,247,.22); font-size: 13.5px;
+    }
+    aside#panel h3 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: .5px; color: #a855f7; }
+    .ctl { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 7px 0; }
+    .ctl label { display: flex; align-items: center; gap: 7px; cursor: pointer; }
+    .ctl select { font: inherit; font-size: 12px; border-radius: 7px; border: 1px solid #e9d5ff; padding: 2px 4px; background: #fff; }
+    .note { margin-top: 10px; padding-top: 10px; border-top: 1px dashed #f0abfc; color: #9333ea; font-size: 12px; }
+    @media (max-width: 640px) { aside#panel { position: static; width: auto; margin: 16px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>✨ sparkle-that-page</h1>
+    <p>Cute, zero-dependency page effects. Flip the switches → watch the page come alive. Part of the <strong>cutify-this</strong> bundle.</p>
+    <code class="install">/plugin install sparkle-that-page@wan-huiyan-cutify-this</code>
+  </header>
+
+  <aside id="panel">
+    <h3>✨ Toggle effects</h3>
+    <div id="controls"></div>
+    <div class="note">cute-chrome is always on — select this text, hover the buttons, peek at the scrollbar &amp; spinner below. Everything respects <code>prefers-reduced-motion</code>.</div>
+  </aside>
+
+  <main>
+    <section>
+      <h2>Move your mouse around ✦</h2>
+      <p>Turn on <strong>Fairy cursor</strong> and <strong>Sparkle trail</strong>, then drift the pointer across the page. Click anywhere for a little burst.</p>
+      <button class="btn stp-wobble" data-confetti>🎉 Click me!</button>
+      <button class="btn stp-wobble" data-confetti>💖 And me!</button>
+    </section>
+
+    <section>
+      <h2>Loading, the cute way</h2>
+      <p>A kawaii three-dot spinner from <code>cute_chrome.css</code> — no SVG, no GIF, pure CSS:</p>
+      <div class="spinner-row"><span class="stp-spinner"></span> <em>fetching adorable things…</em></div>
+    </section>
+
+    <section>
+      <h2>Scroll down to fill the meter 📜</h2>
+      <p>Turn on the <strong>Scroll indicator</strong> (ring / comet / mascot) and scroll — it tracks how far down the page you are.</p>
+    </section>
+
+    <section>
+      <h2>Switch tabs and come back 👀</h2>
+      <p>With <strong>Tab-title peekaboo</strong> on, click away to another browser tab — the title (and favicon) turn into a little "come back! 🥺", then restore when you return.</p>
+    </section>
+
+    <section>
+      <h2>A gentle snowfall of petals 🌸</h2>
+      <p>Turn on <strong>Ambient floaters</strong> and pick sakura, bubbles, snow, or sparkle dust drifting quietly behind the content.</p>
+    </section>
+
+    <section>
+      <h2>Plenty of room to scroll</h2>
+      <p>This section exists so the scroll meter has somewhere to go. Keep scrolling…</p>
+      <p style="height:60vh;display:flex;align-items:flex-end;color:#c084fc">…almost at the bottom ✦</p>
+    </section>
+  </main>
+
+  <script>
+    // Each effect: dataset key it reads, its file, and variant options.
+    var EFFECTS = [
+      { key: "fairyCursor",     file: "fairy_cursor.js",       label: "🪄 Fairy cursor",      attr: "wand",     variants: ["star", "heart", "moon", "pixel"] },
+      { key: "sparkleTrail",    file: "sparkle_trail.js",      label: "✨ Sparkle trail",     attr: "trail",    variants: ["sparkle", "star", "heart", "pixel"] },
+      { key: "scrollIndicator", file: "scroll_indicator.js",   label: "📜 Scroll indicator",  attr: "scroll",   variants: ["ring", "comet", "mascot"] },
+      { key: "tabPeekaboo",     file: "tab_title_peekaboo.js", label: "👀 Tab peekaboo",      attr: null,       variants: [] },
+      { key: "clickConfetti",   file: "click_confetti.js",     label: "🎉 Click confetti",    attr: "confetti", variants: ["heart", "star", "confetti", "petal", "pixel"] },
+      { key: "ambientFloaters", file: "ambient_floaters.js",   label: "🌸 Ambient floaters",  attr: "floaters", variants: ["sakura", "bubbles", "snow", "dust"] }
+    ];
+    var injCount = 0;
+    var box = document.getElementById("controls");
+
+    function enable(eff) {
+      var sel = document.getElementById("sel-" + eff.key);
+      if (eff.attr && sel) document.documentElement.dataset[eff.attr] = sel.value;
+      if (eff.key === "tabPeekaboo") {
+        document.documentElement.dataset.peekabooMsg = "come back! 🥺";
+        document.documentElement.dataset.peekabooFavicon = "🥺";
+      }
+      var s = document.createElement("script");
+      s.src = "./" + eff.file + "?v=" + (++injCount);
+      s.setAttribute("data-stp", eff.key);
+      document.body.appendChild(s);
+    }
+    function disable(eff) {
+      var api = window.SparkleThatPage && window.SparkleThatPage[eff.key];
+      if (api && api.destroy) api.destroy();
+      if (window.SparkleThatPage) delete window.SparkleThatPage[eff.key];
+      var s = document.querySelector('script[data-stp="' + eff.key + '"]');
+      if (s) s.remove();
+    }
+    function isOn(eff) { return document.getElementById("chk-" + eff.key).checked; }
+
+    EFFECTS.forEach(function (eff) {
+      var row = document.createElement("div"); row.className = "ctl";
+      var lab = document.createElement("label");
+      var chk = document.createElement("input"); chk.type = "checkbox"; chk.id = "chk-" + eff.key;
+      lab.appendChild(chk); lab.appendChild(document.createTextNode(eff.label));
+      row.appendChild(lab);
+      if (eff.variants.length) {
+        var sel = document.createElement("select"); sel.id = "sel-" + eff.key;
+        eff.variants.forEach(function (v) { var o = document.createElement("option"); o.value = v; o.textContent = v; sel.appendChild(o); });
+        sel.addEventListener("change", function () { if (isOn(eff)) { disable(eff); enable(eff); } });
+        row.appendChild(sel);
+      }
+      chk.addEventListener("change", function () { chk.checked ? enable(eff) : disable(eff); });
+      box.appendChild(row);
+    });
+  </script>
+</body>
+</html>
