@@ -97,15 +97,16 @@
   <script>
     // Each effect: dataset key it reads, its file, and variant options.
     var EFFECTS = [
-      { key: "fairyCursor",     file: "fairy_cursor.js",       label: "🪄 Fairy cursor",      attr: "wand",     variants: ["star", "heart", "moon", "pixel"] },
-      { key: "sparkleTrail",    file: "sparkle_trail.js",      label: "✨ Sparkle trail",     attr: "trail",    variants: ["sparkle", "star", "heart", "pixel"] },
+      { key: "fairyCursor",     file: "fairy_cursor.js",       label: "🪄 Fairy cursor",      attr: "wand",     variants: ["star", "heart", "moon", "pixel", "sailormoon"] },
+      { key: "sparkleTrail",    file: "sparkle_trail.js",      label: "✨ Sparkle trail",     attr: "trail",    variants: ["sparkle", "star", "heart", "pixel", "fairydust"] },
       { key: "scrollIndicator", file: "scroll_indicator.js",   label: "📜 Scroll indicator",  attr: "scroll",   variants: ["ring", "comet", "mascot"] },
       { key: "tabPeekaboo",     file: "tab_title_peekaboo.js", label: "👀 Tab peekaboo",      attr: null,       variants: [] },
       { key: "clickConfetti",   file: "click_confetti.js",     label: "🎉 Click confetti",    attr: "confetti", variants: ["heart", "star", "confetti", "petal", "pixel"] },
-      { key: "ambientFloaters", file: "ambient_floaters.js",   label: "🌸 Ambient floaters",  attr: "floaters", variants: ["sakura", "bubbles", "snow", "dust"] }
+      { key: "ambientFloaters", file: "ambient_floaters.js",   label: "🌸 Ambient floaters",  attr: "floaters", variants: ["sakura", "leaves", "snowflake", "bubbles", "dust", "fairydust"] }
     ];
     var injCount = 0;
     var box = document.getElementById("controls");
+    document.documentElement.dataset.palette = "candy";
 
     function enable(eff) {
       var sel = document.getElementById("sel-" + eff.key);
@@ -127,6 +128,22 @@
       if (s) s.remove();
     }
     function isOn(eff) { return document.getElementById("chk-" + eff.key).checked; }
+
+    // Color palette (applies to trail / confetti / floaters). Changing it re-injects active effects.
+    (function () {
+      var row = document.createElement("div"); row.className = "ctl";
+      var lab = document.createElement("label"); lab.textContent = "🎨 Palette";
+      var sel = document.createElement("select"); sel.id = "sel-palette";
+      ["candy", "neon", "meadow"].forEach(function (v) { var o = document.createElement("option"); o.value = v; o.textContent = v; sel.appendChild(o); });
+      sel.addEventListener("change", function () {
+        document.documentElement.dataset.palette = sel.value;
+        EFFECTS.forEach(function (eff) {
+          var c = document.getElementById("chk-" + eff.key);
+          if (c && c.checked) { disable(eff); enable(eff); }
+        });
+      });
+      row.appendChild(lab); row.appendChild(sel); box.appendChild(row);
+    })();
 
     EFFECTS.forEach(function (eff) {
       var row = document.createElement("div"); row.className = "ctl";
