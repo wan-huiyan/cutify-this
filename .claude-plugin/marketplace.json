@@ -1,12 +1,20 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "wan-huiyan-cutify-that-tab",
-  "description": "Cute, hand-authored SVG favicons for web apps — three techniques, 56 pixel-art mascots, and 22 emotion-variant gradient blobs in a single skill.",
+  "name": "wan-huiyan-cutify-this",
+  "description": "cutify-this — a bundle of cute web skills. Cutify the browser tab (hand-authored SVG favicons) and sparkle up the whole page (fairy cursor, sparkle trails, scroll progress, confetti, floaters).",
   "owner": { "name": "Huiyan Wan" },
-  "plugins": [{
-    "name": "cutify-that-tab",
-    "source": "./plugins/cutify-that-tab",
-    "description": "Add a cute SVG favicon: emoji, gradient blob (happy / wink / heart-eyes / smug / surprised / starry / kissy / sleepy / anime), or 16×16 pixel-art mascot.",
-    "version": "1.10.0"
-  }]
+  "plugins": [
+    {
+      "name": "cutify-that-tab",
+      "source": "./plugins/cutify-that-tab",
+      "description": "Add a cute SVG favicon: emoji, gradient blob, or 16×16 pixel-art mascot. 56 pixel-art mascots + 22 emotion gradient blobs.",
+      "version": "1.11.0"
+    },
+    {
+      "name": "sparkle-that-page",
+      "source": "./plugins/sparkle-that-page",
+      "description": "Cute zero-dep page effects: fairy-wand cursor, sparkle trail, animated scroll-depth indicator, tab-title peekaboo, click confetti, ambient floaters, cute-chrome touches. Pixel-art variant on each.",
+      "version": "1.0.0"
+    }
+  ]
 }

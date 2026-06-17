@@ -1,0 +1,9 @@
+{
+  "name": "sparkle-that-page",
+  "description": "Add cute, zero-dependency page effects to a web app: a fairy-wand custom cursor, sparkle trail on mouse move + click, an animated floating scroll-depth/progress indicator, tab-title peekaboo, click confetti / heart burst, ambient floaters (petals/bubbles/snow), and cute-chrome touches (::selection, wobble hover, kawaii spinner). Pixel-art style variant on each.",
+  "version": "1.0.0",
+  "author": { "name": "Huiyan Wan" },
+  "repository": "https://github.com/wan-huiyan/cutify-this",
+  "license": "MIT",
+  "keywords": ["claude-code", "claude-code-skill", "cursor", "sparkle", "scroll-progress", "confetti", "animation", "pixel-art", "frontend", "cute"]
+}
