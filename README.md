@@ -1,11 +1,55 @@
-# Cutify That Tab ✨
+# cutify-this ✨
+
+> A little **bundle of cute web skills** for Claude Code. Cutify the browser **tab** (hand-authored SVG favicons) and sparkle up the whole **page** (fairy cursor, sparkle trails, scroll progress, confetti, floaters).
+
+[![license](https://img.shields.io/github/license/wan-huiyan/cutify-this)](LICENSE)
+[![last commit](https://img.shields.io/github/last-commit/wan-huiyan/cutify-this)](https://github.com/wan-huiyan/cutify-this/commits)
+[![Claude Code](https://img.shields.io/badge/Claude_Code-skills-orange)](https://claude.com/claude-code)
+
+## Two skills in the bundle
+
+| Skill | What it does | Install |
+|---|---|---|
+| 🎀 **cutify-that-tab** | cute hand-authored SVG favicons — emoji / gradient blob / pixel-art mascot (78 starters) | `/plugin install cutify-that-tab@wan-huiyan-cutify-this` |
+| ✨ **sparkle-that-page** | cute zero-dep page effects — fairy cursor, sparkle trail, scroll indicator, tab peekaboo, confetti, floaters, cute-chrome | `/plugin install sparkle-that-page@wan-huiyan-cutify-this` |
+
+Add the marketplace once, then install either (or both):
+
+```bash
+/plugin marketplace add wan-huiyan/cutify-this
+```
+
+> Renamed from `cutify-that-tab` → `cutify-this` (the repo now hosts two skills). Old links redirect automatically.
+
+---
+
+## ✨ sparkle-that-page — cute page effects
+
+**▶ Live demo: https://wan-huiyan.github.io/cutify-this/**
+
+Seven self-contained, **zero-dependency** effects — one short vanilla file each, copy-and-edit, no npm/build. Wire with `<script>` / `<link>`, then set options on `<html data-*>`:
+
+| Effect | File | Options (`data-*`) |
+|---|---|---|
+| 🪄 Fairy-wand cursor | `fairy_cursor.js` | `data-wand` = star · heart · moon · pixel · **sailormoon** |
+| ✨ Sparkle trail | `sparkle_trail.js` | `data-trail` = sparkle · star · heart · pixel · **fairydust** |
+| 📜 Scroll-depth indicator | `scroll_indicator.js` | `data-scroll` = ring · comet · mascot |
+| 👀 Tab-title peekaboo | `tab_title_peekaboo.js` | `data-peekaboo-msg`, `data-peekaboo-favicon` |
+| 🎉 Click confetti | `click_confetti.js` | `data-confetti` = heart · star · confetti · petal · pixel |
+| 🌸 Ambient floaters | `ambient_floaters.js` | `data-floaters` = sakura · leaves · snowflake · bubbles · dust · fairydust |
+| 🎀 Cute-chrome touches | `cute_chrome.css` | `.stp-wobble`, `.stp-spinner`, pastel `::selection` + scrollbar |
+
+**Color palette** across the particle effects: `<html data-palette="candy">` — **candy** (default), **neon** (glow), **meadow**.
+
+Every motion effect respects `prefers-reduced-motion`, overlays never block clicks, pointer effects no-op on touch, and each exposes `SparkleThatPage.<name>.destroy()` for SPA cleanup. The bundled `examples/demo.html` (the live demo above) toggles all seven and doubles as the verify tool.
+
+**Prior art** — heavier off-the-shelf options if you'd rather not hand-author: [tholman/cursor-effects](https://github.com/tholman/cursor-effects) (the classic fairy-dust / snowflake / bubble cursors), [party.js](https://party.js.org/), [canvas-confetti](https://github.com/catdad/canvas-confetti), [tsParticles](https://github.com/tsparticles/tsparticles). This bundle stays hand-authored & dependency-free so Claude can author + wire it (and pixel-art variants) for you.
+
+---
+
+## 🎀 cutify-that-tab — cute SVG favicons
 
 > A Claude Code skill for adding a cute, hand-authored SVG favicon to a web app — that tiny icon in the browser tab.
-
-[![GitHub release](https://img.shields.io/github/v/release/wan-huiyan/cutify-that-tab)](https://github.com/wan-huiyan/cutify-that-tab/releases)
-[![license](https://img.shields.io/github/license/wan-huiyan/cutify-that-tab)](LICENSE)
-[![last commit](https://img.shields.io/github/last-commit/wan-huiyan/cutify-that-tab)](https://github.com/wan-huiyan/cutify-that-tab/commits)
-[![Claude Code](https://img.shields.io/badge/Claude_Code-skill-orange)](https://claude.com/claude-code)
 
 <p align="center">
   <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_mochi_cat.svg" width="64" height="64" alt="mochi cat" style="image-rendering:pixelated"/>
@@ -79,13 +123,13 @@ All three ship as a single SVG file. No `.ico`, no PNG fallbacks, no PWA manifes
 
 **Claude Code (plugin install — recommended):**
 ```bash
-/plugin marketplace add wan-huiyan/cutify-that-tab
-/plugin install cutify-that-tab@wan-huiyan-cutify-that-tab
+/plugin marketplace add wan-huiyan/cutify-this
+/plugin install cutify-that-tab@wan-huiyan-cutify-this
 ```
 
 **Claude Code (git clone — always works):**
 ```bash
-git clone https://github.com/wan-huiyan/cutify-that-tab.git ~/.claude/skills/cutify-that-tab
+git clone https://github.com/wan-huiyan/cutify-this.git ~/.claude/skills/cutify-that-tab
 ```
 
 **Cursor:**
@@ -95,7 +139,7 @@ mkdir -p .cursor/rules
 # Copy SKILL.md content into .cursor/rules/cutify-that-tab.mdc with alwaysApply: true
 
 # Or global
-git clone https://github.com/wan-huiyan/cutify-that-tab.git ~/.cursor/skills/cutify-that-tab
+git clone https://github.com/wan-huiyan/cutify-this.git ~/.cursor/skills/cutify-that-tab
 ```
 
 ## Three failure modes the skill catches
