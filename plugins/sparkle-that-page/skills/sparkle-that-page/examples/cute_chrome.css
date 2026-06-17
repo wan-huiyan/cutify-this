@@ -1,0 +1,40 @@
+/* cute_chrome.css — sparkle-that-page
+ * Use: <link rel="stylesheet" href="cute_chrome.css">
+ * - ::selection becomes pastel (global)
+ * - add class "stp-wobble" to buttons/links for a playful hover
+ * - <span class="stp-spinner"></span> = a kawaii 3-dot bouncing loader
+ * - pastel custom scrollbar (WebKit/Blink)
+ * Motion is disabled under prefers-reduced-motion. */
+::selection { background: #f9a8d4; color: #fff; }
+::-moz-selection { background: #f9a8d4; color: #fff; }
+
+.stp-wobble { display: inline-block; transition: transform .15s ease; }
+@media (prefers-reduced-motion: no-preference) {
+  .stp-wobble:hover { animation: stp-wobble .5s ease; }
+  @keyframes stp-wobble {
+    0%, 100% { transform: rotate(0) scale(1); }
+    25% { transform: rotate(-4deg) scale(1.05); }
+    50% { transform: rotate(3deg) scale(1.05); }
+    75% { transform: rotate(-2deg) scale(1.03); }
+  }
+}
+
+.stp-spinner, .stp-spinner::before, .stp-spinner::after {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #c084fc;
+}
+.stp-spinner { position: relative; }
+.stp-spinner::before, .stp-spinner::after { content: ""; position: absolute; top: 0; }
+.stp-spinner::before { left: -14px; background: #f472b6; }
+.stp-spinner::after { left: 14px; background: #a5b4fc; }
+@media (prefers-reduced-motion: no-preference) {
+  .stp-spinner, .stp-spinner::before, .stp-spinner::after { animation: stp-bounce 1s ease-in-out infinite; }
+  .stp-spinner::before { animation-delay: -.16s; }
+  .stp-spinner::after { animation-delay: .16s; }
+  @keyframes stp-bounce { 0%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-8px); } }
+}
+
+* { scrollbar-width: thin; scrollbar-color: #f9a8d4 #fdf2f8; }
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: #fdf2f8; }
+::-webkit-scrollbar-thumb { background: #f9a8d4; border-radius: 6px; border: 3px solid #fdf2f8; }
+::-webkit-scrollbar-thumb:hover { background: #f472b6; }
