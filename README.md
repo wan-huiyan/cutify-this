@@ -28,6 +28,8 @@ Add the marketplace once, then install any (or all):
 
 **▶ Live demo: https://wan-huiyan.github.io/cutify-this/**
 
+**▶ Landing pages** — two design directions, each demoing the effects live on itself: [Aurora · dark](https://wan-huiyan.github.io/cutify-this/site/aurora.html) · [Bubblegum · bright](https://wan-huiyan.github.io/cutify-this/site/bubblegum.html) (source + notes in [`site/`](site/); built straight on the modules below, no extra engine).
+
 Seven self-contained, **zero-dependency** effects — one short vanilla file each, copy-and-edit, no npm/build. Wire with `<script>` / `<link>`, then set options on `<html data-*>`:
 
 | Effect | File | Options (`data-*`) |

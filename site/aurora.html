@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>✨ sparkle that page — Aurora</title>
+<meta name="description" content="The cutest dev tool you've ever seen. Drop in one file and watch any page come alive.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%A8%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- cute-chrome (selection / scrollbar / spinner / wobble) — the repo's real stylesheet -->
+<link rel="stylesheet" href="../plugins/sparkle-that-page/skills/sparkle-that-page/examples/cute_chrome.css">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#100a22;-webkit-font-smoothing:antialiased}
+  @keyframes au-shine{to{background-position:240% center}}
+  @keyframes au-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  @keyframes au-fly{0%,100%{transform:translateY(0) rotate(-2deg) scaleX(1)}25%{transform:translateY(-8px) rotate(.5deg) scaleX(.99)}50%{transform:translateY(-15px) rotate(2deg) scaleX(1)}75%{transform:translateY(-8px) rotate(.5deg) scaleX(.99)}}
+  @keyframes au-shroomglow{0%,100%{opacity:.55;transform:translate(-50%,30%) scale(1)}50%{opacity:.92;transform:translate(-50%,30%) scale(1.08)}}
+  @keyframes au-mote{0%{opacity:0;transform:translateY(0) scale(.5) rotate(0)}30%{opacity:1}100%{opacity:0;transform:translateY(-46px) scale(1) rotate(60deg)}}
+  @keyframes au-twinkle{0%,100%{transform:scale(.55) rotate(0);opacity:.3}50%{transform:scale(1) rotate(35deg);opacity:1}}
+  @keyframes au-mqa{from{transform:translateX(0)}to{transform:translateX(-33.333%)}}
+  @keyframes au-mqb{from{transform:translateX(-33.333%)}to{transform:translateX(0)}}
+  @keyframes au-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  @keyframes m-twirl{0%{transform:translateY(0) rotate(0) scale(1)}12%{transform:translateY(-10px) rotate(0) scale(1.05,.95)}55%{transform:translateY(-15px) rotate(205deg) scale(.93,1.07)}100%{transform:translateY(0) rotate(360deg) scale(1)}}
+  @keyframes ic-spin{to{transform:rotate(360deg)}}
+  @keyframes ic-tw{0%,100%{opacity:.55;transform:scale(.8) rotate(0)}50%{opacity:1;transform:scale(1.05) rotate(28deg)}}
+  /* ——— Avatar-style bioluminescent mushrooms (hero floor) ——— */
+  .shrooms{position:absolute;left:0;right:0;bottom:0;height:210px;z-index:-1;pointer-events:none}
+  .shroom{position:absolute;bottom:0;transform-origin:bottom center}
+  .shroom .stem{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:var(--sw,10px);height:var(--sh,46px);border-radius:46% 46% 34% 34%/14% 14% 50% 50%;background:linear-gradient(180deg,#d3faef,#74d8c3 68%,#3c9a90);box-shadow:0 0 10px var(--mc),0 0 22px color-mix(in oklab,var(--mc) 45%,transparent)}
+  .shroom .cap{position:absolute;left:50%;bottom:var(--sh,46px);transform:translateX(-50%);width:var(--cw,46px);height:calc(var(--cw,46px)*.6);border-radius:50% 50% 44% 44%/80% 80% 24% 24%;background:radial-gradient(125% 150% at 50% 94%,#ffffff,var(--mc) 44%,color-mix(in oklab,var(--mc) 52%,#0a0e20) 100%);box-shadow:0 0 26px 3px var(--mc),0 0 62px 12px color-mix(in oklab,var(--mc) 42%,transparent)}
+  .shroom .cap::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at 32% 40%,#fff 0 2.6px,transparent 3.4px),radial-gradient(circle at 60% 30%,#fff 0 2.2px,transparent 3px),radial-gradient(circle at 50% 60%,#fff 0 1.8px,transparent 2.6px);opacity:.9}
+  .shroom .cap::after{content:"";position:absolute;left:50%;bottom:-3px;transform:translateX(-50%);width:76%;height:6px;border-radius:50%;background:color-mix(in oklab,var(--mc) 72%,#fff);filter:blur(1px);opacity:.7}
+  @media (prefers-reduced-motion:no-preference){
+    .shroom{animation:au-shroom-sway 6.5s ease-in-out infinite}
+    .shroom .cap{animation:au-shroom-pulse 3.6s ease-in-out infinite}
+    .shroom:nth-child(2n){animation-delay:-2.1s}.shroom:nth-child(3n){animation-delay:-3.7s}
+    .shroom:nth-child(2n) .cap{animation-delay:-1.4s}.shroom:nth-child(3n) .cap{animation-delay:-2.6s}
+  }
+  @keyframes au-shroom-sway{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(1.6deg)}}
+  @keyframes au-shroom-pulse{0%,100%{filter:brightness(.9)}50%{filter:brightness(1.32)}}
+  .au-reveal{opacity:0;transform:translateY(34px);filter:blur(8px);transition:opacity .8s cubic-bezier(.25,.1,.25,1),transform .8s cubic-bezier(.25,.1,.25,1),filter .8s cubic-bezier(.25,.1,.25,1)}
+  .au-reveal.in{opacity:1;transform:none;filter:none}
+  @media (prefers-reduced-motion:reduce){.au-reveal{opacity:1;transform:none;filter:none}*{animation:none!important}}
+  .au-nav-link:hover{color:#fff!important;background:rgba(255,255,255,.08)!important}
+  .au-ghost:hover{background:rgba(255,255,255,.07)!important}
+  .au-install:hover{transform:translateY(-2px)}
+  .au-tile:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.28)!important}
+  .au-vp:hover{border-color:rgba(255,255,255,.4)!important}
+  /* ——— kitty-fairy mascot (eyes follow the cursor) ——— */
+  .mascot{--p1:#c3b1f2;--p2:#dccdff;--p3:#fde047;--p4:#efe7ff;--p5:#fb7185;--ink:#3a2a58;position:relative;width:164px;height:198px;cursor:pointer;will-change:transform}
+  .mascot.twirl{animation:m-twirl 1.15s cubic-bezier(.42,.04,.32,1)}
+  .mascot span{position:absolute}
+  .m-seat{position:absolute;left:50%;bottom:-30px;transform:translateX(-50%);transform-origin:50% 86%;width:176px;height:56px;z-index:1;border-radius:50% 50% 46% 46%/72% 72% 28% 28%;background:radial-gradient(120% 150% at 50% 14%,#fff0f6,#ff9ec4 42%,#df5f95 100%);box-shadow:0 22px 44px -8px rgba(223,95,149,.85),0 0 70px 6px rgba(255,150,205,.7),0 0 120px 18px rgba(255,120,190,.4),inset 0 -10px 16px rgba(165,45,95,.35),inset 0 5px 12px rgba(255,255,255,.6);animation:au-shroomsway 3s ease-in-out infinite}
+  .m-seat-glow{position:absolute;left:50%;bottom:-30px;transform:translate(-50%,30%);width:320px;height:220px;z-index:0;border-radius:50%;background:radial-gradient(circle,rgba(255,150,205,.6),rgba(255,120,200,.22) 46%,transparent 70%);filter:blur(16px);pointer-events:none;animation:au-shroomglow 1.9s ease-in-out infinite}
+  .m-mote{position:absolute;z-index:2;background:#fff;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);filter:drop-shadow(0 0 5px #ffd1ea);pointer-events:none;animation:au-mote 2.3s ease-in-out infinite}
+  @keyframes au-shroomsway{0%,100%{transform:translateX(-50%) rotate(-2.6deg);filter:brightness(.98)}50%{transform:translateX(-50%) rotate(2.6deg);filter:brightness(1.24)}}
+  /* ——— layered fairy-kitten: ears, wings, tail, wand-arm all rig independently ——— */
+  .fc{position:relative;width:200px;height:214px;cursor:pointer}
+  .fc *{position:absolute}
+  .fc-wing{border-radius:62% 50% 58% 42%/74% 62% 52% 38%;background:linear-gradient(150deg,rgba(255,232,248,.96),rgba(232,214,255,.72) 38%,rgba(190,238,248,.62) 72%,rgba(255,214,242,.55));border:2px solid rgba(255,255,255,.75);box-shadow:0 0 26px rgba(255,180,232,.6),0 0 12px rgba(190,238,248,.5),inset 0 0 14px rgba(255,255,255,.5)}
+  .fc-wing::after{content:"";position:absolute;left:32%;top:10%;width:2px;height:78%;background:rgba(220,180,235,.5);border-radius:2px;box-shadow:13px 7px 0 -.5px rgba(220,180,235,.4),-9px 9px 0 -.5px rgba(190,220,240,.4)}
+  .fc-wing::before{content:"";position:absolute;left:48%;top:24%;width:7px;height:7px;background:#fff;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);filter:drop-shadow(0 0 4px #fff);opacity:.9}
+  .fc-wing.ul{left:118px;top:34px;width:86px;height:138px;z-index:2;transform-origin:8% 86%;animation:fc-wingLU 2.8s ease-in-out infinite}
+  .fc-wing.ll{left:112px;top:88px;width:72px;height:110px;z-index:2;transform-origin:12% 80%;animation:fc-wingLL 2.8s ease-in-out infinite .3s}
+  .fc-wing.ur{right:118px;top:34px;width:86px;height:138px;z-index:2;transform-origin:92% 86%;transform:scaleX(-1);animation:fc-wingRU 2.8s ease-in-out infinite .15s}
+  .fc-wing.lr{right:112px;top:88px;width:72px;height:110px;z-index:2;transform-origin:88% 80%;transform:scaleX(-1);animation:fc-wingRL 2.8s ease-in-out infinite .45s}
+  .fc-tail{right:14px;top:142px;width:18px;height:82px;z-index:1;border-radius:11px;background:linear-gradient(#fff,#e8eaf6);transform-origin:50% 6%;animation:fc-tail 3.4s ease-in-out infinite;box-shadow:0 2px 7px rgba(120,90,180,.25)}
+  .fc-tail::after{content:"";position:absolute;bottom:-7px;left:-4px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 2px 7px rgba(120,90,180,.25)}
+  .fc-body{left:50%;top:98px;transform:translateX(-50%);width:120px;height:106px;z-index:3;border-radius:48% 48% 44% 44%/54% 54% 46% 46%;background:radial-gradient(120% 110% at 50% 22%,#fff,#eef0fb 80%);box-shadow:inset 0 -12px 20px rgba(180,170,210,.3),0 6px 14px rgba(120,90,180,.22)}
+  .fc-tutu{left:50%;top:150px;transform:translateX(-50%);width:150px;height:58px;z-index:4}
+  .fc-petal{bottom:0;width:30px;height:48px;background:linear-gradient(#ffe27a,#ffcf33);border-radius:50% 50% 50% 50%/66% 66% 34% 34%;border:1.5px solid #efb02e;transform-origin:bottom center;box-shadow:inset 0 -4px 7px rgba(220,150,20,.25)}
+  .fc-petal::after{content:"";position:absolute;left:50%;top:24%;transform:translateX(-50%);width:2px;height:54%;background:#6cc2cf;border-radius:2px;box-shadow:-4px 6px 0 -1px #6cc2cf,4px 6px 0 -1px #6cc2cf,-5px 14px 0 -1px #6cc2cf,5px 14px 0 -1px #6cc2cf}
+  .fc-armR{right:30px;top:150px;width:24px;height:42px;z-index:5;border-radius:13px;background:radial-gradient(120% 120% at 40% 30%,#fff,#e8eaf6 80%);transform:rotate(16deg);box-shadow:inset 0 -4px 8px rgba(180,170,210,.3)}
+  .fc-armL{left:26px;top:126px;width:30px;height:62px;z-index:5;transform-origin:60% 4%;animation:fc-arm 2.6s ease-in-out infinite}
+  .fc-armL .seg{left:3px;top:0;width:22px;height:48px;border-radius:12px;background:radial-gradient(120% 120% at 40% 30%,#fff,#e8eaf6 80%);box-shadow:inset 0 -4px 8px rgba(180,170,210,.3)}
+  .fc-armL .paw{left:-2px;top:40px;width:27px;height:24px;border-radius:50%;background:radial-gradient(120% 120% at 40% 30%,#fff,#e8eaf6 80%)}
+  .fc-armL .wand{left:7px;top:-30px;width:6px;height:60px;border-radius:4px;background:linear-gradient(90deg,#ef9fc8,#fff 45%,#f3a6cd);transform:rotate(-20deg);transform-origin:bottom center;box-shadow:0 0 9px rgba(255,170,215,.7)}
+  .fc-armL .wand::after{content:"";position:absolute;left:50%;top:34%;transform:translateX(-50%);width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff,#ee8bbf);box-shadow:0 0 6px #ffb8e6}
+  .fc-armL .topper{left:50%;top:-42px;transform:translateX(-50%);width:52px;height:52px;animation:fc-topglow 2.6s ease-in-out infinite}
+  .fc-armL .hframe{left:50%;top:7px;transform:translateX(-50%);width:48px;height:44px;z-index:0;background:linear-gradient(135deg,#ffe9b0,#ffd0a0 28%,#f7a8cf 68%,#caa6ef);clip-path:polygon(50% 100%,14% 60%,0 33%,9% 11%,31% 7%,50% 23%,69% 7%,91% 11%,100% 33%,86% 60%);filter:drop-shadow(0 0 12px rgba(255,160,215,.95))}
+  .fc-armL .heart{left:50%;top:10px;transform:translateX(-50%);width:39px;height:35px;z-index:1;background:conic-gradient(from 200deg at 50% 40%,#fff,#ffd6ee,#e7c6ff,#bfeaf6,#ffd6ee,#fff);clip-path:polygon(50% 100%,14% 60%,0 33%,9% 11%,31% 7%,50% 23%,69% 7%,91% 11%,100% 33%,86% 60%)}
+  .fc-armL .heart::after{content:"";position:absolute;inset:16% 22% 30% 22%;border:1.5px solid rgba(255,255,255,.85);border-radius:50% 50% 0 0;opacity:.7}
+  .fc-armL .hgloss{left:28%;top:20%;width:11px;height:7px;z-index:2;background:rgba(255,255,255,.9);border-radius:50%;filter:blur(.5px);transform:rotate(-24deg)}
+  .fc-armL .rose{left:50%;top:43%;transform:translate(-50%,-50%);width:16px;height:16px;z-index:3;border-radius:50%;background:radial-gradient(circle,#fff 0 10%,#f4a6cd 11% 26%,#fff 27% 37%,#ec8fc1 38% 54%,#fff 55% 64%,#e07bb4 65% 82%);box-shadow:0 0 5px rgba(255,150,210,.7)}
+  .fc-armL .crown{left:50%;top:-3px;transform:translateX(-50%);width:13px;height:13px;z-index:4;background:#ffe08a;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);filter:drop-shadow(0 0 5px #ffd36a)}
+  .fc-armL .gem{left:50%;top:42px;transform:translateX(-50%) rotate(45deg);width:10px;height:10px;z-index:2;background:linear-gradient(135deg,#fff,#f49ccb);border-radius:3px;box-shadow:0 0 7px rgba(255,150,210,.9)}
+  .fc-armL .tw{top:9px;width:30px;height:21px;z-index:0;background:linear-gradient(180deg,#fff,#ffdcf0);border-radius:64% 64% 50% 50%/84% 84% 30% 30%;filter:drop-shadow(0 0 8px rgba(255,200,235,.95))}
+  .fc-armL .tw::after{content:"";position:absolute;inset:16% 12% 8% 12%;border-radius:inherit;background:linear-gradient(180deg,transparent,rgba(247,168,207,.5));box-shadow:inset 0 0 0 1px rgba(255,255,255,.5)}
+  .fc-armL .tw.l{left:-22px;transform-origin:100% 100%;animation:fc-twingL 2.2s ease-in-out infinite}
+  .fc-armL .tw.r{right:-22px;transform-origin:0 100%;animation:fc-twingR 2.2s ease-in-out infinite .15s}
+  .fc-armL .tsp{z-index:5;background:#fff;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);filter:drop-shadow(0 0 4px #fff);animation:au-twinkle 1.8s ease-in-out infinite}
+  .fc-armL .tsp.a{left:-7px;top:2px;width:9px;height:9px}
+  .fc-armL .tsp.b{right:-5px;top:10px;width:6px;height:6px;animation-delay:-.7s}
+  .fc-armL .tsp.c{left:50%;top:-9px;width:7px;height:7px;animation-delay:-1.3s}
+  .fc-ear{top:4px;width:48px;height:60px;z-index:5;transform-origin:50% 92%}
+  .fc-ear .out{left:0;top:0;width:100%;height:100%;background:#fff;clip-path:polygon(50% 0,86% 100%,14% 100%);box-shadow:0 2px 4px rgba(120,90,180,.2)}
+  .fc-ear .in{left:26%;top:34%;width:48%;height:58%;background:#f9a8d4;clip-path:polygon(50% 0,80% 100%,20% 100%)}
+  .fc-ear.l{left:30px;transform:rotate(-12deg);animation:fc-earL 3.1s ease-in-out infinite}
+  .fc-ear.r{right:30px;transform:rotate(12deg);animation:fc-earR 3.5s ease-in-out infinite}
+  .fc-head{left:50%;top:32px;transform:translateX(-50%);width:130px;height:118px;z-index:6;border-radius:50% 50% 47% 47%;background:radial-gradient(120% 120% at 38% 28%,#fff,#eef0fb 82%);box-shadow:inset 0 -10px 18px rgba(180,170,210,.26)}
+  .fc-band{left:50%;top:54px;transform:translateX(-50%);width:124px;height:22px;z-index:7;border-radius:50%/100% 100% 0 0;border-top:6px solid #5ed0e0;filter:drop-shadow(0 1px 1px rgba(70,150,170,.4))}
+  .fc-flower{left:50%;top:40px;transform:translateX(-50%);width:42px;height:42px;z-index:7;filter:drop-shadow(0 2px 3px rgba(120,90,150,.3));background:radial-gradient(circle at 50% 12%,#b39ddb 0 21%,transparent 22%),radial-gradient(circle at 85% 38%,#b39ddb 0 21%,transparent 22%),radial-gradient(circle at 72% 86%,#b39ddb 0 21%,transparent 22%),radial-gradient(circle at 28% 86%,#b39ddb 0 21%,transparent 22%),radial-gradient(circle at 15% 38%,#b39ddb 0 21%,transparent 22%),radial-gradient(circle at 50% 50%,#f48fb1 0 19%,transparent 20%)}
+  .fc-cheek{top:108px;width:21px;height:12px;border-radius:50%;background:rgba(251,113,133,.55);filter:blur(.6px);z-index:7}
+  .fc-cheek.l{left:calc(50% - 52px)}.fc-cheek.r{right:calc(50% - 52px)}
+  .fc-eye{top:80px;width:31px;height:38px;z-index:8;border-radius:50%;background:radial-gradient(circle at 50% 36%,#3a2348,#1d1130 76%);transform:translate(var(--ex,0px),var(--ey,0px)) scaleY(var(--bk,1));transition:transform .14s ease}
+  .fc-eye.l{left:calc(50% - 36px)}.fc-eye.r{right:calc(50% - 36px)}
+  .fc-eye .hi{left:5px;top:5px;width:12px;height:12px;border-radius:50%;background:#fff}
+  .fc-eye .hi2{right:5px;bottom:8px;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.85)}
+  .fc-nose{left:50%;top:114px;transform:translateX(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid #fb7185;z-index:8}
+  .fc-mouth{left:50%;top:122px;transform:translateX(-50%);width:32px;height:19px;z-index:8;border-radius:0 0 16px 16px;background:#3a2348;overflow:hidden}
+  .fc-mouth::before{content:"";position:absolute;left:50%;top:7px;transform:translateX(-50%);width:16px;height:12px;border-radius:50%;background:#fb7185}
+  .fc-fang{top:122px;width:0;height:0;border-left:3px solid transparent;border-right:3px solid transparent;border-top:6px solid #fff;z-index:9}
+  .fc-fang.l{left:calc(50% - 13px)}.fc-fang.r{right:calc(50% - 13px)}
+  @keyframes fc-earL{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(-23deg)}}
+  @keyframes fc-earR{0%,100%{transform:rotate(12deg)}50%{transform:rotate(23deg)}}
+  @keyframes fc-wingLU{0%,100%{transform:rotate(22deg)}50%{transform:rotate(37deg)}}
+  @keyframes fc-wingLL{0%,100%{transform:rotate(45deg)}50%{transform:rotate(59deg)}}
+  @keyframes fc-wingRU{0%,100%{transform:scaleX(-1) rotate(22deg)}50%{transform:scaleX(-1) rotate(37deg)}}
+  @keyframes fc-wingRL{0%,100%{transform:scaleX(-1) rotate(45deg)}50%{transform:scaleX(-1) rotate(59deg)}}
+  @keyframes fc-tail{0%,100%{transform:rotate(16deg)}50%{transform:rotate(30deg)}}
+  @keyframes fc-arm{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(-19deg)}}
+  @keyframes fc-twingL{0%,100%{transform:rotate(-16deg)}50%{transform:rotate(-32deg)}}
+  @keyframes fc-twingR{0%,100%{transform:scaleX(-1) rotate(-16deg)}50%{transform:scaleX(-1) rotate(-32deg)}}
+  @keyframes fc-topglow{0%,100%{filter:drop-shadow(0 0 6px rgba(255,170,220,.55))}50%{filter:drop-shadow(0 0 17px rgba(255,150,215,.98))}}
+  @keyframes fc-dust{0%{opacity:0;transform:translate(0,0) scale(.3) rotate(0)}12%{opacity:1}100%{opacity:0;transform:translate(var(--dx,8px),var(--dy,46px)) scale(1) rotate(70deg)}}
+  @keyframes fc-aura{0%,100%{opacity:.42;transform:translateX(-50%) scale(1)}50%{opacity:.78;transform:translateX(-50%) scale(1.09)}}
+  .fc-aura{left:50%;top:28px;transform:translateX(-50%);width:224px;height:204px;z-index:0;border-radius:50%;background:radial-gradient(circle,rgba(255,200,238,.5),rgba(210,190,255,.22) 45%,transparent 70%);filter:blur(11px);pointer-events:none;animation:fc-aura 3.4s ease-in-out infinite}
+  .fc-dust{z-index:9;width:6px;height:6px;background:radial-gradient(circle,#fff,#ffc6ec);border-radius:50%;box-shadow:0 0 5px #ffb8e6;pointer-events:none;animation:fc-dust 2.8s ease-in-out infinite}
+  .fc-dust.s{background:#fff;border-radius:0;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);box-shadow:0 0 5px #fff}
+  @media (prefers-reduced-motion:reduce){.fc-dust,.fc-aura{animation:none!important;opacity:.5}}
+  @media (prefers-reduced-motion:reduce){.fc-ear,.fc-wing,.fc-tail,.fc-armL,.fc-armL .star{animation:none!important}}
+  .m-seat::before{content:"";position:absolute;left:50%;top:8px;transform:translateX(-50%);width:82%;height:56%;border-radius:50%;background:radial-gradient(circle at 26% 30%,#fff 0 2.2px,transparent 3.2px),radial-gradient(circle at 58% 22%,#fff 0 1.8px,transparent 2.8px),radial-gradient(circle at 44% 60%,#fff 0 2px,transparent 3px),radial-gradient(circle at 76% 56%,#fff 0 1.6px,transparent 2.6px),radial-gradient(circle at 88% 30%,#fff 0 1.4px,transparent 2.4px);opacity:.92}
+  .m-seat::after{content:"";position:absolute;left:50%;bottom:-15px;transform:translateX(-50%);width:34px;height:17px;border-radius:0 0 8px 8px;background:linear-gradient(#f3d3ba,#e0a983)}
+</style>
+</head>
+<body>
+<div id="auroraRoot" style="position:relative;min-height:100vh;background:radial-gradient(1100px 700px at 50% -8%,#2a1b54 0%,#180f31 42%,#100a22 100%);font-family:'Nunito',system-ui,sans-serif;color:#f1ecff;overflow-x:clip">
+
+  <!-- ambient glows -->
+  <div style="position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+    <div style="position:absolute;width:46vw;height:46vw;left:-12vw;top:-6vw;border-radius:50%;background:radial-gradient(circle at 40% 40%,#a78bfa,transparent 70%);filter:blur(70px);opacity:.4;animation:au-float 19s ease-in-out infinite"></div>
+    <div style="position:absolute;width:40vw;height:40vw;right:-10vw;top:8vw;border-radius:50%;background:radial-gradient(circle at 40% 40%,#22d3ee,transparent 70%);filter:blur(70px);opacity:.28;animation:au-float 24s ease-in-out infinite reverse"></div>
+    <div style="position:absolute;width:50vw;height:50vw;left:20vw;bottom:-18vw;border-radius:50%;background:radial-gradient(circle at 40% 40%,#f0abfc,transparent 70%);filter:blur(80px);opacity:.22;animation:au-float 27s ease-in-out infinite"></div>
+  </div>
+
+  <!-- NAV -->
+  <nav style="position:fixed;top:18px;left:0;right:0;z-index:50;display:flex;justify-content:center;padding:0 16px;pointer-events:none">
+    <div style="pointer-events:auto;display:flex;align-items:center;gap:8px;padding:7px 7px 7px 16px;border-radius:999px;background:rgba(255,255,255,.05);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 1px rgba(255,255,255,.16),0 14px 36px -20px rgba(0,0,0,.9);max-width:100%;flex-wrap:wrap">
+      <span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:17px;letter-spacing:-.01em;display:flex;align-items:center;gap:7px;color:#fff;white-space:nowrap"><span style="font-size:18px;filter:drop-shadow(0 0 6px #fde047)">✨</span>sparkle&#8209;that&#8209;page</span>
+      <span style="width:1px;height:20px;background:rgba(255,255,255,.14);margin:0 4px"></span>
+      <a href="#play" class="au-nav-link" style="color:rgba(241,236,255,.78);text-decoration:none;font-size:14px;font-weight:600;padding:7px 13px;border-radius:999px;transition:.2s;white-space:nowrap">Try it</a>
+      <a href="#inside" class="au-nav-link" style="color:rgba(241,236,255,.78);text-decoration:none;font-size:14px;font-weight:600;padding:7px 13px;border-radius:999px;transition:.2s;white-space:nowrap">Inside</a>
+      <a href="#get" class="au-nav-link" style="color:rgba(241,236,255,.78);text-decoration:none;font-size:14px;font-weight:600;padding:7px 13px;border-radius:999px;transition:.2s;white-space:nowrap">Install</a>
+      <a href="#get" class="au-install" style="display:flex;align-items:center;gap:7px;background:linear-gradient(123deg,#a78bfa,#f0abfc 55%,#22d3ee);color:#1a0f33;text-decoration:none;font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;padding:9px 16px;border-radius:999px;transition:transform .2s;white-space:nowrap;box-shadow:0 6px 18px -6px rgba(167,139,250,.7)">Add sparkle ✨</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header style="position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 22px 56px">
+    <div class="shrooms" aria-hidden="true">
+      <span class="shroom" style="left:5%;--sw:8px;--sh:34px;--cw:34px;--mc:#22d3ee"><span class="stem"></span><span class="cap"></span></span>
+      <span class="shroom" style="left:13%;--sw:12px;--sh:64px;--cw:56px;--mc:#a78bfa"><span class="stem"></span><span class="cap"></span></span>
+      <span class="shroom" style="left:22%;--sw:9px;--sh:44px;--cw:40px;--mc:#f0abfc"><span class="stem"></span><span class="cap"></span></span>
+      <span class="shroom" style="left:34%;--sw:7px;--sh:28px;--cw:28px;--mc:#818cf8"><span class="stem"></span><span class="cap"></span></span>
+      <span class="shroom" style="left:64%;--sw:8px;--sh:32px;--cw:30px;--mc:#c4b5fd"><span class="stem"></span><span class="cap"></span></span>
+      <span class="shroom" style="left:75%;--sw:11px;--sh:58px;--cw:52px;--mc:#22d3ee"><span class="stem"></span><span class="cap"></span></span>
+      <span class="shroom" style="left:85%;--sw:9px;--sh:42px;--cw:38px;--mc:#a78bfa"><span class="stem"></span><span class="cap"></span></span>
+      <span class="shroom" style="left:93%;--sw:7px;--sh:30px;--cw:30px;--mc:#f0abfc"><span class="stem"></span><span class="cap"></span></span>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:22px">
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.13);backdrop-filter:blur(12px);font-family:'Fredoka',sans-serif;font-weight:500;font-size:13px;color:#e7ddff;transform:rotate(-2deg)">one tiny file</span>
+      <span style="display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.13);backdrop-filter:blur(12px);font-family:'Fredoka',sans-serif;font-weight:500;font-size:13px;color:#e7ddff;transform:rotate(1.5deg)">zero dependencies</span>
+    </div>
+
+    <div style="position:relative;display:flex;justify-content:center;margin-bottom:52px;perspective:800px">
+      <div class="m-seat-glow" aria-hidden="true"></div>
+      <div class="m-seat" aria-hidden="true"></div>
+      <span class="m-mote" style="left:calc(50% - 72px);bottom:6px;width:9px;height:9px;animation-delay:-.4s"></span>
+      <span class="m-mote" style="left:calc(50% - 32px);bottom:-6px;width:7px;height:7px;animation-delay:-1.5s"></span>
+      <span class="m-mote" style="left:calc(50% + 18px);bottom:2px;width:10px;height:10px;animation-delay:-2.3s"></span>
+      <span class="m-mote" style="left:calc(50% + 60px);bottom:-4px;width:7px;height:7px;animation-delay:-.9s"></span>
+      <span class="m-mote" style="left:calc(50% + 2px);bottom:12px;width:6px;height:6px;animation-delay:-2.8s"></span>
+      <div id="auMascotMag" style="position:relative;will-change:transform">
+        <div id="auMascotFly" style="position:relative;will-change:transform;animation:au-fly 4.6s ease-in-out infinite;filter:drop-shadow(0 16px 22px rgba(120,80,200,.5))">
+          <div id="auMascot" class="fc" role="img" aria-label="Sparkle, the fairy-cat mascot">
+            <span class="fc-aura"></span>
+            <span class="fc-dust" style="left:30px;top:60px;--dx:-15px;--dy:50px;animation-delay:-.2s"></span>
+            <span class="fc-dust s" style="left:172px;top:70px;--dx:17px;--dy:46px;animation-delay:-1.1s;width:8px;height:8px"></span>
+            <span class="fc-dust" style="left:100px;top:22px;--dx:4px;--dy:54px;animation-delay:-2s"></span>
+            <span class="fc-dust s" style="left:54px;top:122px;--dx:-19px;--dy:42px;animation-delay:-1.6s;width:7px;height:7px"></span>
+            <span class="fc-dust" style="left:152px;top:132px;--dx:19px;--dy:48px;animation-delay:-.7s"></span>
+            <span class="fc-dust" style="left:18px;top:96px;--dx:-21px;--dy:40px;animation-delay:-2.4s;width:5px;height:5px"></span>
+            <span class="fc-dust s" style="left:186px;top:110px;--dx:23px;--dy:44px;animation-delay:-.9s;width:6px;height:6px"></span>
+            <span class="fc-dust" style="left:122px;top:162px;--dx:9px;--dy:38px;animation-delay:-1.9s"></span>
+            <span class="fc-dust" style="left:80px;top:48px;--dx:-7px;--dy:52px;animation-delay:-2.7s;width:5px;height:5px"></span>
+            <span class="fc-dust s" style="left:40px;top:162px;--dx:-13px;--dy:36px;animation-delay:-1.3s;width:7px;height:7px"></span>
+            <span class="fc-dust" style="left:162px;top:38px;--dx:15px;--dy:52px;animation-delay:-.45s"></span>
+            <span class="fc-dust s" style="left:96px;top:98px;--dx:3px;--dy:46px;animation-delay:-2.2s;width:6px;height:6px"></span>
+            <span class="fc-wing ul"></span><span class="fc-wing ll"></span>
+            <span class="fc-wing ur"></span><span class="fc-wing lr"></span>
+            <span class="fc-tail"></span>
+            <span class="fc-body"></span>
+            <span class="fc-tutu">
+              <span class="fc-petal" style="left:0;transform:rotate(-48deg)"></span>
+              <span class="fc-petal" style="left:24px;transform:rotate(-29deg)"></span>
+              <span class="fc-petal" style="left:48px;transform:rotate(-10deg)"></span>
+              <span class="fc-petal" style="left:72px;transform:rotate(10deg)"></span>
+              <span class="fc-petal" style="left:96px;transform:rotate(29deg)"></span>
+              <span class="fc-petal" style="left:120px;transform:rotate(48deg)"></span>
+            </span>
+            <span class="fc-armR"></span>
+            <span class="fc-armL"><span class="seg"></span><span class="paw"></span><span class="wand"><span class="topper"><span class="tw l"></span><span class="tw r"></span><span class="hframe"></span><span class="heart"></span><span class="hgloss"></span><span class="rose"></span><span class="crown"></span><span class="gem"></span><span class="tsp a"></span><span class="tsp b"></span><span class="tsp c"></span></span></span></span>
+            <span class="fc-ear l"><span class="out"></span><span class="in"></span></span>
+            <span class="fc-ear r"><span class="out"></span><span class="in"></span></span>
+            <span class="fc-head"></span>
+            <span class="fc-band"></span>
+            <span class="fc-flower"></span>
+            <span class="fc-cheek l"></span><span class="fc-cheek r"></span>
+            <span class="fc-eye l"><span class="hi"></span><span class="hi2"></span></span>
+            <span class="fc-eye r"><span class="hi"></span><span class="hi2"></span></span>
+            <span class="fc-nose"></span>
+            <span class="fc-fang l"></span><span class="fc-fang r"></span>
+            <span class="fc-mouth"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h1 style="margin:0;font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(2.9rem,11vw,7.2rem);line-height:.96;letter-spacing:-.03em;background:linear-gradient(108deg,#a78bfa 0%,#818cf8 18%,#fff 38%,#f0abfc 56%,#22d3ee 78%,#a78bfa 100%);background-size:240% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 8px 26px rgba(167,139,250,.45));animation:au-shine 5s linear infinite;max-width:14ch;text-wrap:balance">sparkle that page</h1>
+
+    <p style="margin:22px auto 0;max-width:36ch;font-size:clamp(1.05rem,2.4vw,1.4rem);font-weight:600;color:#cfc4ee;line-height:1.45;text-wrap:balance">The cutest dev tool you&apos;ve ever seen. Drop in one file and watch any page <b style="color:#f0abfc;font-weight:800">come alive</b>.</p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:center;margin-top:34px">
+      <code style="font-family:'DM Mono',monospace;font-size:14px;color:#bff4ff;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:14px 18px;backdrop-filter:blur(10px)"><span style="color:rgba(241,236,255,.4);margin-right:9px">$</span>npm&nbsp;i&nbsp;sparkle-that-page</code>
+      <a href="#play" class="au-ghost" style="display:flex;align-items:center;gap:8px;text-decoration:none;color:#fff;font-family:'Fredoka',sans-serif;font-weight:500;font-size:15px;padding:14px 22px;border-radius:14px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.02);transition:.2s">Try it live <span style="font-size:13px">▶</span></a>
+    </div>
+    <p style="margin-top:42px;font-family:'Fredoka',sans-serif;font-weight:500;font-size:13px;color:rgba(241,236,255,.45);letter-spacing:.04em">move your mouse · click anywhere · this whole page is sparkled ✦</p>
+  </header>
+
+  <!-- SCROLL-REVEAL PILLARS (mask-wipe, Veldara-style) -->
+  <div id="auPinTrigger" style="position:relative;z-index:2;height:200vh"></div>
+  <div id="auPinCards" style="position:fixed;left:0;right:0;bottom:13vh;z-index:6;opacity:0;pointer-events:none;padding:0 24px">
+    <div style="max-width:1040px;margin:0 auto">
+      <div style="text-align:center;margin-bottom:26px">
+        <p style="font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#8fb6ff;margin:0 0 12px">// how it works</p>
+        <h2 style="margin:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(1.8rem,5vw,3rem);color:#fff;letter-spacing:-.02em;line-height:1.05">Three steps to <span style="position:relative;display:inline-block"><span style="position:absolute;left:-2px;right:-2px;bottom:.13em;height:.32em;border-radius:4px;background:linear-gradient(90deg,#a78bfa,#f0abfc 55%,#22d3ee)"></span><span style="position:relative">sparkle</span></span></h2>
+      </div>
+      <div id="auPinGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px"></div>
+    </div>
+  </div>
+
+  <!-- MARQUEE -->
+  <section id="fx" style="position:relative;z-index:2;padding:clamp(50px,8vw,90px) 0 clamp(20px,4vw,46px)">
+    <div class="au-reveal" style="text-align:center;padding:0 22px;margin-bottom:clamp(30px,4vw,48px)">
+      <p style="font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#8fb6ff;margin:0 0 14px">// the toy box</p>
+      <h2 style="margin:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(2rem,6vw,3.6rem);letter-spacing:-.02em;color:#fff;line-height:1.04">Every effect, in&nbsp;motion</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)">
+      <div class="au-mq-row" data-dir="a" style="display:flex;gap:14px;width:max-content;animation:au-mqa 34s linear infinite"></div>
+      <div class="au-mq-row" data-dir="b" style="display:flex;gap:14px;width:max-content;animation:au-mqb 40s linear infinite"></div>
+    </div>
+  </section>
+
+  <!-- PLAYGROUND -->
+  <section id="play" style="position:relative;z-index:2;padding:clamp(50px,8vw,96px) 22px clamp(30px,5vw,60px);max-width:1000px;margin:0 auto">
+    <div class="au-reveal" style="text-align:center;margin-bottom:clamp(26px,4vw,44px)">
+      <p style="font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#8fb6ff;margin:0 0 14px">// try it live</p>
+      <h2 style="margin:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(2rem,6vw,3.6rem);letter-spacing:-.02em;color:#fff;line-height:1.04">Flip a switch, see&nbsp;the&nbsp;magic</h2>
+      <p style="margin:14px auto 0;max-width:46ch;font-size:1.05rem;color:#cfc4ee;font-weight:600">These run on this very page. Toggle them, pick a look, and watch — your cursor and clicks change instantly.</p>
+    </div>
+    <div class="au-reveal" style="border-radius:30px;border:1px solid rgba(255,255,255,.13);background:linear-gradient(160deg,rgba(36,24,68,.7),rgba(22,14,44,.7));backdrop-filter:blur(16px);box-shadow:inset 0 1px 2px rgba(255,255,255,.14),0 40px 80px -44px rgba(0,0,0,1);padding:clamp(18px,2.6vw,30px)">
+      <div id="auPlay" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:16px"></div>
+    </div>
+  </section>
+
+  <!-- STICKY STACKING CARDS -->
+  <section id="inside" style="position:relative;z-index:2;padding:clamp(40px,7vw,80px) 22px clamp(60px,9vw,120px);max-width:1080px;margin:0 auto">
+    <div class="au-reveal" style="text-align:center;margin-bottom:clamp(30px,5vw,54px)">
+      <p style="font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#8fb6ff;margin:0 0 14px">// what&apos;s inside</p>
+      <h2 style="margin:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(2rem,6vw,3.6rem);letter-spacing:-.02em;color:#fff;line-height:1.04">Four ways to delight</h2>
+    </div>
+    <div id="auStack"></div>
+  </section>
+
+  <!-- STATS -->
+  <section id="auStats" style="position:relative;z-index:2;padding:0 22px clamp(60px,9vw,110px);max-width:980px;margin:0 auto">
+    <div class="au-reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px"></div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section id="get" style="position:relative;z-index:2;padding:0 22px clamp(90px,12vw,150px)">
+    <div class="au-reveal" style="max-width:760px;margin:0 auto;text-align:center;border-radius:34px;padding:clamp(40px,6vw,72px) clamp(26px,4vw,56px);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.13);backdrop-filter:blur(18px);box-shadow:inset 0 1px 2px rgba(255,255,255,.18),0 40px 80px -40px rgba(0,0,0,.9)">
+      <div id="auCtaIcon" style="display:flex;justify-content:center;animation:au-bob 3.4s ease-in-out infinite"></div>
+      <h2 style="margin:14px 0 0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(1.9rem,5.5vw,3.2rem);letter-spacing:-.02em;color:#fff;line-height:1.05">Make your page<br>impossible to leave</h2>
+      <p style="margin:16px auto 0;max-width:40ch;font-size:1.05rem;color:#cfc4ee;font-weight:600">Pick a vibe, flip the switches, ship the file. Your visitors will feel the difference.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:30px">
+        <code style="font-family:'DM Mono',monospace;font-size:14px;color:#bff4ff;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:14px 18px"><span style="color:rgba(241,236,255,.4);margin-right:9px">$</span>npm&nbsp;i&nbsp;sparkle-that-page</code>
+        <a href="#play" class="au-install" style="display:flex;align-items:center;gap:8px;background:linear-gradient(123deg,#a78bfa,#f0abfc 55%,#22d3ee);color:#1a0f33;text-decoration:none;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;padding:14px 24px;border-radius:14px;transition:transform .2s;box-shadow:0 10px 26px -8px rgba(167,139,250,.7)">Read the docs →</a>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:48px;font-family:'Fredoka',sans-serif;font-weight:500;font-size:14px;color:rgba(241,236,255,.5)">made with <span style="color:#fde047;filter:drop-shadow(0 0 5px #fde047)">✦</span> for pages that deserve a little magic</p>
+  </section>
+
+  <!-- DIRECTION SWITCHER -->
+  <div style="position:fixed;bottom:18px;left:0;right:0;z-index:60;display:flex;justify-content:center;pointer-events:none">
+    <div style="pointer-events:auto;display:flex;align-items:center;gap:4px;padding:5px;border-radius:999px;background:rgba(20,13,40,.7);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.14);box-shadow:0 12px 30px -12px rgba(0,0,0,.9)">
+      <span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;padding:8px 15px;border-radius:999px;background:linear-gradient(123deg,#a78bfa,#22d3ee);color:#1a0f33">Aurora · dark</span>
+      <a href="bubblegum.html" style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;padding:8px 15px;border-radius:999px;color:rgba(241,236,255,.8);text-decoration:none">Bubblegum · bright →</a>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { startFx, stopFx, magnetic } from './sparkle-bridge.js';
+import { icon } from './icons.js';
+
+// the modules' trail / confetti / floaters read their colors from data-palette.
+// The page chrome is hand-coded in galaxy hex; particles use 'candy' (closest shipped palette).
+document.documentElement.dataset.palette = 'candy';
+
+const fxState = {
+  trail:    { on: true,  variant: 'sparkle' },
+  confetti: { on: true,  variant: 'confetti' },
+  cursor:   { on: false, variant: 'star' },
+  floaters: { on: true,  variant: 'stars' },
+  scroll:   { on: true,  variant: 'cat' },
+  tab:      { on: true,  variant: 'shy' },
+};
+
+const root = document.getElementById('auroraRoot');
+
+initMascot();
+initPins();
+heroFade();
+buildMarquee();
+buildPlayground();
+buildStack();
+buildStats();
+buildCta();
+revealOnScroll();
+stickyScale();
+
+// fire the default-on effects through the REAL repo modules
+Object.keys(fxState).forEach((k) => { if (fxState[k].on) startFx(k, fxState[k].variant); });
+
+// ——— marquee tiles (crafted icons) ———
+function buildMarquee() {
+  const tiles = [
+    ['wand', 'Fairy cursor', 'a sparkly wand for a pointer'],
+    ['sparkle', 'Sparkle trail', 'stardust follows your mouse'],
+    ['confetti', 'Click confetti', 'every tap bursts with cuteness'],
+    ['cat', 'Scroll meter', 'a buddy tracks your scroll'],
+    ['peek', 'Tab peekaboo', 'it misses you when you leave'],
+    ['bloom', 'Ambient floaters', 'petals, snow & bubbles drift by'],
+    ['loader', 'Kawaii loaders', 'pure-CSS adorable spinners'],
+    ['palette', 'Theme palettes', 'one swap restyles everything'],
+  ];
+  const tileHTML = (t) => `<div class="au-tile" style="flex:none;width:252px;padding:22px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(12px);box-shadow:inset 0 1px 1px rgba(255,255,255,.14);transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s">${icon(t[0], 44)}<div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:#fff;margin-top:14px;letter-spacing:-.01em">${t[1]}</div><div style="font-size:14px;color:#bcb0e0;margin-top:5px;line-height:1.4">${t[2]}</div></div>`;
+  const rows = root.querySelectorAll('.au-mq-row');
+  if (rows[0]) rows[0].innerHTML = [...tiles.slice(0, 4), ...tiles.slice(0, 4), ...tiles.slice(0, 4)].map(tileHTML).join('');
+  if (rows[1]) rows[1].innerHTML = [...tiles.slice(4), ...tiles.slice(4), ...tiles.slice(4)].map(tileHTML).join('');
+}
+
+// ——— interactive playground (drives the real modules) ———
+function buildPlayground() {
+  const defs = [
+    { key: 'trail', icon: 'sparkle', name: 'Sparkle trail', sub: 'stardust follows your mouse', variants: ['sparkle', 'star', 'heart'] },
+    { key: 'confetti', icon: 'confetti', name: 'Click confetti', sub: 'every click bursts open', variants: ['confetti', 'heart', 'star', 'petal'] },
+    { key: 'cursor', icon: 'wand', name: 'Fairy cursor', sub: 'your pointer becomes a wand', variants: ['star', 'heart', 'moon', 'crystal'] },
+    { key: 'floaters', icon: 'bloom', name: 'Ambient floaters', sub: 'a gentle weather behind it all', variants: ['stars', 'sakura', 'snow', 'bubbles'] },
+    { key: 'scroll', icon: 'cat', name: 'Scroll meter', sub: 'a buddy rides along as you scroll', variants: ['cat', 'comet'] },
+    { key: 'tab', icon: 'peek', name: 'Tab peekaboo', sub: 'it pleads when you switch tabs', variants: ['shy', 'love', 'sleepy', 'ghost'] },
+  ];
+  const wrap = document.getElementById('auPlay');
+  wrap.innerHTML = defs.map((d) => {
+    const st = fxState[d.key];
+    const pills = d.variants.map((v) => `<button class="au-vp" data-key="${d.key}" data-v="${v}" style="${pillStyle(v === st.variant)}">${v}</button>`).join('');
+    return `<div class="au-pf" style="border-radius:20px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);backdrop-filter:blur(10px);padding:18px;display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+        <div style="display:flex;align-items:center;gap:12px;min-width:0">
+          ${icon(d.icon, 40)}
+          <div style="min-width:0"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#fff;line-height:1.1">${d.name}</div><div style="font-size:12.5px;color:#bcb0e0;margin-top:2px">${d.sub}</div></div>
+        </div>
+        <button class="au-switch" data-key="${d.key}" aria-pressed="${st.on}" style="${switchStyle(st.on)}"><span style="${knobStyle(st.on)}"></span></button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:7px">${pills}</div>
+    </div>`;
+  }).join('');
+
+  wrap.querySelectorAll('.au-switch').forEach((b) => b.addEventListener('click', () => {
+    const k = b.dataset.key, st = fxState[k];
+    st.on = !st.on;
+    b.setAttribute('aria-pressed', st.on);
+    b.style.cssText = switchStyle(st.on);
+    b.firstElementChild.style.cssText = knobStyle(st.on);
+    if (st.on) startFx(k, st.variant); else stopFx(k);
+  }));
+  wrap.querySelectorAll('.au-vp').forEach((b) => b.addEventListener('click', () => {
+    const k = b.dataset.key, v = b.dataset.v;
+    fxState[k].variant = v;
+    wrap.querySelectorAll(`.au-vp[data-key="${k}"]`).forEach((x) => { x.style.cssText = pillStyle(x.dataset.v === v); });
+    if (fxState[k].on) startFx(k, v);
+  }));
+}
+function switchStyle(on) { return `position:relative;cursor:pointer;border:none;width:48px;height:27px;border-radius:999px;flex:none;transition:background .2s;background:${on ? 'linear-gradient(123deg,#a78bfa,#22d3ee)' : 'rgba(255,255,255,.14)'}`; }
+function knobStyle(on) { return `position:absolute;top:3px;left:${on ? '24px' : '3px'};width:21px;height:21px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 2px 5px rgba(0,0,0,.4)`; }
+function pillStyle(active) { return `cursor:pointer;font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:.03em;text-transform:lowercase;padding:5px 11px;border-radius:999px;transition:.18s;border:1px solid ${active ? 'transparent' : 'rgba(255,255,255,.16)'};background:${active ? 'rgba(240,171,252,.92)' : 'rgba(255,255,255,.03)'};color:${active ? '#1a0f33' : '#cbbff0'}`; }
+
+// ——— sticky stacking cards ———
+function buildStack() {
+  const cards = [
+    { n: '01', tag: 'cursor & trail', name: 'Magic at your fingertips', desc: 'Trade your pointer for a sparkly wand and leave a comet-tail of stardust wherever you wander. It is already on — give it a swirl.', demo: demoTrail() },
+    { n: '02', tag: 'click confetti', name: 'Throw a little party', desc: 'Every click bursts into a shower of cuteness. Hearts, stars, petals or ribbons — your pick.', demo: demoConfetti() },
+    { n: '03', tag: 'scroll & tab', name: 'It reacts to you', desc: 'A buddy tracks your scroll from the corner, and the tab title melts into a hopeful little plea the moment you wander off.', demo: demoScroll() },
+    { n: '04', tag: 'palettes & loaders', name: 'Pick your whole vibe', desc: 'One palette restyles the entire page — background, mascot, every effect. Candy, neon, meadow or galaxy.', demo: demoPalette() },
+  ];
+  const stack = document.getElementById('auStack');
+  stack.innerHTML = cards.map((c) => `
+    <div class="au-sticky" style="position:sticky;top:96px;margin-bottom:26px">
+      <div class="au-reveal au-card" style="border-radius:30px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(160deg,rgba(36,24,68,.92),rgba(22,14,44,.94));backdrop-filter:blur(16px);box-shadow:inset 0 1px 2px rgba(255,255,255,.16),0 40px 80px -44px rgba(0,0,0,1);overflow:hidden;display:grid;grid-template-columns:1.15fr .85fr;gap:0;min-height:280px">
+        <div style="padding:clamp(26px,3.4vw,42px);display:flex;flex-direction:column;justify-content:center">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+            <span style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(2.4rem,5vw,3.6rem);line-height:1;background:linear-gradient(135deg,#a78bfa,#22d3ee);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">${c.n}</span>
+            <span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#8fb6ff;border:1px solid rgba(143,182,255,.3);border-radius:999px;padding:5px 11px">${c.tag}</span>
+          </div>
+          <h3 style="margin:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(1.5rem,3.4vw,2.2rem);color:#fff;letter-spacing:-.01em;line-height:1.1">${c.name}</h3>
+          <p style="margin:14px 0 0;font-size:1.02rem;color:#cfc4ee;line-height:1.55;max-width:42ch">${c.desc}</p>
+        </div>
+        <div style="position:relative;border-left:1px solid rgba(255,255,255,.08);background:radial-gradient(120% 120% at 70% 20%,rgba(167,139,250,.18),transparent 60%);display:grid;place-items:center;padding:26px;min-height:240px">${c.demo}</div>
+      </div>
+    </div>`).join('');
+  wireConfettiDemos(stack);
+}
+function demoTrail() {
+  return `<div style="position:relative;width:100%;height:160px;display:grid;place-items:center">${icon('wand', 56)}${[0, 1, 2, 3, 4].map((i) => `<span style="position:absolute;left:${22 + i * 13}%;top:${58 - i * 8}%;width:${12 - i * 1.4}px;height:${12 - i * 1.4}px;background:${['#a78bfa', '#f0abfc', '#22d3ee', '#fde047', '#c4b5fd'][i]};clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);filter:drop-shadow(0 0 6px currentColor);color:${['#a78bfa', '#f0abfc', '#22d3ee', '#fde047', '#c4b5fd'][i]};animation:au-twinkle ${2 + i * 0.3}s ease-in-out infinite;animation-delay:-${i * 0.4}s"></span>`).join('')}</div>`;
+}
+function demoConfetti() {
+  return `<button class="au-demo-confetti" style="cursor:pointer;border:none;display:inline-flex;align-items:center;gap:9px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#1a0f33;background:linear-gradient(123deg,#f0abfc,#fde047);padding:13px 24px;border-radius:16px;box-shadow:0 12px 26px -8px rgba(240,171,252,.7);transition:transform .15s">${icon('confetti', 24)} mash me</button>`;
+}
+function demoScroll() {
+  return `<div style="display:flex;flex-direction:column;align-items:center;gap:16px"><div style="animation:au-bob 2.4s ease-in-out infinite">${icon('cat', 50)}</div><div style="width:150px;height:9px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden"><div style="width:62%;height:100%;border-radius:999px;background:linear-gradient(90deg,#a78bfa,#22d3ee)"></div></div><div style="font-family:'DM Mono',monospace;font-size:12px;color:#8fb6ff">scrolled 62%</div></div>`;
+}
+function demoPalette() {
+  const sw = [['#f472b6', '#c084fc', '#fde047'], ['#2ee6ff', '#b6ff3d', '#ff5ad0'], ['#e07a93', '#6a5acd', '#cf9036'], ['#a78bfa', '#818cf8', '#22d3ee']];
+  return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">${sw.map((p, i) => `<div style="display:flex;border-radius:13px;overflow:hidden;border:1px solid rgba(255,255,255,.16);box-shadow:0 8px 18px -8px rgba(0,0,0,.7);${i === 3 ? 'outline:2px solid #fff;outline-offset:2px' : ''}">${p.map((c) => `<span style="flex:1;height:46px;background:${c}"></span>`).join('')}</div>`).join('')}</div>`;
+}
+function wireConfettiDemos(stack) {
+  stack.querySelectorAll('.au-demo-confetti').forEach((b) => {
+    b.addEventListener('mousedown', () => { b.style.transform = 'scale(.94)'; setTimeout(() => (b.style.transform = ''), 130); });
+  });
+}
+
+// ——— stats ———
+function buildStats() {
+  const stats = [['1', 'tiny file'], ['0', 'dependencies'], ['8', 'live effects'], ['4', 'color vibes']];
+  const statWrap = document.getElementById('auStats').querySelector('div');
+  statWrap.innerHTML = stats.map((s) => `<div style="text-align:center;border-radius:22px;padding:30px 18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(12px);box-shadow:inset 0 1px 1px rgba(255,255,255,.14)"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(2.6rem,5vw,3.4rem);line-height:1;background:linear-gradient(135deg,#f0abfc,#22d3ee);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">${s[0]}</div><div style="margin-top:8px;font-family:'Fredoka',sans-serif;font-weight:500;font-size:14px;color:#bcb0e0;letter-spacing:.02em">${s[1]}</div></div>`).join('');
+}
+
+// ——— cta icon ———
+function buildCta() {
+  const ctaIcon = document.getElementById('auCtaIcon');
+  if (ctaIcon) ctaIcon.innerHTML = icon('sparkle', 56);
+}
+
+// ——— reveal on scroll ———
+function revealOnScroll() {
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  root.querySelectorAll('.au-reveal').forEach((el) => io.observe(el));
+}
+
+// ——— sticky stacking scale ———
+function stickyScale() {
+  const sticky = [...document.querySelectorAll('#auStack .au-card')];
+  const onScroll = () => {
+    for (let i = 0; i < sticky.length - 1; i++) {
+      const r = sticky[i].getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (96 - r.top) / (r.height * 0.9)));
+      const s = 1 - p * 0.06 * (sticky.length - 1 - i);
+      sticky[i].style.transform = `scale(${s.toFixed(4)})`;
+      sticky[i].style.transformOrigin = 'top center';
+    }
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
+// ——— hero fades out as you scroll into the story ———
+function heroFade() {
+  const h = document.querySelector('#auroraRoot > header');
+  if (!h || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const onFade = () => { h.style.opacity = Math.max(0, Math.min(1, 1 - scrollY / (innerHeight * 0.62))); };
+  addEventListener('scroll', onFade, { passive: true });
+  onFade();
+}
+
+// ——— scroll-scrubbed pinned pillar cards that wipe in (mask reveal) ———
+function initPins() {
+  const cards = document.getElementById('auPinCards');
+  const grid = document.getElementById('auPinGrid');
+  const trigger = document.getElementById('auPinTrigger');
+  if (!cards || !grid || !trigger) return;
+  const pillars = [
+    ['01', 'Drop in one file', 'No build step, no dependencies. Add a single script and your page is ready to shimmer.'],
+    ['02', 'Flip the switches', 'Fairy cursor, confetti, floaters, scroll buddy — toggle each one and pick its look, all live.'],
+    ['03', 'Watch it come alive', 'Visitors feel it the instant they move the mouse. Cute, fast, impossible to forget.'],
+  ];
+  grid.innerHTML = pillars.map((p) => `<div style="border-radius:24px;padding:clamp(22px,2.4vw,30px);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.13);backdrop-filter:blur(14px);box-shadow:inset 0 1px 2px rgba(255,255,255,.16),0 30px 60px -34px rgba(0,0,0,1)"><div style="font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.8rem,3vw,2.4rem);line-height:1;background:linear-gradient(135deg,#a78bfa,#22d3ee);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">${p[0]}</div><h3 style="margin:12px 0 8px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(1.15rem,1.8vw,1.45rem);color:#fff;letter-spacing:-.01em;line-height:1.15">${p[1]}</h3><p style="margin:0;font-size:.95rem;color:#cfc4ee;line-height:1.55">${p[2]}</p></div>`).join('');
+  const tick = () => {
+    const r = trigger.getBoundingClientRect();
+    const top = r.top + scrollY, h = r.height, vh = innerHeight;
+    const start = top - vh * 0.5, end = top + h - vh * 0.4, range = end - start;
+    let prog = range > 0 ? (scrollY - start) / range : 0;
+    prog = Math.max(0, Math.min(1, prog));
+    const isActive = scrollY >= start - vh * 0.2 && scrollY <= end + vh * 0.3;
+    const fadeIn = Math.min(1, Math.max(0, (scrollY - (start - vh * 0.2)) / (vh * 0.2)));
+    const fadeOut = Math.min(1, Math.max(0, (end + vh * 0.3 - scrollY) / (vh * 0.3)));
+    cards.style.opacity = isActive ? Math.min(fadeIn, fadeOut) : 0;
+    const mobile = innerWidth < 768;
+    grid.style.gridTemplateColumns = mobile ? '1fr' : 'repeat(3,1fr)';
+    const rev = prog * 130;
+    const grad = mobile
+      ? `linear-gradient(to bottom, #000 ${rev}%, transparent ${rev + 20}%)`
+      : `linear-gradient(to right, #000 ${rev}%, transparent ${rev + 15}%)`;
+    grid.style.maskImage = grad; grid.style.webkitMaskImage = grad;
+    requestAnimationFrame(tick);
+  };
+  tick();
+}
+
+// ——— mascot: eyes follow cursor, blink, click to twirl ———
+function initMascot() {
+  const cat = document.getElementById('auMascot');
+  const mag = document.getElementById('auMascotMag');
+  if (!cat) return;
+  if (mag && !matchMedia('(hover: none)').matches) magnetic(mag, { strength: 5, padding: 150 });
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const onEye = (e) => {
+      const r = cat.getBoundingClientRect();
+      const dx = (e.clientX - (r.left + r.width / 2)) / r.width;
+      const dy = (e.clientY - (r.top + r.height * 0.4)) / r.height;
+      cat.style.setProperty('--ex', Math.max(-3.5, Math.min(3.5, dx * 8)).toFixed(1) + 'px');
+      cat.style.setProperty('--ey', Math.max(-3, Math.min(3.5, dy * 8)).toFixed(1) + 'px');
+    };
+    addEventListener('mousemove', onEye, { passive: true });
+    const blink = () => { setTimeout(() => { cat.style.setProperty('--bk', '.1'); setTimeout(() => cat.style.setProperty('--bk', '1'), 120); blink(); }, 2400 + Math.random() * 2800); };
+    blink();
+  }
+  const fly = document.getElementById('auMascotFly');
+  cat.addEventListener('click', () => {
+    if (!fly || fly.dataset.tw) return;
+    fly.dataset.tw = '1';
+    fly.style.animation = 'm-twirl 1.1s cubic-bezier(.42,.04,.32,1)';
+    setTimeout(() => { fly.style.animation = 'au-fly 4.6s ease-in-out infinite'; delete fly.dataset.tw; }, 1150);
+  });
+}
+</script>
+</body>
+</html>
