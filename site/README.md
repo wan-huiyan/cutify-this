@@ -6,10 +6,11 @@ product and **demonstrate it on themselves** by running the real effects live.
 
 | File | Direction | Look |
 |---|---|---|
+| `index.html` | **Chooser** | the front door — pick-your-vibe splash linking both directions + the raw effects demo |
 | `aurora.html` | **A — Aurora** | dark / galaxy. Nav · hero (fairy-cat mascot on a glowing mushroom + gradient wordmark, scroll-fade) · scroll-mask pillars · auto-scroll marquee · **interactive playground** · sticky stacking cards · stats · final CTA |
 | `bubblegum.html` | **B — Bubblegum** | bright / candy. Color-crossfade carousel · scroll-mask pillars · mascot · features grid · install band |
 
-The two cross-link via the pill switcher (bottom-center on Aurora, top-center on Bubblegum).
+The two directions cross-link via the pill switcher (bottom-center on Aurora, top-center on Bubblegum); the chooser links into both.
 
 ## How the live effects work
 
@@ -34,12 +35,16 @@ set data-* on <html>  →  inject the module <script>  →  call .destroy() to s
 Serve from **at or above the repo root** so the repo-relative module paths resolve:
 
 ```
-python3 -m http.server 8137      # then open http://localhost:8137/site/aurora.html
+python3 -m http.server 8137      # then open http://localhost:8137/site/  (or /site/bubblegum.html)
 ```
 
-GitHub Pages serving the whole repo works the same way. The pages reference the canonical
-modules in place (single source of truth, no duplication). If the site ever needs to ship
-**standalone**, copy the six `examples/*.js` + `cute_chrome.css` into `site/assets/` and
+**Live deploy — GitHub Pages** (`.github/workflows/pages.yml`, on push to `main`). The workflow
+mirrors the repo layout into `_site` rather than flattening — `site/` and the canonical
+`plugins/.../examples/` modules stay **siblings**, so `sparkle-bridge.js`'s `EFFECTS_DIR`
+(`../plugins/...`) and each page's `cute_chrome.css` link resolve unchanged. Root `/` redirects
+to the chooser (`/site/`); `/demo.html` redirects to the raw effects demo. Single source of
+truth — the modules are referenced in place, never copied into `site/`. If the site ever needs
+to ship **standalone**, copy the six `examples/*.js` + `cute_chrome.css` into `site/assets/` and
 repoint `EFFECTS_DIR` in `sparkle-bridge.js`.
 
 ## Deliberate mappings

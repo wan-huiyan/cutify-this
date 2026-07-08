@@ -1,8 +1,9 @@
-name: Deploy demo to Pages
+name: Deploy site to Pages
 on:
   push:
     branches: [main]
     paths:
+      - "site/**"
       - "plugins/sparkle-that-page/skills/sparkle-that-page/examples/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
@@ -21,12 +22,20 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Assemble site (single source of truth = demo.html)
+      - name: Assemble site (landing pages + demo, module paths preserved)
         run: |
-          mkdir -p _site
-          src="plugins/sparkle-that-page/skills/sparkle-that-page/examples"
-          cp "$src"/*.js "$src"/*.css _site/
-          cp "$src/demo.html" _site/index.html
+          set -euo pipefail
+          ex="plugins/sparkle-that-page/skills/sparkle-that-page/examples"
+          mkdir -p "_site/$ex" _site/site
+          # Landing pages + their glue. sparkle-bridge.js resolves ../plugins/... from its own
+          # URL, so site/ and plugins/ MUST stay siblings — mirror the repo layout, don't flatten.
+          cp site/*.html site/*.js "_site/site/"
+          # Canonical effect modules + stylesheet + the raw demo, referenced in place
+          # (single source of truth — no duplication).
+          cp "$ex"/*.js "$ex"/*.css "$ex/demo.html" "_site/$ex/"
+          # Front door → the chooser; friendly /demo.html → the raw effects demo.
+          printf '<!doctype html><meta charset="utf-8"><title>sparkle that page</title><meta http-equiv="refresh" content="0; url=./site/">\n' > _site/index.html
+          printf '<!doctype html><meta charset="utf-8"><title>sparkle that page — demo</title><meta http-equiv="refresh" content="0; url=./%s/demo.html">\n' "$ex" > _site/demo.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
