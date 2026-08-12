@@ -1,6 +1,6 @@
 # cutify-this ✨
 
-> A little **bundle of cute web skills** for Claude Code. Cutify the browser **tab** (hand-authored SVG favicons), sparkle up the whole **page** (fairy cursor, sparkle trails, scroll progress, confetti, floaters), and pop your repo's **README** (a cute house-style front page).
+> A little **bundle of cute skills** for Claude Code. Cutify the browser **tab** (hand-authored SVG favicons), sparkle up the whole **page** (fairy cursor, sparkle trails, scroll progress, confetti, floaters), pop your repo's **README** (a cute house-style front page), and cutify your **terminal** (Ghostty themes, rounded Nerd Fonts, a Starship prompt — and a glyph check that catches the `?` boxes before you do).
 
 [![license](https://img.shields.io/github/license/wan-huiyan/cutify-this)](LICENSE)
 [![last commit](https://img.shields.io/github/last-commit/wan-huiyan/cutify-this)](https://github.com/wan-huiyan/cutify-this/commits)
