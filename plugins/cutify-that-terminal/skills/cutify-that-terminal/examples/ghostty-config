@@ -1,0 +1,43 @@
+# ~/.config/ghostty/config — a starter, not a preset to paste blind.
+#
+# Ghostty needs NO config at all. Delete this file and it goes back to stock.
+# Every line here is optional and commented with why it exists.
+#
+# Reload after editing:  Cmd+Shift+,   (no restart, the window recolours live)
+# Every setting and its default:  ghostty +show-config --default --docs
+
+# ---- the look ------------------------------------------------------------
+
+# 463 themes ship built in. Browse them LIVE with `ghostty +list-themes` — it
+# repaints the window as you arrow through, which beats picking from any list.
+theme = Catppuccin Mocha
+
+# To follow macOS light/dark instead of pinning one:
+# theme = dark:Catppuccin Mocha,light:Catppuccin Latte
+
+# ---- the font ------------------------------------------------------------
+
+# "NF" means the Nerd Font build: the same typeface WITH the icon glyphs a
+# prompt like Starship draws. The plain build is the same font WITHOUT them.
+#
+# Copy this name from `ghostty +list-fonts` verbatim. A name Ghostty cannot
+# match falls back SILENTLY — no error, no warning, just the wrong font. That
+# silence is the single most common way this setup goes wrong.
+font-family = Maple Mono NF
+
+font-size = 14
+
+# ---- behaviour worth changing --------------------------------------------
+
+# Reopen the windows, tabs and splits you had when you quit.
+window-save-state = always
+
+# Install Ghostty's terminfo on remote hosts the first time you ssh to them, so
+# remote programs stop seeing an unknown "xterm-ghostty" and misdrawing.
+# Stock list is: cursor,no-sudo,title,no-ssh-env,no-ssh-terminfo,path
+shell-integration-features = cursor,no-sudo,title,ssh-env,ssh-terminfo,path
+
+# Cmd+Shift+J writes the VISIBLE screen to a file and pastes the path.
+# This adds Cmd+Opt+J for the WHOLE scrollback — the one you want after a long
+# build, so you can hand over a path instead of scrolling and copying.
+keybind = super+alt+j=write_scrollback_file:paste,plain

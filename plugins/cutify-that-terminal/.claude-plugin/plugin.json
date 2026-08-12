@@ -1,0 +1,9 @@
+{
+  "name": "cutify-that-terminal",
+  "description": "Make a macOS terminal cute and then prove it renders: 463 built-in Ghostty themes, rounded Nerd Fonts, and a Starship prompt — plus a verify-glyphs script that catches the \"?\" boxes before the user sees them, and a per-terminal prompt split so Ghostty keeps its icons while Apple Terminal, VS Code and ssh get a prompt that cannot break. macOS + Homebrew + zsh.",
+  "version": "1.0.0",
+  "author": { "name": "Huiyan Wan" },
+  "repository": "https://github.com/wan-huiyan/cutify-this",
+  "license": "MIT",
+  "keywords": ["claude-code", "claude-code-skill", "terminal", "ghostty", "starship", "nerd-fonts", "catppuccin", "zsh", "macos", "dotfiles", "cute"]
+}
