@@ -1,18 +1,19 @@
 # cutify-this ✨
 
-> A little **bundle of cute web skills** for Claude Code. Cutify the browser **tab** (hand-authored SVG favicons), sparkle up the whole **page** (fairy cursor, sparkle trails, scroll progress, confetti, floaters), and pop your repo's **README** (a cute house-style front page).
+> A little **bundle of cute skills** for Claude Code. Cutify the browser **tab** (hand-authored SVG favicons), sparkle up the whole **page** (fairy cursor, sparkle trails, scroll progress, confetti, floaters), pop your repo's **README** (a cute house-style front page), and cutify your **terminal** (Ghostty themes, rounded Nerd Fonts, a Starship prompt — and a glyph check that catches the `?` boxes before you do).
 
 [![license](https://img.shields.io/github/license/wan-huiyan/cutify-this)](LICENSE)
 [![last commit](https://img.shields.io/github/last-commit/wan-huiyan/cutify-this)](https://github.com/wan-huiyan/cutify-this/commits)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-skills-orange)](https://claude.com/claude-code)
 
-## Three skills in the bundle
+## Four skills in the bundle
 
 | Skill | What it does | Install |
 |---|---|---|
 | 🎀 **cutify-that-tab** | cute hand-authored SVG favicons — emoji / gradient blob / pixel-art mascot (78 starters) | `/plugin install cutify-that-tab@wan-huiyan-cutify-this` |
 | ✨ **sparkle-that-page** | cute zero-dep page effects — fairy cursor, sparkle trail, scroll indicator, tab peekaboo, confetti, floaters, cute-chrome | `/plugin install sparkle-that-page@wan-huiyan-cutify-this` |
 | 🪄 **pop-that-readme** | a cute, high-signal README in the house style — pixel hero, badges, value-prop, emoji feature table, install block, honesty box | `/plugin install pop-that-readme@wan-huiyan-cutify-this` |
+| ⌨️ **cutify-that-terminal** | a cute macOS terminal that provably renders — Ghostty themes, rounded Nerd Fonts, a Starship prompt, and a glyph check that catches the `?` boxes | `/plugin install cutify-that-terminal@wan-huiyan-cutify-this` |
 
 Add the marketplace once, then install any (or all):
 
@@ -20,7 +21,12 @@ Add the marketplace once, then install any (or all):
 /plugin marketplace add wan-huiyan/cutify-this
 ```
 
-> Renamed from `cutify-that-tab` → `cutify-this` (the repo now hosts three skills). Old links redirect automatically.
+> Renamed from `cutify-that-tab` → `cutify-this` (the repo now hosts four skills). Old links redirect automatically.
+>
+> ⚠️ **One of these is not like the others.** The three web skills drop a file into
+> your project and revert by deleting it. **`cutify-that-terminal` installs software
+> and edits your `~/.zshrc`** — so it backs the file up first, shows you the diff,
+> appends only, and gives you the undo in the same breath. It is macOS + Homebrew + zsh.
 
 ---
 
@@ -47,6 +53,51 @@ Seven self-contained, **zero-dependency** effects — one short vanilla file eac
 Every motion effect respects `prefers-reduced-motion`, overlays never block clicks, pointer effects no-op on touch, and each exposes `SparkleThatPage.<name>.destroy()` for SPA cleanup. The bundled `examples/demo.html` (the live demo above) toggles all seven and doubles as the verify tool.
 
 **Prior art** — heavier off-the-shelf options if you'd rather not hand-author: [tholman/cursor-effects](https://github.com/tholman/cursor-effects) (the classic fairy-dust / snowflake / bubble cursors), [party.js](https://party.js.org/), [canvas-confetti](https://github.com/catdad/canvas-confetti), [tsParticles](https://github.com/tsparticles/tsparticles). This bundle stays hand-authored & dependency-free so Claude can author + wire it (and pixel-art variants) for you.
+
+---
+
+## ⌨️ cutify-that-terminal — a cute terminal that provably renders
+
+**The problem it actually solves:** every terminal-ricing guide ends with "install
+a Nerd Font, paste this config, enjoy". None of them verify. So you paste it, your
+prompt comes back with `?` boxes where the icons should be, and **nothing errored
+anywhere** — a font name that matches nothing falls back silently, a preset that
+leaves one icon behind still loads fine, and a terminal that never got the font
+just draws boxes. Every layer reports success.
+
+Four levers, in the order you should pull them:
+
+| Lever | What it gets you |
+|---|---|
+| **Terminal** | Ghostty if you have no preference — native, GPU-drawn, good with zero config. Honest one-liners on iTerm2 / kitty / WezTerm / Warp so you can disagree. |
+| **Theme** | 463 ship built in. `ghostty +list-themes` previews them *live*. Nothing to install. |
+| **Font** | A rounded face does more for "cute" than any palette. Maple Mono NF, or Comic Mono if you mean it. |
+| **Prompt** | Starship, with the git branch, a dirty-tree mark, and a `❯` that turns red when the last command failed. |
+
+**Then it verifies, which is the whole point.** `scripts/verify-glyphs.sh` asks
+Ghostty which font would draw each icon in your actual rendered prompt:
+
+```bash
+./scripts/verify-glyphs.sh              # check this shell's prompt
+./scripts/verify-glyphs.sh --self-test  # prove the FAIL path still fires
+```
+
+Three-valued exit — `0` PASS, `1` FAIL, `3` UNCHECKED — because **a check that
+could not run is not a pass**. And a `--self-test` flag that injects a codepoint
+no font has, so you can confirm the guard still fires rather than trusting a green
+tick. It checks three things that fail for different reasons: whether any font has
+the glyphs at all, whether they come from the font you configured or from a silent
+fallback, and whether you are even in Ghostty (if not, it says UNCHECKED rather
+than guessing).
+
+**The finding it is built on:** Ghostty bundles its *own* Symbols Nerd Font as a
+fallback. Icons render in Ghostty even when no Nerd Font is installed and even when
+`font-family` is wrong — which is exactly why this bug is so confusing. The terminal
+you configured looks perfect; only the *other* one shows boxes. Checking by eye
+proves nothing.
+
+Ships a per-terminal prompt split too, so Ghostty keeps its icons while Apple
+Terminal, VS Code and ssh sessions get a prompt that cannot break.
 
 ---
 

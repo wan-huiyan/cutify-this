@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "wan-huiyan-cutify-this",
-  "description": "cutify-this — a bundle of cute web skills. Cutify the browser tab (hand-authored SVG favicons), sparkle up the whole page (fairy cursor, sparkle trails, scroll progress, confetti, floaters), and pop your repo's README (cute house-style front page).",
+  "description": "cutify-this — a bundle of cute skills. Cutify the browser tab (hand-authored SVG favicons), sparkle up the whole page (fairy cursor, sparkle trails, scroll progress, confetti, floaters), pop your repo's README (cute house-style front page), and cutify your terminal (Ghostty themes, rounded Nerd Fonts, a Starship prompt, and a glyph check that catches the \"?\" boxes).",
   "owner": { "name": "Huiyan Wan" },
   "plugins": [
     {
@@ -20,6 +20,12 @@
       "name": "pop-that-readme",
       "source": "./plugins/pop-that-readme",
       "description": "Author a cute, high-signal GitHub README in a polished house style: pixel/arcade hero, badge row, bold value-prop, emoji feature table, copy-paste install block, contributors shoutout, honest limitations. Ships a fill-in template + baked-in hero recipes.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "cutify-that-terminal",
+      "source": "./plugins/cutify-that-terminal",
+      "description": "Make a macOS terminal cute and then prove it renders: 463 built-in Ghostty themes, rounded Nerd Fonts, a Starship prompt, and a verify-glyphs script that catches the \"?\" boxes before you see them. Ships a per-terminal prompt split so Ghostty keeps its icons while Apple Terminal, VS Code and ssh get a prompt that cannot break. macOS + Homebrew + zsh.",
       "version": "1.0.0"
     }
   ]
