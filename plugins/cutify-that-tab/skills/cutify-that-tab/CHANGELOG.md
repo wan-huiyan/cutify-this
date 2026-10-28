@@ -3,6 +3,28 @@
 Newest first. The skill itself is in `SKILL.md`; diagnosis and field-testing detail is in
 `references/troubleshooting.md`.
 
+## v1.12.1 (2026-10-28)
+
+- **All shipped examples now pass `scripts/check-favicon.py`** (issue #7): 74 PASS,
+  0 FAIL, 3 UNCHECKED (`blob_cheer`, `blob_love_rays`, `blob_sparkles` have no tile,
+  so the checker cannot find a body). Each fixed file was also checked by eye in
+  `examples/preview.html` against the four Chrome tab colours.
+- **R1 retints** (body vanished on a light tab): `pixel_axolotl`, `pixel_macaron`,
+  `pixel_tea_cup` (`#fbcfe8` → `#f9a8d4`), `pixel_puppy` (`#fde68a` → `#fcd34d`),
+  `pixel_cat_love` (`#9ca3af` → `#6b7280`), `pixel_seal` (`#9ca3af` → `#64748b`),
+  `pixel_cloud` (sky-300 → sky-400), `pixel_ice_cream` (`#6ee7b7` → `#34d399`),
+  `pixel_ghost` (white → violet-300 `#c4b5fd`).
+- **R2 tiles** (white is the mascot's identity, so it sits on a mid-tone tile):
+  `pixel_cow` (green-400), `pixel_panda` (emerald-500), `pixel_sheep` (lime-400),
+  `pixel_onigiri` (orange-400), `pixel_sushi` (cyan-400), `pixel_rainbow` (sky-400;
+  clouds moved in, blue band darkened).
+- **Margin redraws** (art touched the viewBox edge): `pixel_boba`,
+  `pixel_bunny_silhouette`, `pixel_cactus`, `pixel_cupcake`,
+  `pixel_star_silhouette`, `pixel_sun` (rays thinner, `#fbbf24`).
+- The Technique C recipe in SKILL.md drew a white `#fff` head, two lines above the
+  rule that white vanishes; it now uses the skill's own field-tested colours
+  (`#f9a8d4` head, `#ec4899` ears, `#db2777` blush).
+
 ## v1.12.0 (2026-10-28)
 
 - **Contradictions fixed.** The "pick colors that read on both backgrounds
