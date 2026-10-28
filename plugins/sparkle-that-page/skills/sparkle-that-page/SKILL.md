@@ -54,6 +54,21 @@ CSS with a `<link>`, then set options via `data-*` attributes on `<html>`:
 <html data-wand="sailormoon" data-trail="fairydust" data-palette="candy">
 ```
 
+### Step 0 · how often will it fire?
+
+Decide how often an effect fires *before* you decide how it looks — a rule from
+the `animate` skill in [emilkowalski/skills](https://github.com/emilkowalski/skills):
+things users do 100+ times a day should barely animate; delight belongs to rare
+moments. The defaults below follow it.
+
+| Effect | How often it fires | Default |
+|---|---|---|
+| Click confetti | every click, 100+/day | scoped to celebratory elements (`[data-celebrate]`, `[data-confetti]`); `data-confetti-on="*"` is opt-in |
+| Sparkle trail | every mouse move | sparse by default; `data-trail-density="storm"` is opt-in; landing pages, not all-day tools |
+| Wobble hover | tens per day | near-imperceptible (±2°, 0.35 s, mouse only) |
+| Floaters / fairy cursor / scroll ring | always on | fine on marketing and demo pages; never over data the user is reading or acting on |
+| Tab peekaboo | rare | fine as is |
+
 ### Color palette (shared across the particle effects)
 
 Set `data-palette` on `<html>` (default `candy`). It tints the **sparkle
@@ -65,6 +80,16 @@ variants), and turns on a soft glow for `neon`:
 | `candy` | pink / purple / gold | kawaii (default, matches the cutify brand) |
 | `neon` | cyan / lime / magenta / amber + **glow** | "mission control" |
 | `meadow` | rose / indigo / teal / lavender / peach | soft, earthy, warm |
+
+**One source of color.** `cute_chrome.css` defines the palette as CSS custom
+properties — `--stp-c1` … `--stp-c5` (plus an optional `--stp-c6` and `--stp-ink`,
+the text color on selections) — on `:root` (candy), overridden by
+`[data-palette="neon"]` and `[data-palette="meadow"]`. It also uses them for
+`::selection`, the spinner and the scrollbar. Each JS effect first reads those
+tokens with `getComputedStyle`; if they are empty (the CSS isn't loaded) it falls
+back to its own built-in array, so every file still works alone. Override the
+tokens in your own CSS to brand all effects at once. Click confetti uses the
+tokens only when `data-palette` is set; otherwise it keeps the per-variant colors.
 
 ### 1 · Fairy-wand cursor — `fairy_cursor.js`
 
@@ -85,6 +110,9 @@ and burst on `click`; recycled fixed pool (cap 80).
 
 - `data-trail`: `sparkle` (default) · `star` · `heart` · `pixel` · `fairydust`
   (small glowing dots). Colors come from `data-palette` (multi-color per particle).
+- `data-trail-density`: omit for the sparse default (a spawn every ≥ 24 px of
+  pointer travel) · `storm` = dense, a spawn every ~16 ms (the v1.0 rate).
+  Click bursts are the same either way.
 - No-op on touch and on reduced-motion.
 
 ### 3 · Scroll-depth indicator — `scroll_indicator.js`
@@ -93,8 +121,8 @@ Fixed floating element driven by `scrollTop / (scrollHeight − innerHeight)`,
 `passive` listener + rAF.
 
 - `data-scroll`: `ring` (default — filling % ring, bottom-right, with an idle
-  bob) · `comet` (top progress bar with a sparkle head) · `mascot` (a pixel
-  face that climbs a rail on the right).
+  bob) · `comet` (top progress bar with a sparkle head; `scaleX`) · `mascot` (a
+  pixel face that climbs a rail on the right; `translateY`).
 - Reduced-motion disables the idle bob; the indicator still tracks position.
 
 ### 4 · Tab-title peekaboo — `tab_title_peekaboo.js`
@@ -110,14 +138,17 @@ cute message, then restores on return. The one effect that ties back to
 
 ### 5 · Click confetti / heart burst — `click_confetti.js`
 
-A `<canvas>` overlay; a radial physics burst (velocity + gravity) on click.
+A `<canvas>` overlay (sharp on Retina); a radial physics burst (velocity +
+gravity, time-based so it matches at 60 and 120 Hz) on click.
 
 - `data-confetti`: `heart` (default) · `star` · `confetti` · `petal` · `pixel`.
-- `data-confetti-on` (optional CSS selector, e.g. `[data-confetti]`) limits
-  bursts to matching elements; omit for any-click. `data-palette` recolors it
-  (and `neon` adds glow).
-- No-op on reduced-motion. Exposes `SparkleThatPage.clickConfetti.burst(x, y)`
-  to fire programmatically.
+- `data-confetti-on` — *where* it fires, read at click time (so it can be
+  toggled live): omit = only elements matching `[data-celebrate], [data-confetti]`
+  (elements opt in) · `*` = every click · any other value = a CSS selector.
+  `data-palette` recolors it (and `neon` adds glow).
+- Reduced motion: *fewer and gentler, not zero* — a qualifying click draws one
+  small glyph that fades out in place over ~400 ms (no movement, no physics).
+- Exposes `SparkleThatPage.clickConfetti.burst(x, y)` to fire programmatically.
 
 ### 6 · Ambient floaters — `ambient_floaters.js`
 
@@ -133,21 +164,30 @@ A slow `position:fixed; pointer-events:none` layer **behind** content.
 Drop-in CSS, mostly global:
 
 - Pastel `::selection`.
-- `.stp-wobble` — add to buttons/links for a playful hover wobble.
+- `.stp-wobble` — add to buttons/links for a gentle hover wobble (±2°, scale
+  ≤ 1.03, 0.35 s; only where `(hover: hover) and (pointer: fine)`).
 - `.stp-spinner` — `<span class="stp-spinner"></span>` is a kawaii 3-dot loader.
 - Pastel custom scrollbar (WebKit/Blink + Firefox `scrollbar-color`).
+- The `--stp-c1…c5` palette tokens (see Color palette) drive all three of the above.
 - All motion is wrapped in `@media (prefers-reduced-motion: no-preference)`.
 
 ## Global constraints (baked into every effect — keep them)
 
 - **`prefers-reduced-motion: reduce` disables/reduces every motion effect**
-  (JS-guarded via `matchMedia` + CSS `@media`).
+  (JS-guarded via `matchMedia` + CSS `@media`). Click confetti is "fewer and
+  gentler, not zero": one glyph fades in place (~400 ms) instead of a burst.
+- **Delight budget (Step 0):** confetti fires only on opted-in elements by
+  default, the trail is sparse by default, the wobble is near-imperceptible and
+  mouse-only. Dense / every-click modes are explicit opt-ins.
 - All overlays are **`pointer-events: none`** — effects never block clicks,
   selection, or scrolling.
 - Pointer-following effects (cursor, trail) **no-op on touch / coarse pointers**
   (`matchMedia('(pointer: fine)')`).
-- Particle pools are **capped**, animation is **rAF-driven**, listeners are
-  `passive`, and only `transform`/`opacity` are animated.
+- Particle pools are **capped**, animation is **rAF-driven** and **time-based**
+  (rAF timestamp, step clamped to 3 frames — same speed on 60 and 120 Hz),
+  listeners are `passive`, and only `transform`/`opacity` are animated (plus the
+  scroll ring's `stroke-dashoffset`, on a 48 px SVG). The confetti canvas is
+  scaled by `devicePixelRatio`.
 - Each JS effect registers a **teardown** on a shared registry:
   `window.SparkleThatPage.<name>.destroy()` (for SPA route changes). Keys:
   `fairyCursor`, `sparkleTrail`, `scrollIndicator`, `tabPeekaboo`,
@@ -165,8 +205,8 @@ variant dropdowns — it's both the showcase and the verify tool) and check:
 - [ ] Each effect turns on/off; variants and palettes switch live.
 - [ ] Clicks and scrolling are **not** blocked anywhere (overlays are
       `pointer-events:none`).
-- [ ] `prefers-reduced-motion: reduce` → trail / confetti / floaters suppress;
-      the scroll indicator still tracks.
+- [ ] `prefers-reduced-motion: reduce` → trail / floaters suppress; confetti
+      shows one fading glyph per click; the scroll indicator still tracks.
 - [ ] No console errors.
 - [ ] **Eyeball it.** Programmatic checks can't prove "cute" — look at the
       cursor, the trail, a confetti burst, the floaters.
@@ -185,12 +225,12 @@ cache. In production this is a non-issue — the files don't change between load
 | File | Effect | Key `data-*` |
 |---|---|---|
 | `fairy_cursor.js` | wand cursor | `data-wand` (star/heart/moon/pixel/sailormoon) |
-| `sparkle_trail.js` | mouse trail | `data-trail` (sparkle/star/heart/pixel/fairydust), `data-palette` |
+| `sparkle_trail.js` | mouse trail | `data-trail` (sparkle/star/heart/pixel/fairydust), `data-trail-density` (storm), `data-palette` |
 | `scroll_indicator.js` | scroll depth | `data-scroll` (ring/comet/mascot) |
 | `tab_title_peekaboo.js` | tab blur message | `data-peekaboo-msg`, `data-peekaboo-favicon` |
-| `click_confetti.js` | click burst | `data-confetti` (heart/star/confetti/petal/pixel), `data-confetti-on`, `data-palette` |
+| `click_confetti.js` | click burst | `data-confetti` (heart/star/confetti/petal/pixel), `data-confetti-on` (`*` = every click; default `[data-celebrate], [data-confetti]`), `data-palette` |
 | `ambient_floaters.js` | background layer | `data-floaters` (sakura/leaves/snowflake/bubbles/dust/fairydust), `data-floaters-count`, `data-palette` |
-| `cute_chrome.css` | selection/wobble/spinner/scrollbar | `.stp-wobble`, `.stp-spinner` classes |
+| `cute_chrome.css` | selection/wobble/spinner/scrollbar + palette tokens | `.stp-wobble`, `.stp-spinner` classes, `--stp-c1…c5` |
 | `demo.html` | live showcase + verify tool | — |
 
 ## Prior art / see also
@@ -218,6 +258,16 @@ Sibling skill: **`cutify-that-tab`** — the cute favicon half of the
 
 ## Changelog
 
+- **v1.1.0** (2026-10-28) — Delight budget + animation fixes. New "Step 0 · how
+  often will it fire?" (frequency gate, credited to `animate` in
+  emilkowalski/skills). Click confetti now fires only on `[data-celebrate],
+  [data-confetti]` by default (`data-confetti-on="*"` = every click) and shows a
+  single fading glyph under reduced motion; sparkle trail is sparse by default
+  (`data-trail-density="storm"` restores the old rate); `.stp-wobble` is gentler
+  and hover-gated. Scroll comet/mascot animate `transform` only; confetti canvas
+  honors `devicePixelRatio`; confetti / trail / floaters physics is time-based
+  (no 2× speed on 120 Hz); palettes come from `--stp-c1…c5` CSS tokens with the
+  JS arrays as fallback.
 - **v1.0.0** (2026-06-17) — Initial skill: 7 zero-dependency page effects
   (fairy-wand cursor, sparkle trail, scroll-depth indicator, tab-title
   peekaboo, click confetti, ambient floaters, cute-chrome touches), each with

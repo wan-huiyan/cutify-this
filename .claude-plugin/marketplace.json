@@ -8,13 +8,13 @@
       "name": "cutify-that-tab",
       "source": "./plugins/cutify-that-tab",
       "description": "Add a cute SVG favicon: emoji, gradient blob, or 16×16 pixel-art mascot. 56 pixel-art mascots + 22 emotion gradient blobs.",
-      "version": "1.11.0"
+      "version": "1.12.0"
     },
     {
       "name": "sparkle-that-page",
       "source": "./plugins/sparkle-that-page",
       "description": "Cute zero-dep page effects: fairy-wand cursor, sparkle trail, animated scroll-depth indicator, tab-title peekaboo, click confetti, ambient floaters, cute-chrome touches. Pixel-art variant on each.",
-      "version": "1.0.0"
+      "version": "1.1.0"
     },
     {
       "name": "pop-that-readme",

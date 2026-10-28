@@ -3,8 +3,9 @@
  *   sakura | leaves | snowflake | bubbles | dust | fairydust
  *   dust & fairydust pick colors from <html data-palette="candy"> (candy | neon | meadow)
  *   count: <html data-floaters-count="18">
+ *   dust/fairydust read CSS tokens --stp-c1…c6 (see cute_chrome.css) first; built-in arrays are the fallback.
  * A slow layer of drifting things behind the content. pointer-events:none.
- * No-op on reduced-motion. */
+ * Time-based motion (same speed at 60 / 120 Hz). No-op on reduced-motion. */
 (function () {
   "use strict";
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -17,7 +18,8 @@
     neon:   ["#2ee6ff", "#b6ff3d", "#ff5ad0", "#ffb43d", "#ffffff"],
     meadow: ["#e87a90", "#6a5acd", "#4aad9a", "#d4943a", "#b8a8e0", "#f4c4a0"]
   };
-  var palette = PALETTES[ds.palette] || PALETTES.candy;
+  function tokens() { var cs = getComputedStyle(document.documentElement), o = []; for (var i = 1; i <= 6; i++) { var v = cs.getPropertyValue("--stp-c" + i).trim(); if (v) o.push(v); } return o.length ? o : null; }
+  var palette = tokens() || PALETTES[ds.palette] || PALETTES.candy;
   var GLYPH = { sakura: "❀", leaves: "🍃", snowflake: "❄", dust: "✦", fairydust: "•" };
   var FIXED = { sakura: "#fbcfe8", snowflake: "#ffffff", leaves: "#86efac" };
   var usePalette = variant === "dust" || variant === "fairydust";
@@ -57,10 +59,11 @@
     layer.appendChild(el);
     var p = { el: el }; reset(p, false); items.push(p);
   }
-  var raf;
-  function tick() {
+  var raf, last = 0;
+  function tick(now) {
+    var k = last ? Math.min((now - last) / 16.667, 3) : 1; last = now; // 1 = one 60 Hz frame
     for (var i = 0; i < items.length; i++) {
-      var p = items[i]; p.sway += 0.02; p.y += p.vy; p.x += p.vx + Math.sin(p.sway) * 0.4;
+      var p = items[i]; p.sway += 0.02 * k; p.y += p.vy * k; p.x += (p.vx + Math.sin(p.sway) * 0.4) * k;
       if (p.y > innerHeight + 24) reset(p, true);
       p.el.style.transform = isBubble
         ? "translate(" + p.x + "px," + p.y + "px)"
