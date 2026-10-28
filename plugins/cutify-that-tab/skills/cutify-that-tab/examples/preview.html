@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Favicon tab preview</title>
+<style>
+  :root { --bg:#faf8f5; --fg:#2b2a28; --mute:#7a766f; --card:#fff; --line:#e4e0d9; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#17171a; --fg:#e8e6e1; --mute:#9a968e; --card:#1f1f23; --line:#2e2e33; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:32px 20px 48px; background:var(--bg); color:var(--fg);
+         font:14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width:760px; margin:0 auto; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  p.sub { margin:0 0 20px; color:var(--mute); }
+  .pick { display:flex; flex-wrap:wrap; gap:12px 24px; margin-bottom:20px; }
+  .pick label { display:flex; flex-direction:column; gap:4px; font-size:12px; color:var(--mute); }
+  .pick input { color:var(--fg); font-size:13px; }
+  .strip { background:var(--card); border:1px solid var(--line); border-radius:12px;
+           padding:14px 16px; margin-bottom:12px; }
+  .strip h2 { font-size:13px; font-weight:600; margin:0 0 10px; display:flex; gap:8px; align-items:baseline; }
+  .strip h2 code { font-weight:400; color:var(--mute); }
+  .row { display:flex; align-items:flex-end; gap:20px; flex-wrap:wrap; }
+  .bar { display:flex; align-items:flex-end; padding:8px 8px 0; background:#8a8d91; border-radius:8px 8px 0 0; }
+  .tab { display:flex; align-items:center; gap:8px; padding:8px 14px; min-width:170px;
+         border-radius:8px 8px 0 0; font:12px system-ui, sans-serif; }
+  .tab img { width:16px; height:16px; image-rendering:pixelated; }
+  .big { display:flex; align-items:center; justify-content:center; border-radius:6px;
+         border:1px solid rgba(128,128,128,.35); }
+  .big img { image-rendering:pixelated; }
+  .note { margin:8px 0 0; font-size:12px; color:var(--mute); }
+  .err { color:#c2410c; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Favicon at real tab size</h1>
+  <p class="sub">The icon at 16 px in a tab, plus 32 and 64 px enlargements, against the four Chrome tab colours.
+    URL form: <code>preview.html?src=icon.svg&amp;dark=icon_dark.svg</code> (paths relative to this page, or absolute).</p>
+  <div class="pick">
+    <label>Light file <input type="file" id="lf" accept=".svg,image/svg+xml"></label>
+    <label>Dark file (optional) <input type="file" id="df" accept=".svg,image/svg+xml"></label>
+  </div>
+  <div id="out"></div>
+  <p class="note" id="msg"></p>
+</main>
+<script>
+const TABS = [
+  ["Light active",   "#f0eee9", "#1f1f1f", "light"],
+  ["Light inactive", "#c2c5be", "#3c3c3c", "light"],
+  ["Dark active",    "#202124", "#e8eaed", "dark"],
+  ["Dark inactive",  "#2f3033", "#bdc1c6", "dark"],
+];
+const q = new URLSearchParams(location.search);
+const state = { light: q.get("src") || "pixel_mochi_cat.svg", dark: q.get("dark") || "" };
+const names = { light: state.light, dark: state.dark };
+const out = document.getElementById("out"), msg = document.getElementById("msg");
+
+function img(url, px) {
+  const i = new Image(px, px);
+  i.alt = "";
+  i.onerror = () => { msg.className = "note err"; msg.textContent = "Could not load " + url + " (check the path, or use a file picker)."; };
+  i.src = url;
+  return i;
+}
+
+function render() {
+  out.replaceChildren();
+  for (const [label, hex, fg, mode] of TABS) {
+    const useDark = mode === "dark" && state.dark;
+    const url = useDark ? state.dark : state.light;
+    const strip = document.createElement("section");
+    strip.className = "strip";
+    const h = document.createElement("h2");
+    h.append(label + " ");
+    const c = document.createElement("code"); c.textContent = hex; h.append(c);
+    strip.append(h);
+    const row = document.createElement("div"); row.className = "row";
+    const bar = document.createElement("div"); bar.className = "bar";
+    const tab = document.createElement("div"); tab.className = "tab";
+    tab.style.background = hex; tab.style.color = fg;
+    tab.append(img(url, 16), "Your App Name");
+    bar.append(tab); row.append(bar);
+    for (const px of [32, 64]) {
+      const b = document.createElement("div"); b.className = "big";
+      b.style.cssText = `background:${hex};width:${px + 24}px;height:${px + 24}px`;
+      b.append(img(url, px)); row.append(b);
+    }
+    strip.append(row);
+    const n = document.createElement("p"); n.className = "note";
+    n.textContent = (useDark ? "dark file: " : mode === "dark" ? "light file on a dark tab: " : "") + (useDark ? names.dark : names.light);
+    strip.append(n);
+    out.append(strip);
+  }
+}
+
+function pick(id, key) {
+  document.getElementById(id).addEventListener("change", e => {
+    const f = e.target.files[0];
+    if (!f) return;
+    if (state[key].startsWith("blob:")) URL.revokeObjectURL(state[key]);
+    state[key] = URL.createObjectURL(f); names[key] = f.name;
+    msg.textContent = ""; render();
+  });
+}
+pick("lf", "light"); pick("df", "dark");
+render();
+</script>
+</body>
+</html>

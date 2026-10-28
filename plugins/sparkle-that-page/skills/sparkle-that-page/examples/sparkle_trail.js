@@ -2,6 +2,9 @@
  * Use: <script src="sparkle_trail.js"></script>   Variant: <html data-trail="sparkle">
  *   trail: sparkle | star | heart | pixel | fairydust
  *   color: <html data-palette="candy">  (candy | neon | meadow) — multi-color picks per particle
+ *     Reads CSS tokens --stp-c1…c6 (see cute_chrome.css) first; the built-in arrays are the fallback.
+ *   density: sparse by default (a spawn every >=24 px of travel); <html data-trail-density="storm"> = dense, every ~16 ms.
+ * Click bursts are unchanged. Time-based physics (same speed at 60 / 120 Hz).
  * No-op on touch + on reduced-motion. Capped particle pool, rAF-driven. */
 (function () {
   "use strict";
@@ -17,7 +20,8 @@
   var ds = document.documentElement.dataset;
   var variant = ds.trail || "sparkle";
   var paletteName = ds.palette || "candy";
-  var palette = PALETTES[paletteName] || PALETTES.candy;
+  function tokens() { var cs = getComputedStyle(document.documentElement), o = []; for (var i = 1; i <= 6; i++) { var v = cs.getPropertyValue("--stp-c" + i).trim(); if (v) o.push(v); } return o.length ? o : null; }
+  var palette = tokens() || PALETTES[paletteName] || PALETTES.candy;
   var glyph = GLYPH[variant] || GLYPH.sparkle;
   var glow = paletteName === "neon" || variant === "fairydust";
   var fontSize = variant === "fairydust" ? 11 : 14;
@@ -45,17 +49,21 @@
       el.style.opacity = "1";
     }
   }
-  var lastMove = 0, mx = 0, my = 0, moved = false;
+  var lastMove = 0, mx = 0, my = 0, sx = 0, sy = 0, moved = false, fresh = true, last = 0;
   function onMove(e) { mx = e.clientX; my = e.clientY; moved = true; }
   function onClick(e) { spawn(e.clientX, e.clientY, 14, 6); }
   addEventListener("mousemove", onMove, { passive: true });
   addEventListener("click", onClick, { passive: true });
 
   var raf;
-  function tick() {
-    if (moved && performance.now() - lastMove > 16) { spawn(mx, my, 2, 2); lastMove = performance.now(); moved = false; }
+  function tick(now) {
+    var k = last ? Math.min((now - last) / 16.667, 3) : 1; last = now; // 1 = one 60 Hz frame
+    if (moved) {
+      var storm = ds.trailDensity === "storm";
+      if (storm ? now - lastMove > 16 : fresh || Math.hypot(mx - sx, my - sy) >= 24) { spawn(mx, my, 2, 2); lastMove = now; sx = mx; sy = my; fresh = false; moved = false; }
+    }
     for (var i = live.length - 1; i >= 0; i--) {
-      var p = live[i]; p.life++; p.x += p.vx; p.y += p.vy; p.vy += 0.12; p.vx *= 0.96;
+      var p = live[i]; p.life += k; p.x += p.vx * k; p.y += p.vy * k; p.vy += 0.12 * k; p.vx *= Math.pow(0.96, k);
       var t = p.life / p.ttl;
       p.el.style.transform = "translate(" + p.x + "px," + p.y + "px) scale(" + (1 - t) + ") rotate(" + p.rot + "deg)";
       p.el.style.opacity = String(1 - t);

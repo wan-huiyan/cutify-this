@@ -75,6 +75,10 @@ export async function startFx(key, variant) {
     ds.peekabooFavicon = m[1];
   }
   if (key === 'floaters') ds.floatersCount = '28';
+  // The landing copy promises a dense trail and "every click bursts", so opt in to both explicitly
+  // (the shipped defaults are sparse trail + confetti only on [data-celebrate] / [data-confetti]).
+  if (key === 'trail') ds.trailDensity = 'storm';
+  if (key === 'confetti') ds.confettiOn = '*';
   await injectEffect(spec.file, spec.win);
 }
 

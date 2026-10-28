@@ -107,6 +107,7 @@
     var injCount = 0;
     var box = document.getElementById("controls");
     document.documentElement.dataset.palette = "candy";
+    document.documentElement.dataset.confettiOn = "*"; // showcase: every click bursts (the shipped default is [data-celebrate] / [data-confetti] only)
 
     function enable(eff) {
       var sel = document.getElementById("sel-" + eff.key);
