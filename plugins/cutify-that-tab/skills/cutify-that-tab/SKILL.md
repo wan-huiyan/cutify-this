@@ -16,7 +16,7 @@ description: |
   a corporate/photographic logo — this skill is for hand-authored, cute,
   low-effort icons.
 author: Claude Code
-version: 1.12.0
+version: 1.12.1
 date: 2026-10-28
 ---
 
@@ -105,13 +105,13 @@ without it browsers antialias the rects into mush at every zoom level.
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">
-  <rect x="3"  y="3" width="2" height="2" fill="#fda4af"/>   <!-- ears -->
-  <rect x="11" y="3" width="2" height="2" fill="#fda4af"/>
-  <rect x="3" y="5" width="10" height="9" fill="#fff"/>      <!-- head -->
+  <rect x="3"  y="3" width="2" height="2" fill="#ec4899"/>   <!-- ears -->
+  <rect x="11" y="3" width="2" height="2" fill="#ec4899"/>
+  <rect x="3" y="5" width="10" height="9" fill="#f9a8d4"/>   <!-- head: *-300, not white -->
   <rect x="5"  y="8" width="1" height="2" fill="#1f2937"/>   <!-- eyes -->
   <rect x="10" y="8" width="1" height="2" fill="#1f2937"/>
-  <rect x="4"  y="10" width="1" height="1" fill="#fda4af"/>  <!-- blush -->
-  <rect x="11" y="10" width="1" height="1" fill="#fda4af"/>
+  <rect x="4"  y="10" width="1" height="1" fill="#db2777"/>  <!-- blush -->
+  <rect x="11" y="10" width="1" height="1" fill="#db2777"/>
   <rect x="7" y="10" width="1" height="1" fill="#1f2937"/>   <!-- mouth -->
   <rect x="8" y="10" width="1" height="1" fill="#1f2937"/>
 </svg>

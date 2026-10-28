@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- rounded tile (green-400 pasture) so the white mascot reads on light tabs -->
+  <rect x="1" y="1" width="14" height="14" rx="3" fill="#4ade80"/>
   <rect x="3" y="3" width="2" height="2" fill="#fbcfe8"/>
   <rect x="11" y="3" width="2" height="2" fill="#fbcfe8"/>
   <rect x="3" y="5" width="10" height="9" fill="#f9fafb"/>
