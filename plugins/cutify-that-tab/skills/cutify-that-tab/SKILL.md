@@ -16,7 +16,7 @@ description: |
   a corporate/photographic logo — this skill is for hand-authored, cute,
   low-effort icons.
 author: Claude Code
-version: 1.12.1
+version: 1.13.0
 date: 2026-10-28
 ---
 
@@ -52,6 +52,23 @@ show options A-C with renders (AskUserQuestion preview); don't pick on first ask
 | **A** | **Emoji favicon** | 0 min — one `<link>` tag | Instant-cute, zero asset files, OK with the OS's emoji font (differs on Mac / Windows / Linux). Examples: 🦊 🦦 🍡 🌈 🪼 🐸 🌷 |
 | **B** | **Gradient mascot blob** | 5-10 min | App has a brand gradient and the favicon should rhyme with it. Soft, friendly. ~12 SVG elements. |
 | **C** | **16×16 pixel-art sticker** | 10-15 min | Indie / "internal tool with personality" vibe. Pixel-perfect at native tab size. ~10 `<rect>` elements. |
+
+**Then explore styles before drawing the final icon** (skip if the user already
+named a style or mascot). Without this, every project gets the same pink cat.
+
+1. Open `examples/styles.html`: seven styles from `references/styles.md` (kawaii
+   pixel, 1-bit silhouette, Game Boy, NES outline, die-cut sticker, chibi blob,
+   riso two-ink), the same cat in each, on all four tab colours.
+2. Draw 6 rough candidates across at least 3 styles. Choose styles with a real
+   random draw, not habit, then add one the brief clearly suggests:
+   `python3 -c "import random; print(random.sample(['kawaii pixel','1-bit silhouette','game boy','nes outline','die-cut sticker','chibi blob','riso two-ink'], 3))"`
+3. Run `scripts/check-favicon.py` on each; drop any that FAIL.
+4. Show the 3 most different (in `examples/preview.html` or AskUserQuestion
+   previews) and let the user pick. Record their choice, in their words, as a
+   comment in the SVG.
+
+Want something outside the seven? `references/styles.md` lists sources to study
+(with checked licences) and the styles that don't survive 16 px.
 
 ### Step 2 — author the SVG
 
@@ -317,7 +334,9 @@ you have users there, next to the SVG link:
 ## Examples directory
 
 `examples/` ships 78 starter SVGs (13-25 lines each; copy, then change colours
-and grid positions); `README.md` has thumbnails.
+and grid positions); `README.md` has thumbnails. Plus 5 **style specimens**
+(`style_gameboy_cat`, `style_nes_cat`, `style_diecut_cat`, `style_chibi_cat`,
+`style_riso_cat`) and `styles.html`, which shows all seven styles side by side.
 
 **Gradient blobs (Option B — 22 emotion variants):** `blob_brand_grad.svg` happy, sunset gradient ·
 `blob_mint.svg` wink, mint→cyan · `blob_heart_eyes.svg` in love · `blob_smug.svg` smug / smirk ·
@@ -348,6 +367,7 @@ and grid positions); `README.md` has thumbnails.
 
 ## See also
 
+`references/styles.md` (seven 16 px styles, sources to study) ·
 `references/troubleshooting.md` (R1-R4 diagnosis, two files, two-margin rule, tab
 colours, preview loop) · `CHANGELOG.md` · `frontend-design` (broader UI design) ·
 `claude-design-handoff-bundle` (implementing a designer's specific mark)

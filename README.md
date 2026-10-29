@@ -178,6 +178,7 @@ All three ship as a single SVG file. No `.ico`, no PNG fallbacks, no PWA manifes
 ## What you get
 
 - **`<link rel="icon" type="image/svg+xml">` recipe** — the modern one-liner
+- **A style vocabulary** — seven named styles that survive a 16 px tab (kawaii pixel, 1-bit silhouette, Game Boy, NES outline, die-cut sticker, chibi blob, riso two-ink), the same cat in each, compared in `examples/styles.html`; the skill draws candidates across several styles before you pick.
 - **78 starter SVGs** in `examples/` — 56 pixel-art mascots (animals, sweets, nature, ghosts, silhouettes) and 22 emotion-variant gradient blobs. Copy + rename + edit colors
 - **Live verification loop** — `/tmp/favicon_preview.html` rendering the favicon at 16/32/64/128 px so you iterate against real tab size, not the enlarged SVG
 - **Tab-edge / tab-background diagnosis** — three distinct failure modes (chrome blending, dark-mode mismatch, light-tab silhouette vanish) with decision trees for each

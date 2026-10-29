@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- body: one big squircle, no outline -->
+  <rect x="3" y="7" width="26" height="22" rx="11" fill="#c4b5fd"/>
+  <!-- ears: two triangles sunk into the head so they merge (violet-300) -->
+  <polygon points="5,12 6,3 14,8" fill="#c4b5fd"/>
+  <polygon points="27,12 26,3 18,8" fill="#c4b5fd"/>
+  <!-- inner ears (pink-300) -->
+  <polygon points="7,10 7,6 11,8" fill="#f9a8d4"/>
+  <polygon points="25,10 25,6 21,8" fill="#f9a8d4"/>
+  <!-- eyes at ~60% height, wide apart -->
+  <circle cx="10.5" cy="19" r="2.2" fill="#1f2937"/>
+  <circle cx="21.5" cy="19" r="2.2" fill="#1f2937"/>
+  <!-- blush -->
+  <ellipse cx="7" cy="23.5" rx="2.8" ry="1.8" fill="#f9a8d4"/>
+  <ellipse cx="25" cy="23.5" rx="2.8" ry="1.8" fill="#f9a8d4"/>
+  <!-- mouth: tiny w -->
+  <path d="M14 23 Q15 25 16 23 Q17 25 18 23" stroke="#1f2937" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+</svg>
