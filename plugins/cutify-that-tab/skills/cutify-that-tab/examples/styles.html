@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Favicon style vocabulary</title>
+<style>
+  :root { --bg:#faf8f5; --fg:#2b2a28; --mute:#7a766f; --card:#fff; --line:#e4e0d9; --link:#9d174d; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#17171a; --fg:#e8e6e1; --mute:#9a968e; --card:#1f1f23; --line:#2e2e33; --link:#f9a8d4; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:32px 20px 48px; background:var(--bg); color:var(--fg);
+         font:14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width:1040px; margin:0 auto; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  p.sub { margin:0 0 20px; color:var(--mute); }
+  .head, .style { display:grid; grid-template-columns:190px repeat(4, 1fr); gap:14px; align-items:start; }
+  .head { padding:0 16px 6px; font-size:12px; color:var(--mute); }
+  .head code { font-weight:400; }
+  .style { background:var(--card); border:1px solid var(--line); border-radius:12px;
+           padding:14px 16px; margin-bottom:12px; }
+  .style h2 { font-size:14px; font-weight:600; margin:0; }
+  .style p { margin:2px 0 6px; font-size:12px; color:var(--mute); }
+  .style a { font-size:12px; color:var(--link); }
+  .bar { display:inline-flex; padding:8px 8px 0; background:#8a8d91; border-radius:8px 8px 0 0; }
+  .tab { display:flex; align-items:center; gap:8px; padding:8px 14px; min-width:150px;
+         border-radius:8px 8px 0 0; font:12px system-ui, sans-serif; }
+  .tab img { width:16px; height:16px; image-rendering:pixelated; }
+  .big { display:flex; align-items:center; justify-content:center; width:88px; height:88px; margin-top:8px;
+         border-radius:6px; border:1px solid rgba(128,128,128,.35); }
+  .big img { width:64px; height:64px; image-rendering:pixelated; }
+</style>
+</head>
+<body>
+<main>
+  <h1>One cat, seven styles</h1>
+  <p class="sub">Each icon at 16 px in a tab, plus a 64 px pixelated enlargement, on the four Chrome tab colours.
+    Rules for each style: <code>references/styles.md</code>.</p>
+  <div class="head" id="head"></div>
+  <div id="out"></div>
+</main>
+<script>
+const TABS = [
+  ["Light active",   "#f0eee9", "#1f1f1f"],
+  ["Light inactive", "#c2c5be", "#3c3c3c"],
+  ["Dark active",    "#202124", "#e8eaed"],
+  ["Dark inactive",  "#2f3033", "#bdc1c6"],
+];
+const STYLES = [
+  ["Kawaii pixel",     "pixel_mochi_cat.svg",     "kawaii-pixel",     "soft, pastel, the house default", ""],
+  ["1-bit silhouette", "pixel_cat_silhouette.svg","1-bit-silhouette", "quiet, octocat-like, blends with the browser",
+   "Light file only. Charcoal vanishes on dark tabs, so ship the dark pair."],
+  ["Game Boy",         "style_gameboy_cat.svg",   "game-boy",         "nostalgic, handheld, four greens", ""],
+  ["NES outline",      "style_nes_cat.svg",       "nes-outline",      "arcade, bold, black-outlined sprite", ""],
+  ["Die-cut sticker",  "style_diecut_cat.svg",    "die-cut-sticker",  "laptop-sticker, white cut border", ""],
+  ["Chibi blob",       "style_chibi_cat.svg",     "chibi-blob",       "smooth vector, round, squishy", ""],
+  ["Riso two-ink",     "style_riso_cat.svg",      "riso-two-ink",     "zine / print, two inks overprinting", ""],
+];
+const el = (tag, props = {}, ...kids) => {
+  const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
+
+document.getElementById("head").append(el("span"), ...TABS.map(([n, hex]) =>
+  el("span", {}, n + " ", el("code", { textContent: hex }))));
+
+const out = document.getElementById("out");
+for (const [name, file, anchor, feel, note] of STYLES) {
+  const row = el("section", { className: "style" });
+  row.append(el("div", {}, el("h2", { textContent: name }), el("p", { textContent: feel + (note ? ". " + note : "") }),
+    el("a", { href: "../references/styles.md#" + anchor, textContent: "rules →" })));
+  for (const [, hex, fg] of TABS) {
+    const icon = () => el("img", { src: file, alt: name });
+    const tab = el("div", { className: "tab" }, icon(), "Your App Name");
+    tab.style.cssText = `background:${hex};color:${fg}`;
+    const big = el("div", { className: "big" }, icon());
+    big.style.background = hex;
+    row.append(el("div", {}, el("div", { className: "bar" }, tab), big));
+  }
+  out.append(row);
+}
+</script>
+</body>
+</html>

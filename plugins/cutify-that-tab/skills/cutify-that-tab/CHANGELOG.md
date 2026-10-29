@@ -3,6 +3,24 @@
 Newest first. The skill itself is in `SKILL.md`; diagnosis and field-testing detail is in
 `references/troubleshooting.md`.
 
+## v1.13.0 (2026-10-29)
+
+- **Style vocabulary** (`references/styles.md`): seven named styles that survive a
+  16 px tab — kawaii pixel, 1-bit silhouette, Game Boy (Lospec `dmg-nso` greens),
+  NES outline, die-cut sticker, chibi blob, riso two-ink — each with hard rules and a
+  "16 px trap", plus the styles that don't survive 16 px (thin line icons,
+  cross-stitch, 3D clay, painterly).
+- **Five new specimens**, the same cat in each style: `style_gameboy_cat`,
+  `style_nes_cat`, `style_diecut_cat`, `style_chibi_cat`, `style_riso_cat` (all pass
+  `check-favicon.py`), and `examples/styles.html` showing all seven on the four
+  Chrome tab colours.
+- **Exploration step** in Step 1: draw 6 candidates across at least 3 styles (styles
+  chosen by a real random draw), drop checker FAILs, show the 3 most different, and
+  record the user's pick in the SVG.
+- **Sources to study, not copy** — Lospec, OpenMoji, Twemoji, Fluent Emoji, Kenney,
+  Phosphor — with licences read from each project's own LICENSE or site on
+  2026-10-29. Noto Emoji left out: its README and root LICENSE disagree.
+
 ## v1.12.1 (2026-10-28)
 
 - **All shipped examples now pass `scripts/check-favicon.py`** (issue #7): 74 PASS,

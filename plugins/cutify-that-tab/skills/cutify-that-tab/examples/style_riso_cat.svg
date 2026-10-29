@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- pink plate: head -->
+  <rect x="2" y="5" width="11" height="7" fill="#ff48b0"/>
+  <rect x="3" y="12" width="10" height="1" fill="#ff48b0"/>
+  <!-- blue plate, 1 cell off: ears + shadow slivers -->
+  <rect x="3" y="3" width="2" height="1" fill="#0078bf"/>
+  <rect x="10" y="3" width="2" height="1" fill="#0078bf"/>
+  <rect x="3" y="4" width="3" height="1" fill="#0078bf"/>
+  <rect x="9" y="4" width="3" height="1" fill="#0078bf"/>
+  <rect x="13" y="6" width="1" height="7" fill="#0078bf"/>
+  <rect x="4" y="13" width="10" height="1" fill="#0078bf"/>
+  <!-- overlap (pink x blue) drawn explicitly: ear bases, eyes, mouth -->
+  <rect x="3" y="5" width="3" height="1" fill="#002284"/>
+  <rect x="9" y="5" width="3" height="1" fill="#002284"/>
+  <rect x="4" y="8" width="1" height="2" fill="#002284"/>
+  <rect x="10" y="8" width="1" height="2" fill="#002284"/>
+  <rect x="6" y="10" width="1" height="1" fill="#002284"/>
+  <rect x="8" y="10" width="1" height="1" fill="#002284"/>
+  <rect x="7" y="11" width="1" height="1" fill="#002284"/>
+</svg>
