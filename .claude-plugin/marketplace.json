@@ -22,7 +22,7 @@
       "name": "pop-that-readme",
       "source": "./plugins/pop-that-readme",
       "description": "Author a cute, high-signal GitHub README in a polished house style: pixel/arcade hero, badge row, bold value-prop, emoji feature table, copy-paste install block, contributors shoutout, honest limitations. Ships a fill-in template + baked-in hero recipes.",
-      "version": "1.0.0"
+      "version": "1.1.0"
     },
     {
       "name": "cutify-that-terminal",

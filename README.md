@@ -330,7 +330,21 @@ The skill behind *this* page. It gives Claude a recipe and a fill-in template fo
 | 🧱 | **An 11-section recipe** | hero → badges → one bold promise → captioned demo → why → feature table → install → usage → contributors → limitations → footer |
 | 🖼️ | **Ready-made heroes** | an ASCII box hero that works anywhere, and a copy-paste pixel-SVG hero |
 | ✍️ | **Voice rules** | the promise is one bold sentence; every claim earns a number; emoji as signposts, not decoration; a real limitations section |
-| ☑️ | **A pre-ship checklist** | first screen has the hero, 3+ badges and the promise; no 404 badges; renders cleanly on GitHub |
+| ☑️ | **A pre-ship checklist** | first screen has the hero, 3+ badges and the promise; no 404 badges; renders cleanly on GitHub; badges are honest |
+| 🤖 | **Hand-drawn status badges** | drawn pills for claims no service can measure, never a fake live metric; sized to sit in a shields.io row, readable on GitHub light and dark; 3 examples to copy |
+
+<p align="center">
+  <img src="plugins/pop-that-readme/skills/pop-that-readme/examples/badges/robot-vouched.svg" height="24" alt="Robot vouched: an agent saw it work in a browser"/>
+  <img src="plugins/pop-that-readme/skills/pop-that-readme/examples/badges/human-peeked.svg" height="24" alt="A human peeked: a person looked at it before it shipped"/>
+  <img src="plugins/pop-that-readme/skills/pop-that-readme/examples/badges/fuelled-by-tea.svg" height="24" alt="Fuelled by tea"/>
+  <br/><sub>The three example badges, hand-drawn SVG, 1–1.5 KB each. A picture can't go red, so tests and coverage stay live badges.</sub>
+</p>
+
+```text
+You:    give my README a glow-up, it's a wall of text
+Claude: [reads the repo, drafts the hero, badge row, one bold promise and a feature table,
+         moves the long install notes into a fold, and adds a limitations section]
+```
 
 ---
 

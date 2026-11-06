@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="132" height="24" viewBox="0 0 132 24" role="img" aria-label="Robot vouched">
+  <title>Robot vouched</title>
+  <rect width="132" height="24" rx="12" fill="#5160c9"/>
+  <rect x="0.5" y="0.5" width="131" height="23" rx="11.5" fill="none" stroke="#ffffff" stroke-opacity=".35"/>
+  <!-- robot -->
+  <line x1="14" y1="3.5" x2="14" y2="6.5" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
+  <circle cx="14" cy="3.2" r="1.5" fill="#ffd166"/>
+  <rect x="7" y="6.5" width="14" height="11" rx="3.5" fill="#fff"/>
+  <rect x="4.5" y="10" width="2" height="4" rx="1" fill="#fff"/>
+  <rect x="21.5" y="10" width="2" height="4" rx="1" fill="#fff"/>
+  <circle cx="11.2" cy="11.5" r="1.7" fill="#5160c9"/>
+  <circle cx="16.8" cy="11.5" r="1.7" fill="#5160c9"/>
+  <path d="M11 15 Q14 16.8 17 15" fill="none" stroke="#5160c9" stroke-width="1.2" stroke-linecap="round"/>
+  <rect x="9" y="18" width="10" height="3.5" rx="1.5" fill="#fff" fill-opacity=".85"/>
+  <text x="30" y="16" fill="#fff" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="600" textLength="92" lengthAdjust="spacingAndGlyphs">Robot vouched</text>
+</svg>

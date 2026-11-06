@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="140" height="24" viewBox="0 0 140 24" role="img" aria-label="A human peeked">
+  <title>A human peeked</title>
+  <defs><clipPath id="p"><rect width="140" height="24" rx="12"/></clipPath></defs>
+  <rect width="140" height="24" rx="12" fill="#2b7a4b"/>
+  <g clip-path="url(#p)">
+    <!-- pigtails + head peeking over the wall -->
+    <circle cx="5.5" cy="14" r="2.6" fill="#5a3320"/>
+    <circle cx="22.5" cy="14" r="2.6" fill="#5a3320"/>
+    <circle cx="14" cy="12" r="7" fill="#ffd9b8"/>
+    <path d="M7 11.5 Q14 3 21 11.5 Q14 8 7 11.5Z" fill="#5a3320"/>
+    <circle cx="11.3" cy="12.6" r="1.1" fill="#2a1a10"/>
+    <circle cx="16.7" cy="12.6" r="1.1" fill="#2a1a10"/>
+    <circle cx="9.3" cy="15" r="1.1" fill="#ff8fa3" fill-opacity=".8"/>
+    <circle cx="18.7" cy="15" r="1.1" fill="#ff8fa3" fill-opacity=".8"/>
+    <!-- brick wall -->
+    <rect x="-3" y="16.5" width="31" height="10" rx="2" fill="#e8d9c3"/>
+    <path d="M0 20.2H28M0 24H28M9 16.5V20.2M19 16.5V20.2M4 20.2V24M14 20.2V24M24 20.2V24" stroke="#b9a487" stroke-width="1" fill="none"/>
+  </g>
+  <rect x="0.5" y="0.5" width="139" height="23" rx="11.5" fill="none" stroke="#ffffff" stroke-opacity=".35"/>
+  <text x="34" y="16" fill="#fff" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="600" textLength="96" lengthAdjust="spacingAndGlyphs">A human peeked</text>
+</svg>
