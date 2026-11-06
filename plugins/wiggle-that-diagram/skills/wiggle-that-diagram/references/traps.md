@@ -67,6 +67,16 @@ Re-check machine-specific items (paths, installed tools) with `command -v` befor
 | Style A's recipe had the scene file carry its own copy of the captions. | `scripts/style-a/beats_js.py` writes `ways/<film>_beats.js` from beats.json; the scene reads that. |
 | The three players expose different test hooks: C and A have `window.__anim` (C: `time()`, A: `state().t`), B has none (read `#v.currentTime`). | A host-page test that checks all three must read each one its own way (the pizza's switcher test does). |
 
+## Learned on the expenses example (a richer six-beat film)
+
+| Trap | Fix |
+|---|---|
+| Style B `test_contract.py` takes the film key from the html file's stem; a file already renamed to `<film>-whiteboard.html` fails with `KeyError`. | Test the file as `final/<film>.html`, then rename it. |
+| Style B `K.write` aligns only left or centre, so a right-hand amount on a card ran into a long name ("Dinne$95"). | Leave about 130 board px for the right-hand text, or widen the card. |
+| Style B: a board laid out in one long row (phone, cards, manager, report) made the closing pull-back tiny in the square frame (zoom 0.52). | Lay the board out for the square: put later panels under earlier ones (the manager under the amber reason, the report under the cards); the pull-back is then zoom 0.68. |
+| Style A: HTML labels keep one size while the camera zooms, so a word inside a big card looks tiny in a close shot. | Put an inline `font-size` (1.3 to 1.5 em) in that label's `html`; then check the whole-picture frame, where enlarged labels can run into their neighbours, and leave long labels at 1 em. |
+| Style C: a close frame cut a word in half at its top edge. | Look at every step's still at both widths; move the frame until each word is in or out. |
+
 ## huashu gates that disagree with explainers paced for reading
 
 - `film_gate.py` turns RED when fast-motion frames are under 3.5 % of the film. Long still holds for reading do exactly that

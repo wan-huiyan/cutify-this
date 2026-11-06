@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pizza order, three ways</title>
+<title>One diagram, three ways</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -27,24 +27,40 @@ a{color:var(--accent)}
 </head>
 <body>
 <main>
-<h1>One pizza order, three ways</h1>
-<p class="lead">A made-up example for <a href="https://github.com/wan-huiyan/cutify-this#-wiggle-that-diagram--make-a-diagram-explain-itself">wiggle-that-diagram</a>: the same five steps and the same captions, drawn in each of the skill's three styles. Pick one; use the numbered steps to jump.</p>
-<div class="pick" role="group" aria-label="Style">
-  <button type="button" data-src="pizza.html" aria-pressed="true">Live SVG<small>21 KB</small></button>
-  <button type="button" data-src="pizza-diagram.html" aria-pressed="false">Diagram clip<small>423 KB</small></button>
-  <button type="button" data-src="pizza-whiteboard.html" aria-pressed="false">Whiteboard<small>513 KB</small></button>
+<h1>One diagram, three ways</h1>
+<p class="lead">Made-up examples for <a href="https://github.com/wan-huiyan/cutify-this#-wiggle-that-diagram--make-a-diagram-explain-itself">wiggle-that-diagram</a>: the same steps and the same captions, drawn in each of the skill's three styles. Pick an example and a style; use the numbered steps to jump.</p>
+<div class="pick" role="group" aria-label="Example">
+  <button type="button" data-demo="expenses" aria-pressed="true">Expense claim<small>6 steps</small></button>
+  <button type="button" data-demo="pizza" aria-pressed="false">Pizza order<small>5 steps</small></button>
 </div>
-<div class="frame"><iframe id="film" title="Animation: how a pizza order travels" src="pizza.html"></iframe></div>
+<div class="pick" role="group" aria-label="Style">
+  <button type="button" data-style="whiteboard" aria-pressed="true">Whiteboard<small></small></button>
+  <button type="button" data-style="diagram" aria-pressed="false">Diagram clip<small></small></button>
+  <button type="button" data-style="svg" aria-pressed="false">Live SVG<small></small></button>
+</div>
+<div class="frame"><iframe id="film" title="Animation" src="expenses-whiteboard.html"></iframe></div>
 <footer>Every name, number and address here is invented. Each style is one self-contained HTML file, built for an iframe in a slide deck or report.</footer>
 </main>
 <script>
 (function(){
-  var f = document.getElementById('film'), btns = [].slice.call(document.querySelectorAll('.pick button'));
+  var f = document.getElementById('film');
+  var DEMOS = {
+    expenses: { title: 'how an expense claim gets checked', files: { whiteboard: ['expenses-whiteboard.html', '818 KB'], diagram: ['expenses-diagram.html', '435 KB'], svg: ['expenses.html', '23 KB'] } },
+    pizza:    { title: 'how a pizza order travels',        files: { whiteboard: ['pizza-whiteboard.html', '513 KB'],    diagram: ['pizza-diagram.html', '423 KB'],    svg: ['pizza.html', '21 KB'] } }
+  };
+  var demoBtns = [].slice.call(document.querySelectorAll('[data-demo]')), styleBtns = [].slice.call(document.querySelectorAll('[data-style]'));
+  var demo = 'expenses', style = 'whiteboard';
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  btns.forEach(function(b){ b.addEventListener('click', function(){
-    btns.forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-    f.src = b.getAttribute('data-src');
-  }); });
+  function show(){
+    demoBtns.forEach(function(x){ x.setAttribute('aria-pressed', x.getAttribute('data-demo') === demo ? 'true' : 'false'); });
+    styleBtns.forEach(function(x){ var s = x.getAttribute('data-style'); x.setAttribute('aria-pressed', s === style ? 'true' : 'false'); x.querySelector('small').textContent = DEMOS[demo].files[s][1]; });
+    f.title = 'Animation: ' + DEMOS[demo].title;
+    var src = DEMOS[demo].files[style][0];
+    if (f.getAttribute('src') !== src) f.src = src;
+  }
+  demoBtns.forEach(function(b){ b.addEventListener('click', function(){ demo = b.getAttribute('data-demo'); show(); }); });
+  styleBtns.forEach(function(b){ b.addEventListener('click', function(){ style = b.getAttribute('data-style'); show(); }); });
+  show();
   // embed contract, parent side: size the frame from anim-height, start it on load, and pass forwarded gestures to this page
   f.addEventListener('load', function(){ if (!reduce) f.contentWindow.postMessage({type:'anim-play'}, '*'); });
   window.addEventListener('message', function(e){
