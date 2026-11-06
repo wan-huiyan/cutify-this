@@ -1,11 +1,28 @@
-# wiggle-that-diagram demo: how a pizza order travels
+# wiggle-that-diagram demos
 
-A neutral, made-up example for the [`wiggle-that-diagram`](../../plugins/wiggle-that-diagram/skills/wiggle-that-diagram/SKILL.md)
-skill: Sam orders one margherita in an app, the order prints as a ticket in the kitchen, a driver collects the box,
+Two made-up examples for the [`wiggle-that-diagram`](../../plugins/wiggle-that-diagram/skills/wiggle-that-diagram/SKILL.md)
+skill, each in all three styles. Live, with a switcher (whiteboard first): <https://wan-huiyan.github.io/cutify-this/wiggle/>
+
+## How an expense claim gets checked (`expenses/`)
+
+Ana snaps three receipts, written rules check each one, each gets a colour and a reason, the manager approves the
+amber dinner, the approved lines fill the report and finance pays it. Six beats, 46 s loops, one `expenses/beats.json`.
+Every name and amount is invented.
+
+| Style | Film | Size | Source |
+|---|---|---|---|
+| Whiteboard (B) | `final/expenses-whiteboard.html` | 818 KB | `expenses/style-b/board.js`, `eras.js` |
+| Diagram clip (A) | `final/expenses-diagram.html` | 435 KB | `expenses/style-a/expenses.js`, `eras_expenses.js`, `meta.json` |
+| Live SVG (C) | `final/expenses.html` | 23 KB | `expenses/style-c/expenses.svg`, `expenses.js` (default theme) |
+
+`expenses.gif` (the whiteboard at 2× speed, made with ffmpeg from the B master video) is the README picture. Build
+it like the pizza below, with `expenses/beats.json`, `--var EX_BEATS` for A and no `--css` for C.
+
+## How a pizza order travels
+
+Sam orders one margherita in an app, the order prints as a ticket in the kitchen, a driver collects the box,
 the app tracks the driver on a map, and the box reaches 12 Elm Street. Five beats, one caption script, three styles.
 Every name, number and address is invented.
-
-Live, with a style switcher: <https://wan-huiyan.github.io/cutify-this/wiggle/>
 
 | Style | Film | Size | Source |
 |---|---|---|---|
@@ -13,8 +30,8 @@ Live, with a style switcher: <https://wan-huiyan.github.io/cutify-this/wiggle/>
 | Diagram clip (A) | `final/pizza-diagram.html` | 423 KB | `style-a/pizza.js`, `style-a/eras_pizza.js`, `style-a/meta.json` |
 | Whiteboard (B) | `final/pizza-whiteboard.html` | 513 KB | `style-b/board.js`, `style-b/eras.js` |
 
-All three are 42 s loops built from `beats.json`. `final/index.html` is the switcher page; `pizza.gif` (step 4 of
-the live style) is the README picture. The same sources ship inside the skill as `examples/pizza/`.
+All three are 42 s loops built from `beats.json`. `final/index.html` is the switcher page for both demos; `pizza.gif` is step 4 of
+the live style. The same sources ship inside the skill as `examples/pizza/` and `examples/expenses/`.
 
 Rebuild and check, from this folder (`S` is the skill's `scripts` folder):
 

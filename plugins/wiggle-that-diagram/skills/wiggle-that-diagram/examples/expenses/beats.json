@@ -1,0 +1,72 @@
+{
+ "_doc": "Caption script for the second neutral wiggle-that-diagram demo: how an expense claim gets checked. Every name, amount and rule is made up. Format: plugins/wiggle-that-diagram/skills/wiggle-that-diagram/scripts/common/beats.example.json.",
+ "expenses": {
+  "title": "How an expense claim gets checked",
+  "alt": "Animation in six steps. Ana photographs three receipts from a work trip: hotel 180 dollars, client dinner 95 dollars, taxi 40 dollars. Written rules check each receipt against the expense policy. The hotel is green, under the limit. The dinner is amber, over the 60 dollar meal limit, so a manager decides. The taxi is red, with no receipt photo, so it goes back to Ana. Her manager approves the dinner with a note. The approved lines fill the expense report, 275 dollars in total. Finance pays 275 dollars into Ana's account on Friday.",
+  "verdict": 3,
+  "beats": [
+   {
+    "title": "Receipts in",
+    "caption": "Ana snaps three receipts from her trip, and the app reads each amount.",
+    "dur": 8.0,
+    "still": 7.4,
+    "picture": "Hotel $180 Dinner $95 Taxi $40",
+    "reveals": [
+     2.5
+    ]
+   },
+   {
+    "title": "Rules check",
+    "caption": "Written rules check every receipt: the limit, the category and a photo.",
+    "dur": 6.5,
+    "still": 5.9,
+    "picture": "Expense policy",
+    "reveals": [
+     2.5
+    ]
+   },
+   {
+    "title": "Colour and reason",
+    "caption": "Each receipt gets a colour and a reason. Same receipt, same answer.",
+    "dur": 10.0,
+    "still": 9.4,
+    "picture": "Under the limit Over the $60 meal limit No photo",
+    "reveals": [
+     2.5,
+     5.0,
+     7.5
+    ]
+   },
+   {
+    "title": "Manager decides",
+    "caption": "The amber dinner goes to Ana's manager, who approves it with a note.",
+    "dur": 7.5,
+    "still": 6.9,
+    "picture": "Approved Client dinner, 2 people",
+    "reveals": [
+     2.5
+    ]
+   },
+   {
+    "title": "Report fills",
+    "caption": "The approved lines fill the expense report, with a total.",
+    "dur": 6.0,
+    "still": 5.4,
+    "picture": "Total $275",
+    "reveals": [
+     2.5
+    ]
+   },
+   {
+    "title": "Paid",
+    "caption": "Finance pays the total into Ana's account on Friday.",
+    "dur": 8.0,
+    "still": 6.0,
+    "picture": "Paid",
+    "reveals": [
+     2.5
+    ]
+   }
+  ]
+ }
+}

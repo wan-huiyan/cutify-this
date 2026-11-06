@@ -4,7 +4,7 @@ description: "Use when someone asks to animate an illustration in an HTML slide 
 metadata:
   author: "Huiyan Wan, built with Claude (Anthropic)"
   license: "MIT"
-  version: "1.2.0"
+  version: "1.3.0"
   created: "2026-11-05"
   base_skill: "huashu-art-motion 1.2.0"
 ---
@@ -71,8 +71,9 @@ Each step ends with the check that proves it is done.
    user before launching. → Check: each returns files, stills, NOTES.md and an honest open-issues list.
 
 6. **Build recipes** (what each style agent actually did; scripts are in `scripts/style-a|b|c/`):
-   All three styles of one neutral film are in `examples/pizza/` (`beats.json` plus `style-a/`, `style-b/`,
-   `style-c/`): start from the folder for your style.
+   Two neutral films ship in all three styles, each as `beats.json` plus `style-a/`, `style-b/`, `style-c/`:
+   `examples/pizza/` (5 beats, simple) and `examples/expenses/` (6 beats: cards, colour-coded reasons, arrows to a
+   second and third panel). Start from the folder for your style.
    - **A.** `cp -R ~/.claude/skills/huashu-art-motion/scripts/engine <A>/engine` and `touch <A>/engine/favicon.ico`.
      Add `engine/ways/way_make.js` (from `scripts/style-a/`), run `beats_js.py beats.json --engine engine --var
      <VAR>` (captions and timing from the shared script, never a hand copy), a scene file `engine/ways/<film>.js`
@@ -215,7 +216,9 @@ On a new diagram (the neutral pizza example, 6 Nov 2026), every style end to end
 `build.py --css`, `test_contract.py` (all checks), `widthcheck.py`, `gif.py`; B `build_beats.py`, the engine render,
 `build_html.py`, `test_contract.py` (32/32); A `beats_js.py`, `make.sh` (render, build, `pace_check.py`,
 `test_embed.py`: no failures), `midmove.py`; huashu `film_gate.py` on both videos (pass, one yellow);
-`common/contact_sheet.py`.
+`common/contact_sheet.py`. Again on the expenses example (6 Nov 2026): C `test_contract.py` (all checks), B
+`test_contract.py` (32/32), A `make.sh` (no failures) and `midmove.py`, `film_gate.py` (B pass, A yellow), and a
+switcher page playing all six films in real Chrome at 1280 and 390 px.
 
 | Script | Use |
 |---|---|
@@ -227,7 +230,7 @@ On a new diagram (the neutral pizza example, 6 Nov 2026), every style end to end
 | `style-b/kit.js`, `build_beats.py`, `build_html.py`, `test_contract.py`, `player.html` | Style B pipeline: board kit, timing bridge, encode + inline, contract test |
 | `style-c/shell.html`, `shell.css`, `head.js`, `tail.js`, `build.py`, `test_contract.py`, `camdbg.py`, `widthcheck.py` | Style C runtime, builder (`--css` theme), contract + timing test, camera and width checks |
 | `style-c/gif.py` | GIF of one beat (or a PNG still) from a built style C film, by seeking in real Chrome |
-| `examples/pizza/` | One neutral film in all three styles to start from: `beats.json`, `style-a/` (scene, eras, meta), `style-b/` (board, eras), `style-c/` (SVG, timeline, theme) |
+| `examples/pizza/`, `examples/expenses/` | Two neutral films in all three styles to start from: `beats.json`, `style-a/` (scene, eras, meta), `style-b/` (board, eras), `style-c/` (SVG, timeline, theme where used) |
 | `deck/embed_anims.py`, `howtest.py`, `howtest2.py` | Host side: embed all films + switcher slide + zoom-to-fit into a stacked-slide deck; tests (labels and anchor ids are the worked deck's, change first) |
 
 Dependencies: `uv`, Google Chrome, ffmpeg (styles A and B), Pillow for contact sheets, the
@@ -241,10 +244,12 @@ each animated in all three styles (3 × 3 films). Everything above
 each style's NOTES.md) somewhere lasting, outside any session scratchpad, and point to it from your project notes,
 not from this skill.
 
-A second, neutral example ships with the skill: `examples/pizza/` (an order going from a phone app to a kitchen
-to a door, five beats, 42 s, in all three styles: A 423 KB, B 513 KB, C 21 KB). It was the first test of these instructions on a diagram other
-than the client deck; what they got wrong is fixed above and listed in `references/traps.md` ("Learned on the
-pizza example").
+Two neutral examples ship with the skill. `examples/pizza/` (an order going from a phone app to a kitchen
+to a door, five beats, 42 s, in all three styles: A 423 KB, B 513 KB, C 21 KB) was the first test of these instructions on a diagram other
+than the client deck. `examples/expenses/` (an expense claim checked against written rules, colour-coded, approved and
+paid; six beats, 46 s: A 435 KB, B 818 KB, C 23 KB) is the richer one, closer to a real mechanism slide. What they got
+wrong is fixed above and listed in `references/traps.md` ("Learned on the pizza example", "Learned on the expenses
+example").
 
 ## Credits
 
