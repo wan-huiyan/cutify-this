@@ -1,105 +1,250 @@
-# cutify-this ✨
+<p align="center">
+  <a href="https://wan-huiyan.github.io/cutify-this/site/aurora.html"><img src="docs/readme/hero.gif" width="880" alt="A fairy wand glides across the dark purple Aurora landing page leaving a sparkle trail, a click bursts into confetti, and the page scrolls while a cat mascot rides the scroll indicator."/></a>
+  <br/><sub>sparkle-that-page running live on its own landing page: wand cursor, fairy-dust trail, a confetti burst, and the scroll buddy. <a href="https://wan-huiyan.github.io/cutify-this/site/aurora.html">Try it yourself →</a></sub>
+</p>
 
-> A little **bundle of cute skills** for Claude Code. Cutify the browser **tab** (hand-authored SVG favicons), sparkle up the whole **page** (fairy cursor, sparkle trails, scroll progress, confetti, floaters), pop your repo's **README** (a cute house-style front page), cutify your **terminal** (Ghostty themes, rounded Nerd Fonts, a Starship prompt — and a glyph check that catches the `?` boxes before you do), **hatch a whole app** as a little drawn world, and **wiggle a diagram** into a captioned explainer animation.
+<h1 align="center">cutify-this ✨</h1>
+<p align="center"><em>Six Claude Code skills that make the things you build cute, and check that the cute actually works.</em></p>
 
-[![license](https://img.shields.io/github/license/wan-huiyan/cutify-this)](LICENSE)
-[![last commit](https://img.shields.io/github/last-commit/wan-huiyan/cutify-this)](https://github.com/wan-huiyan/cutify-this/commits)
-[![Claude Code](https://img.shields.io/badge/Claude_Code-skills-orange)](https://claude.com/claude-code)
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/wan-huiyan/cutify-this" alt="license"/></a>
+  <a href="https://github.com/wan-huiyan/cutify-this/actions/workflows/test.yml"><img src="https://github.com/wan-huiyan/cutify-this/actions/workflows/test.yml/badge.svg" alt="tests"/></a>
+  <a href="https://github.com/wan-huiyan/cutify-this/commits"><img src="https://img.shields.io/github/last-commit/wan-huiyan/cutify-this" alt="last commit"/></a>
+  <a href="https://claude.com/claude-code"><img src="https://img.shields.io/badge/Claude_Code-6_skills-orange" alt="Claude Code: 6 skills"/></a>
+  <img src="https://img.shields.io/badge/style-kawaii_but_tested-f472b6" alt="style: kawaii but tested"/>
+</p>
 
-## Six skills in the bundle
+> **Ask Claude to "make it cute" and get a favicon that doesn't vanish in a grey tab, page effects that switch off for people who
+> asked for less motion, a terminal whose icons provably render, and a README, an app or an explainer animation with the same
+> care. Every skill ships with checks that can fail.**
 
-| Skill | What it does | Install |
-|---|---|---|
-| 🎀 **cutify-that-tab** | cute hand-authored SVG favicons — emoji / gradient blob / pixel-art mascot (78 starters) | `/plugin install cutify-that-tab@wan-huiyan-cutify-this` |
-| ✨ **sparkle-that-page** | cute zero-dep page effects — fairy cursor, sparkle trail, scroll indicator, tab peekaboo, confetti, floaters, cute-chrome | `/plugin install sparkle-that-page@wan-huiyan-cutify-this` |
-| 🪄 **pop-that-readme** | a cute, high-signal README in the house style — pixel hero, badges, value-prop, emoji feature table, install block, honesty box | `/plugin install pop-that-readme@wan-huiyan-cutify-this` |
-| ⌨️ **cutify-that-terminal** | a cute macOS terminal that provably renders — Ghostty themes, rounded Nerd Fonts, a Starship prompt, and a glyph check that catches the `?` boxes | `/plugin install cutify-that-terminal@wan-huiyan-cutify-this` |
-| 🐛 **hatch-that-world** | a whole app or daily page as a little drawn world — data as a scene, switchable worlds, a mascot with moods, clickable drawings, and checks that can fail | `/plugin install hatch-that-world@wan-huiyan-cutify-this` |
-| 🪱 **wiggle-that-diagram** | make a "how it works" diagram move — a captioned, looping explainer animation for an HTML deck or report, in three styles, paced so people can read it | `/plugin install wiggle-that-diagram@wan-huiyan-cutify-this` |
-
-Add the marketplace once, then install any (or all):
+## 🚀 Install
 
 ```bash
 /plugin marketplace add wan-huiyan/cutify-this
 ```
 
-> Renamed from `cutify-that-tab` → `cutify-this` (the repo now hosts six skills). Old links redirect automatically.
->
-> ⚠️ **One of these is not like the others.** The web skills drop a file into
-> your project and revert by deleting it. **`cutify-that-terminal` installs software
-> and edits your `~/.zshrc`** — so it backs the file up first, shows you the diff,
-> appends only, and gives you the undo in the same breath. It is macOS + Homebrew + zsh.
+Then install the ones you want (or all six):
+
+```bash
+/plugin install cutify-that-tab@wan-huiyan-cutify-this
+/plugin install sparkle-that-page@wan-huiyan-cutify-this
+/plugin install pop-that-readme@wan-huiyan-cutify-this
+/plugin install cutify-that-terminal@wan-huiyan-cutify-this
+/plugin install hatch-that-world@wan-huiyan-cutify-this
+/plugin install wiggle-that-diagram@wan-huiyan-cutify-this
+```
+
+<details><summary>From a terminal instead, all six in one go</summary>
+
+```bash
+claude plugin marketplace add wan-huiyan/cutify-this
+for p in cutify-that-tab sparkle-that-page pop-that-readme cutify-that-terminal hatch-that-world wiggle-that-diagram; do
+  claude plugin install "$p@wan-huiyan-cutify-this"
+done
+```
+</details>
+
+## 🧺 Six skills at a glance
+
+| | Skill | Say this to Claude | You get | Try it |
+|---|---|---|---|---|
+| ✨ | [**sparkle-that-page**](#-sparkle-that-page--cute-page-effects) | "make this page more magical" | 7 drop-in effects, 24 variants, 3 palettes, zero dependencies | [live demo](https://wan-huiyan.github.io/cutify-this/site/aurora.html) |
+| 🎀 | [**cutify-that-tab**](#-cutify-that-tab--a-cute-favicon-that-survives-the-tab) | "put something cute in the browser tab" | 1 SVG favicon from 78 starters in 7 styles, checked against 4 Chrome tab colours | [style gallery](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/styles.html) |
+| 🐛 | [**hatch-that-world**](#-hatch-that-world--your-app-as-a-little-world) | "make this dashboard cute, like the morning brief" | your data drawn as a scene, switchable worlds, a mascot with moods | [morning-fairy](https://github.com/wan-huiyan/morning-fairy) |
+| 🪱 | [**wiggle-that-diagram**](#-wiggle-that-diagram--make-a-diagram-explain-itself) | "animate this how-it-works diagram" | a captioned, looping explainer in 3 styles, paced so people can read it | [3 styles](https://wan-huiyan.github.io/cutify-this/wiggle/) |
+| ⌨️ | [**cutify-that-terminal**](#️-cutify-that-terminal--a-cute-terminal-that-provably-renders) | "make my terminal prettier" | a theme, a rounded Nerd Font, a Starship prompt, and a check for `?` boxes | macOS + zsh |
+| 🪄 | [**pop-that-readme**](#-pop-that-readme--a-readme-that-pops) | "give my README a glow-up" | an 11-section front page in this house style, with a fill-in template | this page |
+
+## 🌱 Used in the wild
+
+<table>
+<tr>
+<td width="50%"><a href="https://github.com/wan-huiyan/pomodo"><img src="https://raw.githubusercontent.com/wan-huiyan/pomodo/main/docs/screens/after-hours.png" alt="Pomodo's Recently done list: two rows finished after 6 pm sit under a night-sky strip with a moon, and Pomo the pixel tomato, looking sleepy, tells the team to go to bed"/></a></td>
+<td width="50%"><a href="https://github.com/wan-huiyan/morning-fairy"><img src="https://raw.githubusercontent.com/wan-huiyan/morning-fairy/main/docs/three-worlds.png" alt="The same morning brief drawn in three worlds: a storybook garden, a cosmic orbit and candy pop"/></a></td>
+</tr>
+<tr>
+<td><sub><b><a href="https://github.com/wan-huiyan/pomodo">Pomodo</a></b>, a team progress board, runs 6 of the 7 sparkle effects, adapted: the wand, the fairy dust, the stars on a click, the tab peekaboo, the floating dust, and Pomo climbing the scroll rail (that's our scroll buddy).</sub></td>
+<td><sub><b><a href="https://github.com/wan-huiyan/morning-fairy">morning-fairy</a></b>, a daily brief drawn as a little world, is where hatch-that-world's method comes from: one builder, swappable worlds, a mascot with moods. (Made-up data.)</sub></td>
+</tr>
+</table>
 
 ---
 
 ## ✨ sparkle-that-page — cute page effects
 
-**▶ Live demo: https://wan-huiyan.github.io/cutify-this/**
+**▶ [Live demo](https://wan-huiyan.github.io/cutify-this/) · landing pages: [Aurora (dark)](https://wan-huiyan.github.io/cutify-this/site/aurora.html) · [Bubblegum (bright)](https://wan-huiyan.github.io/cutify-this/site/bubblegum.html)**
 
-**▶ Landing pages** — two design directions, each demoing the effects live on itself: [Aurora · dark](https://wan-huiyan.github.io/cutify-this/site/aurora.html) · [Bubblegum · bright](https://wan-huiyan.github.io/cutify-this/site/bubblegum.html) (source + notes in [`site/`](site/); built straight on the modules below, no extra engine).
+Seven self-contained, **zero-dependency** effects: one short vanilla file each, no npm, no build. Wire them with
+`<script>` / `<link>`, then choose options with `data-*` attributes on `<html>`.
 
-Seven self-contained, **zero-dependency** effects — one short vanilla file each, copy-and-edit, no npm/build. Wire with `<script>` / `<link>`, then set options on `<html data-*>`:
+| | Effect | File | Variants (`data-*`) |
+|---|---|---|---|
+| 🪄 | Fairy-wand cursor | `fairy_cursor.js` | `data-wand` = star · heart · moon · pixel · sailormoon |
+| ✨ | Sparkle trail | `sparkle_trail.js` | `data-trail` = sparkle · star · heart · pixel · fairydust; `data-trail-density="storm"` for the dense version |
+| 📜 | Scroll buddy | `scroll_indicator.js` | `data-scroll` = ring · comet · mascot |
+| 👀 | Tab-title peekaboo | `tab_title_peekaboo.js` | `data-peekaboo-msg`, `data-peekaboo-favicon` |
+| 🎉 | Click confetti | `click_confetti.js` | `data-confetti` = heart · star · confetti · petal · pixel |
+| 🌸 | Ambient floaters | `ambient_floaters.js` | `data-floaters` = sakura · leaves · snowflake · bubbles · dust · fairydust |
+| 🎀 | Cute chrome | `cute_chrome.css` | `.stp-wobble`, `.stp-spinner`, pastel selection and scrollbar |
 
-| Effect | File | Options (`data-*`) |
+**Palettes:** `data-palette` = **candy** (default), **neon** (with glow), **meadow**. All colours come from CSS tokens
+`--stp-c1…c6` in `cute_chrome.css`, so one edit recolours every effect.
+
+**Cute, but considerate.** The skill decides *how often* an effect fires before how it looks (the "delight budget",
+from Emil Kowalski's [animate](https://github.com/emilkowalski/skills) skill):
+
+| | What | Why |
 |---|---|---|
-| 🪄 Fairy-wand cursor | `fairy_cursor.js` | `data-wand` = star · heart · moon · pixel · **sailormoon** |
-| ✨ Sparkle trail | `sparkle_trail.js` | `data-trail` = sparkle · star · heart · pixel · **fairydust** |
-| 📜 Scroll-depth indicator | `scroll_indicator.js` | `data-scroll` = ring · comet · mascot |
-| 👀 Tab-title peekaboo | `tab_title_peekaboo.js` | `data-peekaboo-msg`, `data-peekaboo-favicon` |
-| 🎉 Click confetti | `click_confetti.js` | `data-confetti` = heart · star · confetti · petal · pixel |
-| 🌸 Ambient floaters | `ambient_floaters.js` | `data-floaters` = sakura · leaves · snowflake · bubbles · dust · fairydust |
-| 🎀 Cute-chrome touches | `cute_chrome.css` | `.stp-wobble`, `.stp-spinner`, pastel `::selection` + scrollbar |
+| 🎯 | Confetti fires only on `[data-celebrate]` buttons by default; `data-confetti-on="*"` makes every click burst | A burst on every click of an all-day tool stops being a treat |
+| 🌬️ | The trail is sparse by default (a sparkle every 24 px of movement) | A storm is for landing pages, not tools |
+| ♿ | With reduced motion on, confetti becomes one small heart that fades in place; the trail and floaters stay off | "Fewer and gentler", not nothing |
+| 🖱️ | Pointer effects do nothing on touch screens; overlays never block a click or a scroll | Effects never get in the way |
+| 🔬 | Confetti is sharp on Retina screens and runs at the same speed on 60 Hz and 120 Hz displays | Physics is time-based, the canvas matches the screen's pixel density |
+| 🧹 | Every effect has `SparkleThatPage.<name>.destroy()` | Clean up on single-page-app route changes |
 
-**Color palette** across the particle effects: `<html data-palette="candy">` — **candy** (default), **neon** (glow), **meadow**.
-
-Every motion effect respects `prefers-reduced-motion`, overlays never block clicks, pointer effects no-op on touch, and each exposes `SparkleThatPage.<name>.destroy()` for SPA cleanup. The bundled `examples/demo.html` (the live demo above) toggles all seven and doubles as the verify tool.
-
-**Prior art** — heavier off-the-shelf options if you'd rather not hand-author: [tholman/cursor-effects](https://github.com/tholman/cursor-effects) (the classic fairy-dust / snowflake / bubble cursors), [party.js](https://party.js.org/), [canvas-confetti](https://github.com/catdad/canvas-confetti), [tsParticles](https://github.com/tsparticles/tsparticles). This bundle stays hand-authored & dependency-free so Claude can author + wire it (and pixel-art variants) for you.
+<sub>Prior art, if you'd rather not hand-author: [tholman/cursor-effects](https://github.com/tholman/cursor-effects),
+[party.js](https://party.js.org/), [canvas-confetti](https://github.com/catdad/canvas-confetti),
+[tsParticles](https://github.com/tsparticles/tsparticles). This bundle stays dependency-free so Claude can write and
+wire every effect for you.</sub>
 
 ---
 
-## ⌨️ cutify-that-terminal — a cute terminal that provably renders
+## 🎀 cutify-that-tab — a cute favicon that survives the tab
 
-**The problem it actually solves:** every terminal-ricing guide ends with "install
-a Nerd Font, paste this config, enjoy". None of them verify. So you paste it, your
-prompt comes back with `?` boxes where the icons should be, and **nothing errored
-anywhere** — a font name that matches nothing falls back silently, a preset that
-leaves one icon behind still loads fine, and a terminal that never got the font
-just draws boxes. Every layer reports success.
+<p align="center">
+  <a href="https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/styles.html"><img src="docs/readme/styles.png" width="820" alt="One pixel cat drawn in seven favicon styles, each shown at 16 px in light and dark browser tabs plus a 64 px enlargement."/></a>
+  <br/><sub>One cat, seven styles, each in a real tab chip on Chrome's four tab colours. <a href="https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/styles.html">Open the gallery →</a></sub>
+</p>
 
-Four levers, in the order you should pull them:
+One SVG file in the browser tab, instead of the 12-file pack a favicon generator gives you. Every browser since 2020
+supports `<link rel="icon" type="image/svg+xml">`.
 
-| Lever | What it gets you |
-|---|---|
-| **Terminal** | Ghostty if you have no preference — native, GPU-drawn, good with zero config. Honest one-liners on iTerm2 / kitty / WezTerm / Warp so you can disagree. |
-| **Theme** | 463 ship built in. `ghostty +list-themes` previews them *live*. Nothing to install. |
-| **Font** | A rounded face does more for "cute" than any palette. Maple Mono NF, or Comic Mono if you mean it. |
-| **Prompt** | Starship, with the git branch, a dirty-tree mark, and a `❯` that turns red when the last command failed. |
+| | Feature | The specifics |
+|---|---|---|
+| 🐾 | **78 starters** | 56 pixel-art mascots (animals, sweets, nature, ghosts, silhouettes) and 22 emotion blobs; 13–25 lines each |
+| 🎨 | **7 styles** | kawaii pixel, 1-bit silhouette, Game Boy, NES outline, die-cut sticker, chibi blob, riso two-ink: each with rules written to survive 16 px |
+| 🎲 | **Explores before it draws** | 6 candidates across at least 3 styles (picked by a real random draw, so not always the pink cat); you choose from the 3 most different |
+| ✅ | **A checker that can fail** | `check-favicon.py` scores the icon against Chrome's 4 tab colours, its edge margin and crisp edges: PASS, FAIL or UNCHECKED, with a 17-case self-test. None of the 78 starters fails it |
+| 🔍 | **Tab-size preview** | `preview.html` shows your icon at 16, 32 and 64 px in a real tab chip on all 4 colours, light and dark files side by side |
+| 🌗 | **Dark mode that works in Chrome** | Two files and two `<link media>` tags; Chrome ignores `@media` inside a favicon SVG |
+| ♻️ | **Replacing an icon?** | Bump `?v=2` on the link. Browsers cache favicons by URL, and a hard refresh won't clear it |
+| 📚 | **Sources to study, not copy** | Lospec, OpenMoji, Twemoji, Fluent Emoji, Kenney, Phosphor, with their licences checked |
 
-**Then it verifies, which is the whole point.** `scripts/verify-glyphs.sh` asks
-Ghostty which font would draw each icon in your actual rendered prompt:
-
-```bash
-./scripts/verify-glyphs.sh              # check this shell's prompt
-./scripts/verify-glyphs.sh --self-test  # prove the FAIL path still fires
+```
+You:    the browser tab is a blank square. can you put something cute in there?
+Claude: [opens the style gallery, draws 6 candidates in kawaii pixel, NES outline and die-cut sticker,
+         runs the checker, shows you the 3 most different]
+You:    the NES one
+Claude: [writes static/favicon.svg, wires the <link>, checks it on all 4 tab colours] Done. It passes on all four.
 ```
 
-Three-valued exit — `0` PASS, `1` FAIL, `3` UNCHECKED — because **a check that
-could not run is not a pass**. And a `--self-test` flag that injects a codepoint
-no font has, so you can confirm the guard still fires rather than trusting a green
-tick. It checks three things that fail for different reasons: whether any font has
-the glyphs at all, whether they come from the font you configured or from a silent
-fallback, and whether you are even in Ghostty (if not, it says UNCHECKED rather
-than guessing).
+<details><summary>🖼️ All 78 starters</summary>
 
-**The finding it is built on:** Ghostty bundles its *own* Symbols Nerd Font as a
-fallback. Icons render in Ghostty even when no Nerd Font is installed and even when
-`font-family` is wrong — which is exactly why this bug is so confusing. The terminal
-you configured looks perfect; only the *other* one shows boxes. Checking by eye
-proves nothing.
+<p align="center">
+<img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_acorn.svg" width="48" height="48" alt="acorn" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_axolotl.svg" width="48" height="48" alt="axolotl" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_bear.svg" width="48" height="48" alt="bear" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_bee.svg" width="48" height="48" alt="bee" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_boba.svg" width="48" height="48" alt="boba" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_bunny.svg" width="48" height="48" alt="bunny" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_bunny_silhouette.svg" width="48" height="48" alt="bunny silhouette" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_cactus.svg" width="48" height="48" alt="cactus" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_capybara.svg" width="48" height="48" alt="capybara" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_cat_love.svg" width="48" height="48" alt="cat love" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_cat_silhouette.svg" width="48" height="48" alt="cat silhouette" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_chick.svg" width="48" height="48" alt="chick" style="image-rendering:pixelated"/>
+  <br/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_cloud.svg" width="48" height="48" alt="cloud" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_cloud_silhouette.svg" width="48" height="48" alt="cloud silhouette" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_corgi.svg" width="48" height="48" alt="corgi" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_cow.svg" width="48" height="48" alt="cow" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_cupcake.svg" width="48" height="48" alt="cupcake" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_dango.svg" width="48" height="48" alt="dango" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_donut.svg" width="48" height="48" alt="donut" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_duckling.svg" width="48" height="48" alt="duckling" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_flower.svg" width="48" height="48" alt="flower" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_fox.svg" width="48" height="48" alt="fox" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_frog.svg" width="48" height="48" alt="frog" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_ghost.svg" width="48" height="48" alt="ghost" style="image-rendering:pixelated"/>
+  <br/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_ghost_silhouette.svg" width="48" height="48" alt="ghost silhouette" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_ghost_silhouette_dark.svg" width="48" height="48" alt="ghost silhouette dark" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_ghost_tile.svg" width="48" height="48" alt="ghost tile" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_heart_silhouette.svg" width="48" height="48" alt="heart silhouette" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_hedgehog.svg" width="48" height="48" alt="hedgehog" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_ice_cream.svg" width="48" height="48" alt="ice cream" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_macaron.svg" width="48" height="48" alt="macaron" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_mochi_cat.svg" width="48" height="48" alt="mochi cat" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_moon.svg" width="48" height="48" alt="moon" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_mushroom.svg" width="48" height="48" alt="mushroom" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_onigiri.svg" width="48" height="48" alt="onigiri" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_otter.svg" width="48" height="48" alt="otter" style="image-rendering:pixelated"/>
+  <br/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_owl.svg" width="48" height="48" alt="owl" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_pancakes.svg" width="48" height="48" alt="pancakes" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_panda.svg" width="48" height="48" alt="panda" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_penguin.svg" width="48" height="48" alt="penguin" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_pig.svg" width="48" height="48" alt="pig" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_planet.svg" width="48" height="48" alt="planet" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_pudding.svg" width="48" height="48" alt="pudding" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_puppy.svg" width="48" height="48" alt="puppy" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_quokka.svg" width="48" height="48" alt="quokka" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_rainbow.svg" width="48" height="48" alt="rainbow" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_seal.svg" width="48" height="48" alt="seal" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_sheep.svg" width="48" height="48" alt="sheep" style="image-rendering:pixelated"/>
+  <br/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_shy_cat.svg" width="48" height="48" alt="shy cat" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_star_face.svg" width="48" height="48" alt="star face" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_star_silhouette.svg" width="48" height="48" alt="star silhouette" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_strawberry.svg" width="48" height="48" alt="strawberry" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_sun.svg" width="48" height="48" alt="sun" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_sushi.svg" width="48" height="48" alt="sushi" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_taiyaki.svg" width="48" height="48" alt="taiyaki" style="image-rendering:pixelated"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_tea_cup.svg" width="48" height="48" alt="tea cup" style="image-rendering:pixelated"/>
+  <br/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_blush.svg" width="48" height="48" alt="blush"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_brand_grad.svg" width="48" height="48" alt="brand grad"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_bubble_heart.svg" width="48" height="48" alt="bubble heart"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_cheer.svg" width="48" height="48" alt="cheer"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_cozy.svg" width="48" height="48" alt="cozy"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_dreamy.svg" width="48" height="48" alt="dreamy"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_giggle.svg" width="48" height="48" alt="giggle"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_heart_eyes.svg" width="48" height="48" alt="heart eyes"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_kissy.svg" width="48" height="48" alt="kissy"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_love_rays.svg" width="48" height="48" alt="love rays"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_mint.svg" width="48" height="48" alt="mint"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_party.svg" width="48" height="48" alt="party"/>
+  <br/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_proud.svg" width="48" height="48" alt="proud"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_sleepy.svg" width="48" height="48" alt="sleepy"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_smug.svg" width="48" height="48" alt="smug"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_sparkles.svg" width="48" height="48" alt="sparkles"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_starry.svg" width="48" height="48" alt="starry"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_surprise.svg" width="48" height="48" alt="surprise"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_thinking.svg" width="48" height="48" alt="thinking"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_wave.svg" width="48" height="48" alt="wave"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_wide_eye.svg" width="48" height="48" alt="wide eye"/>
+  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_woah.svg" width="48" height="48" alt="woah"/>
+  <br/>
+</p>
 
-Ships a per-terminal prompt split too, so Ghostty keeps its icons while Apple
-Terminal, VS Code and ssh sessions get a prompt that cannot break.
+Each file is in [`examples/`](plugins/cutify-that-tab/skills/cutify-that-tab/examples), with its name and
+vibe listed in the skill's [SKILL.md](plugins/cutify-that-tab/skills/cutify-that-tab/SKILL.md#examples-directory).
+</details>
+
+<details><summary>🩺 The four ways a favicon silently breaks (and the fixes)</summary>
+
+| # | Failure | Looks fine in | Breaks in | Fix |
+|---|---|---|---|---|
+| 1 | **Tab-edge blending** | a preview on a flat dark page | Chrome's rounded tab | a 14×14 tile with a 1-cell outer margin |
+| 2 | **Dark-mode mismatch** | one system theme | switching theme | two files + `<link media="(prefers-color-scheme: dark)">` |
+| 3 | **Body vanishes on a light tab** | dark previews and dark tabs | Chrome's grey inactive tab `#c2c5be` | tint the body to Tailwind `*-300` or darker, or add a tile |
+| 4 | **The old icon won't go away** | incognito | every returning visitor | bump `?v=N` on the `<link>` href |
+
+Number 3 is the subtle one: `prefers-color-scheme` doesn't fix it, because Chrome is in light mode while it shows the
+grey inactive tab. The checker catches 1 and 3 before you ship.
+</details>
 
 ---
 
@@ -110,15 +255,18 @@ Terminal, VS Code and ssh sessions get a prompt that cannot break.
   <br/><sub>Built with this method: <a href="https://github.com/wan-huiyan/morning-fairy">morning-fairy</a>'s caterpillar world. (Made-up demo data.)</sub>
 </p>
 
-The method behind [morning-fairy](https://github.com/wan-huiyan/morning-fairy), written down so your next cute app starts from it:
+The method behind [morning-fairy](https://github.com/wan-huiyan/morning-fairy), written down so your next cute app
+starts from it:
 
-- **The scene is the data.** Pick the axis (hours of today, the last 30 days, the stages of a funnel), then map each number to the channel that suits it: a running amount → the ground's height, separate items → objects on it, a 1–5 score → a small accent, the overall state → the mascot's mood. Missing data drawn as missing, never as 0.
-- **A world = colour tokens + one scene drawing + one sound voice.** Adding one touches nothing else: an 8-step checklist and real code in `references/world-anatomy.md`.
-- **Clickable drawings that stay accessible** — an invisible layer of real links placed from the drawing's geometry, keyboard order = time order.
-- **An options page before building**, with live slices of the real data, and a dated plan per change.
-- **Checks that can fail**, each shown to fail on the old version first — three ready Playwright scripts: `copy_identical.cjs` (the copied text didn't change), `pixel_regress.cjs` (the other worlds didn't move a pixel, with a noise floor) and `hit_check.cjs` (each thing in the drawing is clickable and lands on its row).
+| | Feature | The specifics |
+|---|---|---|
+| 🗺️ | **The scene is the data** | Pick the axis (hours of today, the last 30 days, a funnel's stages), then map each number to a channel: a running amount → the ground's height, items → objects on it, the overall state → the mascot's mood. Missing data is drawn as missing, never as 0 |
+| 🌍 | **Worlds you can swap** | A world = colour tokens + one scene drawing + one sound voice. Adding one touches nothing else: an 8-step checklist and real code in `references/world-anatomy.md` |
+| 🖱️ | **Clickable, still accessible** | An invisible layer of real links placed from the drawing's geometry; keyboard order follows time order |
+| 🧭 | **Options before building** | An options page with live slices of your real data, and a dated plan per change |
+| ✅ | **Checks that can fail** | 3 Playwright scripts, each shown failing on the old version first: `copy_identical.cjs` (copied text unchanged), `pixel_regress.cjs` (other worlds didn't move a pixel) and `hit_check.cjs` (every drawn thing is clickable and lands on its row) |
 
-Needs Node + Playwright and an installed Chrome for the scripts. Pairs with `sparkle-that-page` and `cutify-that-tab`.
+Needs Node, Playwright and Chrome for the scripts. Pairs with sparkle-that-page and cutify-that-tab.
 
 ---
 
@@ -126,337 +274,121 @@ Needs Node + Playwright and an installed Chrome for the scripts. Pairs with `spa
 
 <p align="center">
   <img src="docs/wiggle-that-diagram/pizza.gif" width="720" alt="Step 4 of a five-step animation: a phone shows a map with a red dot moving along an orange route and the words 6 min away, while a delivery scooter rides from the kitchen to a house at 12 Elm St. Under the picture the caption reads: The app follows the driver on a map, so Sam can watch the pizza get closer."/>
-  <br/><sub>Step 4 of 5 from the live style: how a pizza order travels from app to kitchen to door (made-up example). <a href="https://wan-huiyan.github.io/cutify-this/wiggle/">Watch it in all three styles</a>.</sub>
+  <br/><sub>Step 4 of 5 in the live style: how a pizza order travels from app to kitchen to door (made-up example). <a href="https://wan-huiyan.github.io/cutify-this/wiggle/">Watch it in all three styles →</a></sub>
 </p>
 
-Turn one static "how it works" picture (files flow in, rules check them, a person approves) into a short,
-**captioned, looping animation** that drops into an HTML slide deck or report, and offer it in **three styles**
-so people can pick:
+Turn one static "how it works" picture into a short, **captioned, looping animation** for an HTML slide deck or
+report, offered in three styles so people can pick:
 
 | Style | Looks like | Made with |
 |---|---|---|
 | **Diagram clip** | a clean, 3Blue1Brown-style diagram; labels stay sharp | huashu-art-motion engine → text-free video + HTML labels |
 | **Whiteboard** | someone explaining at a whiteboard, hand-lettered | huashu-art-motion's whiteboard grammar → square video |
-| **Live** | a polished product animation, ~30 KB | inline SVG + GSAP with a virtual camera |
+| **Live** | a polished product animation, about 30 KB | inline SVG + GSAP with a virtual camera |
 
-What makes it different from "add some animation":
-
-- **Readable, not flashy.** Captions are written first; every step holds for at least `max(4.5 s, words/3 + 1.5 s)`, and
-  something new appears only after the last words have been up for 2.5 s. The first cut of the worked example was
-  "so fast"; this rule is the fix, and `pace_check.py` fails any step shorter than its reading time.
-- **Same story, three ways.** One caption script and one set of beats feed all three styles, so a switcher compares
-  styles, not content.
-- **Behaves inside a deck.** Each film is one self-contained file in an `iframe srcdoc`: step rail, Play/Pause,
-  reduced motion, and wheel/keys/swipes forwarded so one gesture still moves one slide. The deck-side script adds a
-  Way × Style switcher and fits animation + caption on one laptop screen by narrowing the layout before it zooms,
-  so captions keep their size.
-- **Checks that can fail:** pacing gate, contract tests in real Chrome, edge-clipping checks, size budgets, and
-  independent reviewers who check every picture word against the source material.
+| | What makes it different | The specifics |
+|---|---|---|
+| 📖 | **Readable, not flashy** | Captions are written first; each step holds for at least `max(4.5 s, words/3 + 1.5 s)`, and `pace_check.py` fails any step shorter than its reading time |
+| 🔁 | **One story, three ways** | One caption script feeds all three styles, so a switcher compares styles, not content |
+| 🎞️ | **Behaves inside a deck** | One self-contained file per film in an `iframe srcdoc`: step rail, play/pause, reduced motion, and one gesture still moves one slide |
+| ✅ | **Checks that can fail** | A pacing gate, contract tests in real Chrome, edge-clipping checks, size budgets, and reviewers who check every word in the picture against the source |
 
 Needs `uv`, Google Chrome, ffmpeg (video styles) and the
 [huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion) skill for the two video styles.
 
-**Credits.** Built on **[huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion)** by 花叔 (alchaincyf, MIT):
-its direction method (shot lists, camera grammar, the ways an explainer fails) and its rendering engine are the
-foundation for the diagram-clip and whiteboard styles. Live style uses [GSAP](https://gsap.com); fonts
-[Outfit](https://fonts.google.com/specimen/Outfit) and [Kalam](https://fonts.google.com/specimen/Kalam) (OFL).
-Made by Huiyan Wan with **Claude** (Anthropic) in Claude Code, which built the first nine films as parallel agents
-and wrote the skill down from what worked and what broke. Third-party licence text:
-[`THIRD_PARTY_NOTICES.md`](plugins/wiggle-that-diagram/skills/wiggle-that-diagram/THIRD_PARTY_NOTICES.md).
+---
+
+## ⌨️ cutify-that-terminal — a cute terminal that provably renders
+
+Every terminal-ricing guide ends with "install a Nerd Font, paste this config, enjoy". None of them check. So the
+prompt comes back with `?` boxes where the icons should be, and **nothing errored anywhere**: a font name that matches
+nothing falls back silently, and a terminal that never got the font just draws boxes.
+
+| | Lever | What it gets you |
+|---|---|---|
+| 🖥️ | **Terminal** | Ghostty if you have no preference; honest one-liners on iTerm2, kitty, WezTerm and Warp so you can disagree |
+| 🎨 | **Theme** | 463 built into Ghostty; `ghostty +list-themes` previews them live. Nothing to install |
+| 🔤 | **Font** | A rounded face does more for "cute" than any palette: Maple Mono NF, or Comic Mono if you mean it |
+| ❯ | **Prompt** | Starship with the git branch, a dirty-tree mark, and a `❯` that turns red when the last command failed |
+| ✅ | **The check** | `verify-glyphs.sh` asks Ghostty which font draws each icon in your real prompt. Exit `0` PASS, `1` FAIL, `3` UNCHECKED, plus `--self-test` to prove the FAIL path still fires |
+
+**The finding it's built on:** Ghostty bundles its own Symbols Nerd Font as a fallback, so icons render in Ghostty even
+when your `font-family` is wrong. The terminal you configured looks perfect; only the *other* one shows boxes.
+
+> ⚠️ **One of these is not like the others.** The other skills drop a file into your project and you undo them by
+> deleting it. This one **installs software and edits your `~/.zshrc`**, so it backs the file up first, shows you the
+> diff, only appends, and gives you the undo in the same breath. macOS + Homebrew + zsh only.
 
 ---
 
 ## 🪄 pop-that-readme — a README that pops
 
-The skill behind *this* README. It gives Claude the recipe + a fill-in template to author a cute, high-signal repo front page in the house style:
+The skill behind *this* page. It gives Claude a recipe and a fill-in template for a cute, high-signal front page:
 
-- **An 11-section recipe** (hero → badges → bold value-prop → captioned demo → why-it-exists → emoji feature table → install block → usage → contributors → honesty box → footer) — front-load value, stay scannable.
-- **Baked-in hero recipes** — an ASCII box hero (works anywhere) + a copy-paste pixel-SVG hero (`shape-rendering="crispEdges"`); hand off to `pixel-art` / `css-animated-svg-scenes` for animated banners.
-- **Voice rules** — value prop = one bold sentence; every claim earns a number; emoji as wayfinding; an honesty section as a feature.
-- **A fill-in template** (`examples/README.template.md`) + a pre-ship **quality checklist**.
+| | Feature | The specifics |
+|---|---|---|
+| 🧱 | **An 11-section recipe** | hero → badges → one bold promise → captioned demo → why → feature table → install → usage → contributors → limitations → footer |
+| 🖼️ | **Ready-made heroes** | an ASCII box hero that works anywhere, and a copy-paste pixel-SVG hero |
+| ✍️ | **Voice rules** | the promise is one bold sentence; every claim earns a number; emoji as signposts, not decoration; a real limitations section |
+| ☑️ | **A pre-ship checklist** | first screen has the hero, 3+ badges and the promise; no 404 badges; renders cleanly on GitHub |
 
 ---
 
-## 🎀 cutify-that-tab — cute SVG favicons
+## ✅ Checks
 
-> A Claude Code skill for adding a cute, hand-authored SVG favicon to a web app — that tiny icon in the browser tab.
-
-<p align="center">
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_mochi_cat.svg" width="64" height="64" alt="mochi cat" style="image-rendering:pixelated"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_bunny.svg" width="64" height="64" alt="bunny" style="image-rendering:pixelated"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_bear.svg" width="64" height="64" alt="bear" style="image-rendering:pixelated"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_chick.svg" width="64" height="64" alt="chick" style="image-rendering:pixelated"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_bee.svg" width="64" height="64" alt="bee" style="image-rendering:pixelated"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_strawberry.svg" width="64" height="64" alt="strawberry" style="image-rendering:pixelated"/>
-  <br/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_ghost.svg" width="64" height="64" alt="ghost" style="image-rendering:pixelated"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_ghost_tile.svg" width="64" height="64" alt="ghost tile" style="image-rendering:pixelated"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_ghost_silhouette.svg" width="64" height="64" alt="ghost silhouette" style="image-rendering:pixelated"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_cloud.svg" width="64" height="64" alt="cloud" style="image-rendering:pixelated"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_dango.svg" width="64" height="64" alt="dango" style="image-rendering:pixelated"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_frog.svg" width="64" height="64" alt="frog" style="image-rendering:pixelated"/>
-  <br/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_brand_grad.svg" width="64" height="64" alt="happy blob"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_mint.svg" width="64" height="64" alt="wink blob"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_heart_eyes.svg" width="64" height="64" alt="heart-eyes blob"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_smug.svg" width="64" height="64" alt="smug blob"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_surprise.svg" width="64" height="64" alt="surprise blob"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_starry.svg" width="64" height="64" alt="starry-eyed blob"/>
-  <br/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_kissy.svg" width="64" height="64" alt="kissy blob"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_wide_eye.svg" width="64" height="64" alt="anime blob"/>
-  <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_sleepy.svg" width="64" height="64" alt="sleepy blob"/>
-</p>
-
-## Why this exists
-
-Most online "favicon generators" produce a 12-file pack (`favicon.ico`, `apple-touch-icon` variants, `manifest.json`, ...) for a problem that needs **one SVG file**. Modern browsers have supported `<link rel="icon" type="image/svg+xml">` since 2020 — 96%+ global support today.
-
-This skill gives Claude Code the recipes to author cute, hand-coded favicons in a single SVG, plus the verification loop to make sure they actually read at real tab size (~14–16px).
-
-## Quick Start
-
-```
-You: my app's browser tab is just a blank square. can you put something cute in there?
-
-Claude: [reads skill] I'll add an SVG favicon. Three quick questions:
-  - what vibe — emoji, gradient blob mascot, or 16×16 pixel-art mascot?
-  - what color palette?
-  - which animal / character if pixel art (bunny, bear, ghost, mochi cat, ...)?
-
-You: pixel-art mochi cat, pink palette
-
-Claude: [writes static/favicon.svg, wires up <link>, opens /tmp/favicon_preview.html
-        showing 16/32/64/128 px stacked, iterates with you until shipped]
-```
-
-## The three techniques
-
-| Technique | Effort | Vibe | When to pick |
-|---|---|---|---|
-| **A · Emoji as favicon** | ~30 sec | 🐱 minimum-viable | "Just put SOMETHING there" — works with any emoji |
-| **B · Gradient mascot blob** | ~5 min | soft, friendly, brand-ish | Marketing site, indie SaaS, "personality not pixels" |
-| **C · 16×16 pixel-art sticker** | ~10 min | kawaii, retro, dev-tool charm | Internal dashboard, dev tool, "we have taste" |
-
-All three ship as a single SVG file. No `.ico`, no PNG fallbacks, no PWA manifest, no apple-touch-icon variants — those are different problems.
-
-## What you get
-
-- **`<link rel="icon" type="image/svg+xml">` recipe** — the modern one-liner
-- **A style vocabulary** — seven named styles that survive a 16 px tab (kawaii pixel, 1-bit silhouette, Game Boy, NES outline, die-cut sticker, chibi blob, riso two-ink), the same cat in each, compared in `examples/styles.html`; the skill draws candidates across several styles before you pick.
-- **78 starter SVGs** in `examples/` — 56 pixel-art mascots (animals, sweets, nature, ghosts, silhouettes) and 22 emotion-variant gradient blobs. Copy + rename + edit colors
-- **Live verification loop** — `/tmp/favicon_preview.html` rendering the favicon at 16/32/64/128 px so you iterate against real tab size, not the enlarged SVG
-- **Tab-edge / tab-background diagnosis** — three distinct failure modes (chrome blending, dark-mode mismatch, light-tab silhouette vanish) with decision trees for each
-- **Dark-mode-aware favicons** — the two-file `<link media>` recipe that works in Chrome 92+, Firefox, and Safari (single-file CSS-in-SVG `@media` is ignored by Chrome for favicons — this is documented in the skill)
-- **Cache-bust recipe for *replacing* a favicon** — when you change an already-shipped icon and the live tab stubbornly shows the old one, the fix isn't "tell users to clear their cache." Bump a `?v=N` query on the `<link rel="icon">` href so the new URL re-fetches for everyone (Step 3b)
-
-## Installation
-
-**Claude Code (plugin install — recommended):**
 ```bash
-/plugin marketplace add wan-huiyan/cutify-this
-/plugin install cutify-that-tab@wan-huiyan-cutify-this
+bash scripts/check-all.sh
 ```
 
-**Claude Code (git clone — always works):**
-```bash
-git clone https://github.com/wan-huiyan/cutify-this.git ~/.claude/skills/cutify-that-tab
-```
+One script runs every check, on every push and pull request (the **tests** badge above). Today it runs 22 checks:
 
-**Cursor:**
-```bash
-# Per-project rule (most reliable)
-mkdir -p .cursor/rules
-# Copy SKILL.md content into .cursor/rules/cutify-that-tab.mdc with alwaysApply: true
+- **Favicons:** the checker's 17-fixture self-test, then every starter SVG on the four Chrome tab colours (0 fail; the
+  3 known blobs it can't measure must stay UNCHECKED).
+- **Sparkle:** a real Chromium clicks around the demo and checks 6 things: no console errors; the demo's confetti
+  fires; by default a plain click draws nothing while a `data-celebrate` click bursts; and with reduced motion a
+  click draws a little and is gone within ~700 ms.
+- **Syntax:** every shipped script parses (JavaScript, Python, bash, zsh).
+- **Wiggle:** the pacing checker passes on the example films, and style C rebuilds byte-for-byte.
+- **Repo:** marketplace versions match each plugin, skill names match, and every link in this README points at a real
+  file.
 
-# Or global
-git clone https://github.com/wan-huiyan/cutify-this.git ~/.cursor/skills/cutify-that-tab
-```
+The terminal glyph check is skipped on machines without Ghostty, so CI does not cover it.
 
-## Three failure modes the skill catches
+## 🙈 Limitations
 
-The skill documents three distinct ways favicons silently break at real tab size — failures that file-level previews (`<img src=favicon.svg>` against a flat dark `<body>`) don't expose. Each has a different fix:
+- **Claude Code first.** The skills are written for Claude Code. Other agents can read the `SKILL.md` files, but the
+  install commands and some steps assume Claude Code.
+- **Favicons are SVG only.** No `.ico` fallback, no `apple-touch-icon` or PWA icons; for a polished brand mark, use a
+  designer. Most browsers reject animation inside a favicon.
+- **The favicon checker is an early warning, not proof.** Its pass mark is calibrated on 5 field cases, and it can't
+  measure outlines or tile-less blobs (3 starters come back UNCHECKED). Look at the real tab before you ship.
+- **The terminal skill is macOS + Homebrew + zsh.** The ideas port to Linux; the commands don't.
+- **hatch-that-world and wiggle-that-diagram need tools:** Node, Playwright and Chrome; wiggle's video styles also need
+  ffmpeg and the huashu-art-motion skill.
+- **"Cute" is still judged by eye.** Every check here proves something that can fail (contrast, pacing, glyphs, clicks),
+  never that it's charming. Look at it.
 
-| # | Failure | Looks fine in | Breaks in | Fix |
-|---|---|---|---|---|
-| 1 | **Tab-edge blending** | File preview against dark `<body>` | Chrome's rounded tab chrome | 14×14 inset tile, 1-cell outer margin (the "two-margin rule") |
-| 2 | **Dark-mode mismatch** | Single system theme | System theme switch | Two-file `<link media="(prefers-color-scheme: dark)">` recipe |
-| 3 | **Light-tab silhouette vanish** | Dark mocks + dark-mode tabs | Light-mode inactive tab (Chrome's grey-sage `#c2c5be`) | Tint body to Tailwind `*-300` tier, or add tile, or add outline |
+## 💛 Credits
 
-Failure #3 is the subtle one: `prefers-color-scheme` does NOT fix it — Chrome is technically in light mode while showing the grey-sage inactive tab, so the light-mode variant fires, which is the white body that disappears.
+- **[huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion)** and **[huashu-design](https://github.com/alchaincyf/huashu-design)**
+  by 花叔 (alchaincyf, MIT): the direction method and rendering engine under wiggle's video styles, and the "add
+  options, not bans" idea behind cutify-that-tab's style exploration.
+- **[animate](https://github.com/emilkowalski/skills)** by Emil Kowalski: the "should it animate at all" frequency
+  gate behind sparkle-that-page's delight budget.
+- **[tholman/cursor-effects](https://github.com/tholman/cursor-effects)**: the effect vocabulary (fairy dust,
+  snowflake, bubble) sparkle-that-page names its variants after.
+- **[Lospec](https://lospec.com/palette-list/dmg-nso)**: the Game Boy greens.
+- Wiggle's live style uses [GSAP](https://gsap.com) and the fonts [Outfit](https://fonts.google.com/specimen/Outfit)
+  and [Kalam](https://fonts.google.com/specimen/Kalam) (OFL); see its
+  [`THIRD_PARTY_NOTICES.md`](plugins/wiggle-that-diagram/skills/wiggle-that-diagram/THIRD_PARTY_NOTICES.md).
 
-## Replacing a favicon? Cache-bust the link
-
-A *fourth* failure mode, and the one most often mis-diagnosed as "Chrome is just stubborn about its cache": you deploy a new favicon, the server serves it correctly, but every browser tab keeps showing the **old** icon — even after a hard-refresh.
-
-Favicons live in a **separate cache keyed on the icon URL**, not on the page. If you changed `favicon.svg`'s contents but left the `<link rel="icon">` href URL unchanged, the browser sees the same URL and serves the stale icon indefinitely, for every returning user. Incognito shows the new one (proving the server is right) but the normal profile stays stale.
-
-**Fix — one line, ships to all users:** bump a version query on the href.
-
-```html
-<!-- before --> <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
-<!-- after  --> <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=2">
-```
-
-The query doesn't change what static servers return — it only changes the cache key, forcing a fresh fetch for *every* browser (including already-poisoned ones). Bump the integer on each subsequent swap. See **Step 3b** in the skill.
-
-## Examples directory
-
-The 78 starter SVGs in `examples/` — each is 13–25 lines, hand-authorable, copy-and-edit. Organized by family below.
-
-### Pixel-art mascots (Technique C)
-
-#### Animals — 24 mascots
-
-| Preview | File | Vibe |
-|---|---|---|
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_mochi_cat.svg" width="56" alt="mochi cat"> | `pixel_mochi_cat.svg` | classic pink mochi cat |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_bunny.svg" width="56" alt="bunny"> | `pixel_bunny.svg` | peach bunny with pink ears |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_bear.svg" width="56" alt="bear"> | `pixel_bear.svg` | brown bear with cream snout |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_chick.svg" width="56" alt="chick"> | `pixel_chick.svg` | yellow chick with orange beak + feet |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_bee.svg" width="56" alt="bee"> | `pixel_bee.svg` | striped bee with sky-blue wings |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_frog.svg" width="56" alt="frog"> | `pixel_frog.svg` | green frog face |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_sheep.svg" width="56" alt="sheep"> | `pixel_sheep.svg` | fluffy sheep with grey face |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_cat_love.svg" width="56" alt="cat with heart"> | `pixel_cat_love.svg` | grey cat with a floating heart |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_shy_cat.svg" width="56" alt="shy cat"> | `pixel_shy_cat.svg` | lavender cat with big blush |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_panda.svg" width="56" alt="panda"> | `pixel_panda.svg` | black-and-white panda with patch eyes |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_penguin.svg" width="56" alt="penguin"> | `pixel_penguin.svg` | black penguin with white belly + orange beak |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_fox.svg" width="56" alt="fox"> | `pixel_fox.svg` | orange fox with cream snout |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_owl.svg" width="56" alt="owl"> | `pixel_owl.svg` | amber owl with big round eyes |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_pig.svg" width="56" alt="pig"> | `pixel_pig.svg` | pink pig with snout |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_duckling.svg" width="56" alt="duckling"> | `pixel_duckling.svg` | yellow duckling with orange bill |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_cow.svg" width="56" alt="cow"> | `pixel_cow.svg` | white cow with black spots + pink muzzle |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_puppy.svg" width="56" alt="puppy"> | `pixel_puppy.svg` | cream puppy with floppy ears + tongue out |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_seal.svg" width="56" alt="seal"> | `pixel_seal.svg` | grey seal with whisker dots |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_otter.svg" width="56" alt="otter"> | `pixel_otter.svg` | brown otter with cream face |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_hedgehog.svg" width="56" alt="hedgehog"> | `pixel_hedgehog.svg` | spiky brown hedgehog in profile |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_axolotl.svg" width="56" alt="axolotl"> | `pixel_axolotl.svg` | pink axolotl with frilly gills |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_capybara.svg" width="56" alt="capybara"> | `pixel_capybara.svg` | calm brown capybara with sleepy eyes |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_corgi.svg" width="56" alt="corgi"> | `pixel_corgi.svg` | orange corgi with cream snout + tongue |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_quokka.svg" width="56" alt="quokka"> | `pixel_quokka.svg` | brown quokka with a famous big smile |
-
-#### Sweets & food — 11 mascots
-
-| Preview | File | Vibe |
-|---|---|---|
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_strawberry.svg" width="56" alt="strawberry"> | `pixel_strawberry.svg` | red strawberry with seeds and a face |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_dango.svg" width="56" alt="dango"> | `pixel_dango.svg` | dango skewer (three pastel mochi balls) |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_donut.svg" width="56" alt="donut"> | `pixel_donut.svg` | pink-frosted donut with sprinkles |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_cupcake.svg" width="56" alt="cupcake"> | `pixel_cupcake.svg` | cupcake with pink frosting + cherry |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_ice_cream.svg" width="56" alt="ice cream"> | `pixel_ice_cream.svg` | mint scoop on a waffle cone, with face |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_boba.svg" width="56" alt="boba tea"> | `pixel_boba.svg` | boba tea cup with pink straw + tapioca |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_macaron.svg" width="56" alt="macaron"> | `pixel_macaron.svg` | pink macaron sandwich with cream filling |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_pancakes.svg" width="56" alt="pancakes"> | `pixel_pancakes.svg` | pancake stack with butter + syrup |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_onigiri.svg" width="56" alt="onigiri"> | `pixel_onigiri.svg` | triangle rice ball with nori band + face |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_sushi.svg" width="56" alt="sushi"> | `pixel_sushi.svg` | salmon nigiri with a tiny face |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_taiyaki.svg" width="56" alt="taiyaki"> | `pixel_taiyaki.svg` | fish-shaped pastry in profile |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_pudding.svg" width="56" alt="pudding"> | `pixel_pudding.svg` | caramel pudding with a happy face |
-
-#### Nature & objects — 11 mascots
-
-| Preview | File | Vibe |
-|---|---|---|
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_cloud.svg" width="56" alt="cloud"> | `pixel_cloud.svg` | sky-blue cloud with pink blush |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_mushroom.svg" width="56" alt="mushroom"> | `pixel_mushroom.svg` | red-cap mushroom with a white-stem face |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_rainbow.svg" width="56" alt="rainbow"> | `pixel_rainbow.svg` | rainbow stripes between two clouds |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_star_face.svg" width="56" alt="smiling star"> | `pixel_star_face.svg` | yellow star with a sleepy smile |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_moon.svg" width="56" alt="moon"> | `pixel_moon.svg` | crescent moon with one eye + small blush |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_sun.svg" width="56" alt="sun"> | `pixel_sun.svg` | sun with rays + pink blushes |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_flower.svg" width="56" alt="flower"> | `pixel_flower.svg` | pink flower with smiling yellow center |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_cactus.svg" width="56" alt="cactus"> | `pixel_cactus.svg` | potted cactus with a tiny face |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_tea_cup.svg" width="56" alt="tea cup"> | `pixel_tea_cup.svg` | pink tea cup with steam + face |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_planet.svg" width="56" alt="planet"> | `pixel_planet.svg` | ringed purple planet with face |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_acorn.svg" width="56" alt="acorn"> | `pixel_acorn.svg` | acorn with dark cap + smiling nut |
-
-#### Ghosts — 4 variants
-
-| Preview | File | Vibe |
-|---|---|---|
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_ghost.svg" width="56" alt="ghost"> | `pixel_ghost.svg` | friendly ghost, transparent bg |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_ghost_tile.svg" width="56" alt="ghost on tile"> | `pixel_ghost_tile.svg` | C-variant 1 — ghost on dark tile (14×14 inset) |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_ghost_silhouette.svg" width="56" alt="ghost silhouette"> | `pixel_ghost_silhouette.svg` | C-variant 2 — silhouette with cut-out eyes |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_ghost_silhouette_dark.svg" width="56" alt="ghost silhouette dark"> | `pixel_ghost_silhouette_dark.svg` | dark-mode pair for the above |
-
-#### Silhouettes — 5 cut-out variants
-
-| Preview | File | Vibe |
-|---|---|---|
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_cat_silhouette.svg" width="56" alt="cat silhouette"> | `pixel_cat_silhouette.svg` | black cat with cut-out eyes + blush |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_bunny_silhouette.svg" width="56" alt="bunny silhouette"> | `pixel_bunny_silhouette.svg` | tall-eared bunny with cut-out eyes + blush |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_heart_silhouette.svg" width="56" alt="heart"> | `pixel_heart_silhouette.svg` | solid red heart with shine highlight |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_star_silhouette.svg" width="56" alt="star"> | `pixel_star_silhouette.svg` | solid yellow star with twinkle highlight |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/pixel_cloud_silhouette.svg" width="56" alt="cloud silhouette"> | `pixel_cloud_silhouette.svg` | bold cloud silhouette with cut-out eyes |
-
-### Gradient blobs (Technique B) — 22 emotion variants
-
-| Preview | File | Gradient | Emotion |
-|---|---|---|---|
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_brand_grad.svg" width="56" alt="happy blob"> | `blob_brand_grad.svg` | sunset (orange → red → pink → indigo) | 😊 happy |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_mint.svg" width="56" alt="wink blob"> | `blob_mint.svg` | mint → cyan | 😉 wink |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_heart_eyes.svg" width="56" alt="heart eyes blob"> | `blob_heart_eyes.svg` | pink → magenta | 😍 in love |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_smug.svg" width="56" alt="smug blob"> | `blob_smug.svg` | lavender → violet | 😏 smug |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_surprise.svg" width="56" alt="surprised blob"> | `blob_surprise.svg` | cyan → teal | 😮 gasping |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_starry.svg" width="56" alt="starry blob"> | `blob_starry.svg` | yellow → orange | 🤩 amazed |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_kissy.svg" width="56" alt="kissy blob"> | `blob_kissy.svg` | coral → pink | 😘 kissy |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_wide_eye.svg" width="56" alt="big-eyed blob"> | `blob_wide_eye.svg` | radial amber | 🥺 anime / big-eyed |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_sleepy.svg" width="56" alt="sleepy blob"> | `blob_sleepy.svg` | violet → indigo | 😌 sleepy |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_woah.svg" width="56" alt="woah blob"> | `blob_woah.svg` | lavender → violet | 😲 surprised (raised brows + O mouth) |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_cheer.svg" width="56" alt="cheering blob"> | `blob_cheer.svg` | yellow → amber | 🙌 cheering (arms-up Y + sparkles) |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_love_rays.svg" width="56" alt="radiating heart"> | `blob_love_rays.svg` | n/a (radiating heart) | ❤️ radiating love |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_sparkles.svg" width="56" alt="sparkling blob"> | `blob_sparkles.svg` | amber → pink | ✨ sparkling / shiny |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_giggle.svg" width="56" alt="giggling blob"> | `blob_giggle.svg` | rose → crimson | 😂 giggling (open laugh + blush) |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_blush.svg" width="56" alt="blushing blob"> | `blob_blush.svg` | pale pink → rose | ☺️ shy / blushing |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_dreamy.svg" width="56" alt="dreamy blob"> | `blob_dreamy.svg` | lavender → violet | 💭 dreamy (sleepy eyes + floating stars) |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_proud.svg" width="56" alt="proud blob"> | `blob_proud.svg` | cyan → teal | 😌 proud (closed-eye smile + sparkle) |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_party.svg" width="56" alt="party blob"> | `blob_party.svg` | mint → emerald | 🥳 party (tongue out + confetti) |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_cozy.svg" width="56" alt="cozy blob"> | `blob_cozy.svg` | peach → orange | ☕ cozy (sleepy + steam wisps) |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_wave.svg" width="56" alt="waving blob"> | `blob_wave.svg` | yellow → amber | 👋 waving hi |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_bubble_heart.svg" width="56" alt="speech bubble heart"> | `blob_bubble_heart.svg` | pink → magenta | 💬 speech bubble with a heart |
-| <img src="plugins/cutify-that-tab/skills/cutify-that-tab/examples/blob_thinking.svg" width="56" alt="thinking blob"> | `blob_thinking.svg` | violet → indigo | 🤔 thinking (raised brow + thought bubble) |
-
-## Limitations
-
-- **Not a corporate brand mark.** This skill is for hand-authored, cute, low-effort favicons. If you need a polished brand mark, photographic logo, or an apple-touch-icon multi-platform pack, hand off to a designer.
-- **SVG-only.** No `.ico` fallback in the recipes. Every browser shipped since 2020 supports SVG favicons (Chrome 80+, Firefox 41+, Safari 12+, Edge 80+). IE 11 and ancient Android browsers are not in scope.
-- **Animation is shaky.** Most browsers reject SMIL animation in favicons; CSS animation works in some contexts but isn't covered in the canonical recipes.
-- **PWA / home-screen icons.** Different problem — `manifest.json` and `apple-touch-icon` are out of scope.
-
-## Dependencies
-
-None at runtime — the output is a single SVG file. The skill assumes the user's web app has a `<head>` element where `<link rel="icon">` can be added; that's it.
-
-## Key design decisions
-
-1. **One SVG, not a 12-file pack.** The skill explicitly rejects the favicon-generator pattern of `.ico` + 4× PNG sizes + manifest + apple-touch-icon. Modern browsers don't need any of that.
-2. **Live tab-size verification is non-optional.** Pixel-art choices that look great at the SVG's natural viewBox size (16×16, viewed at 200% in your editor) routinely break at the actual 14–16px tab size. The skill defaults to the `/tmp/favicon_preview.html` iterate-with-preview loop.
-3. **Dark-mode goes through two files, not CSS-in-SVG.** Chrome treats favicon SVGs as image-type resources and does NOT evaluate `@media (prefers-color-scheme: dark)` inside them. The two-file `<link media>` recipe is the only cross-browser path.
-
-## See also
-
-- **`frontend-design`** — broader frontend / UI design guidance for Claude Code
-- **`claude-design-handoff-bundle`** — for implementing a designer's specific favicon mark (different problem: rendering a brand mark, not authoring a cute one from scratch)
-
-## References
-
-- [MDN: SVG favicons](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/link)
-- [Can I Use: SVG favicons](https://caniuse.com/link-icon-svg) — 96%+ global support as of 2026
-- [`shape-rendering="crispEdges"`](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/shape-rendering) — the magic attribute that keeps pixel art pixel-crisp
-
-## Version history
-
-- **v1.11.0** (2026-06-02) — Added **Step 3b — cache-bust the favicon link when replacing an existing icon.** Fixes the long-standing gap where the only cache advice was "hard-refresh / incognito," which doesn't help when a *changed* favicon stays stale on returning users' tabs. The deterministic fix is a `?v=N` version query on the `<link rel="icon">` href (new URL = new cache key = forced re-fetch for everyone). Source: field testing — a deployed monkey→butterfly swap was server-correct but tab-stale until `favicon.svg` → `favicon.svg?v=2`.
-- **v1.10.0** (2026-05-28) — Big catalog expansion. Removed 4 mascots that didn't land (`blob_hugg`, `pixel_cat_meow`, `pixel_hyper_cat`, `pixel_monkey`). Added 50 new originals across five families: 15 animals (panda, penguin, fox, owl, pig, duckling, cow, puppy, seal, otter, hedgehog, axolotl, capybara, corgi, quokka), 10 sweets/food (donut, cupcake, ice cream, boba, macaron, pancakes, onigiri, sushi, taiyaki, pudding), 10 nature/objects (mushroom, rainbow, star face, moon, sun, flower, cactus, tea cup, planet, acorn), 5 silhouettes (cat, bunny, heart, star, cloud), and 10 emotion blobs (sparkles, giggle, blush, dreamy, proud, party, cozy, wave, bubble heart, thinking). Catalog now: 56 pixel + 22 blob = 78 starter SVGs.
-- **v1.9.0** (2026-05-28) — Added 10 new starter mascots (6 pixel + 4 blob) inspired by a Slack emoji wishlist. Pixel: `sheep`, `cat_meow`, `cat_love`, `shy_cat`, `hyper_cat`, `monkey`. Blob: `hugg`, `woah`, `cheer`, `love_rays` (no-face radiating heart). IP-protected source emojis were skipped — all designs are original.
-- **v1.8.0** (2026-05-27) — Expanded Technique B emotion vocabulary: swapped `blob_mint` to a wink and added 5 new emotion blobs (heart-eyes, smug, surprise, starry, kissy). Gradient blobs now cover 9 distinct emotions, useful for mood-picker UIs.
-- **v1.7.0** (2026-05-27) — Dropped Technique D (text sticker); added 6 new pixel-art mascots (bunny, bear, chick, bee, strawberry, cloud) so the skill ships with 13 ready-to-edit pixel-art mascots and 4 gradient blobs.
-- **v1.6.0** (2026-05-27) — Tightened R1 contrast guidance: tint body color should be ≥30 lightness points below the brightest tab background it must survive (Tailwind `*-300` for cream/white active tabs); `*-50` pastels vanish on cream tabs.
-- **v1.5.0** (2026-05-27) — Flipped the dark-mode recipe to two files + `<link media>` after empirical finding that Chrome does NOT evaluate CSS-in-SVG `@media (prefers-color-scheme: dark)` for favicons. Browser-support matrix added.
-- **v1.4.0** (2026-05-27) — Added the "silhouette disappeared into the tab background" diagnosis (distinct from tab-edge blending and dark-mode mismatch); 4-path recolor decision tree.
-- **v1.3.0** (2026-05-27) — C-variant 2 (single-color silhouette with cut-out eyes, GitHub-octocat style); first dark-mode adaptation pass.
-- **v1.2.0** (2026-05-27) — The "two-margin rule" for tiled pixel art (14×14 inset tile + 12-wide mascot body); live-browser verification is mandatory for tiled stickers.
-- **v1.1.0** (2026-05-27) — C-variant for pixel art on a rounded tile; iterate-with-preview promoted to a first-class authoring pattern.
-- **v1.0.0** (2026-05-27) — Initial skill: emoji, gradient blob, 16×16 pixel art.
+Made by Huiyan Wan with **Claude** (Anthropic) in Claude Code. Version history:
+[cutify-that-tab](plugins/cutify-that-tab/skills/cutify-that-tab/CHANGELOG.md), and the `## Changelog` section at the
+end of the `SKILL.md` for [sparkle-that-page](plugins/sparkle-that-page/skills/sparkle-that-page/SKILL.md#changelog),
+[cutify-that-terminal](plugins/cutify-that-terminal/skills/cutify-that-terminal/SKILL.md#changelog) and
+[pop-that-readme](plugins/pop-that-readme/skills/pop-that-readme/SKILL.md#changelog). For hatch-that-world and
+wiggle-that-diagram, see the [commit history](https://github.com/wan-huiyan/cutify-this/commits/main).
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE).

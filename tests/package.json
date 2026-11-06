@@ -1,0 +1,6 @@
+{
+  "name": "cutify-this-tests",
+  "private": true,
+  "description": "Test dependencies for scripts/check-all.sh (not published)",
+  "devDependencies": { "playwright": "^1.50.0" }
+}
