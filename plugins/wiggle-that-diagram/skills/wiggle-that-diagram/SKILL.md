@@ -4,7 +4,7 @@ description: "Use when someone asks to animate an illustration in an HTML slide 
 metadata:
   author: "Huiyan Wan, built with Claude (Anthropic)"
   license: "MIT"
-  version: "1.0.0"
+  version: "1.1.0"
   created: "2026-11-05"
   base_skill: "huashu-art-motion 1.2.0"
 ---
@@ -89,11 +89,20 @@ Each step ends with the check that proves it is done.
      demos/<film> --fps 30 --crf 12 --out work/<film>_master.mp4` → `build_html.py <film> --beats beats.json`
      (720², 24 fps, lowest CRF that fits) → `test_contract.py final/<film>.html --beats beats.json`. Each film
      ends with a pull-back to the whole board, a ≥ 1 s hold, then an eraser wipe; the empty board is where the loop restarts.
-   - **C.** Write `src/<film>.svg` (one `<svg id="scene" class="scene">` holding `<g id="world">`; tag every
-     `<text>` or its group with `data-b="<beat>"`) and `src/<film>.js` (camera frames `FR` / `ORDER`; reveals with
-     `R(selector, beat, offset)`, moves with `camTo(i, beat, offset)`, line draws with `draw()`). Then
-     `build.py beats.json --src src --out final` → `test_contract.py final/<film>.html` → `widthcheck.py`.
-     The runtime (`shell.html`, `shell.css`, `head.js`, `tail.js`) is reused as is; swap the `:root` tokens.
+   - **C.** Start from `examples/pizza/` (a complete neutral film: beats.json, SVG, timeline, theme). Write
+     `src/<film>.svg` (one `<svg id="scene" class="scene">` holding `<g id="world">`; tag every `<text>` or its group
+     with `data-b="<beat>"`, 1-based, set to the beat in which the camera FIRST shows it) and `src/<film>.js` (camera
+     frames `FR` / `ORDER`, each frame with a `w` rect for wide screens and a `t` rect for narrow ones; reveals with
+     `R(selector, beat, offset)`, moves with `camTo(i, beat, offset)`, line draws with `draw()`). In the JS, `beat` is
+     **0-based** (`B[0]` is beat 1). `R()` is only for words, at offset ≥ 2.5 s: every `R()` call is logged as a word
+     reveal and the caption counts as words at offset 0, so `R()` on a wordless shape or at offset 0 fails the
+     spacing check. Shapes, movement and words that arrive with the caption use plain `tl.to(…, T(beat, offset))`.
+     Wrap any element that has its own `transform` in a parent `<g>` and animate the child. Then
+     `build.py beats.json --src src --out final [--css theme.css]` → `test_contract.py final/<film>.html --stills
+     <scratch>/stills` → `widthcheck.py`. The runtime (`shell.html`, `shell.css`, `head.js`, `tail.js`) is reused as
+     is; to match the host page, put new `:root` tokens (`--panel`, `--ink`, `--muted`, `--line`, `--gold`,
+     `--cap-ink`, `--on-gold`, …) in a theme file and pass it with `--css`. For a README or chat picture of a film:
+     `gif.py final/<film>.html --beat 4 --from 1.9 --to 8.6 --out film.gif` (or `--still <s>` for a PNG).
 
 7. **Check before showing anyone** (all three builds skipped the last three; do them):
    - pacing gate OK; contract test all pass at 1100 and 360 px in real Chrome; sizes under budget;
@@ -193,6 +202,8 @@ A `build.py` and C `build.py` rebuilt byte-identical files; B `build_html.py` re
 and C contract tests passed on one film each (28, 34 and all checks); A `render_way.py` rendered stills; A
 `pace_check.py`, `midmove.py`, B `build_beats.py`, C `camdbg.py`, `widthcheck.py`, `common/*` ran once each.
 Not run: `make.sh` (syntax check only) and `kit.js` (syntax check only; it runs inside the engine).
+On a new diagram (the neutral pizza example, 6 Nov 2026): `common/pace_check.py`, C `build.py --css`, C
+`test_contract.py` (all checks at 1100 and 360 px), `widthcheck.py`, `common/contact_sheet.py` and `gif.py` ran.
 
 | Script | Use |
 |---|---|
@@ -202,7 +213,9 @@ Not run: `make.sh` (syntax check only) and `kit.js` (syntax check only; it runs 
 | `common/ffprobe-shim/ffprobe` | Stand-in for a missing ffprobe (huashu film_gate) |
 | `style-a/way_make.js`, `render_way.py`, `build.py`, `pace_check.py`, `test_embed.py`, `midmove.py`, `make.sh`, `player_template.html` | Style A pipeline: label track, render, inline, gates, contract test |
 | `style-b/kit.js`, `build_beats.py`, `build_html.py`, `test_contract.py`, `player.html` | Style B pipeline: board kit, timing bridge, encode + inline, contract test |
-| `style-c/shell.html`, `shell.css`, `head.js`, `tail.js`, `build.py`, `test_contract.py`, `camdbg.py`, `widthcheck.py` | Style C runtime, builder, contract + timing test, camera and width checks |
+| `style-c/shell.html`, `shell.css`, `head.js`, `tail.js`, `build.py`, `test_contract.py`, `camdbg.py`, `widthcheck.py` | Style C runtime, builder (`--css` theme), contract + timing test, camera and width checks |
+| `style-c/gif.py` | GIF of one beat (or a PNG still) from a built style C film, by seeking in real Chrome |
+| `examples/pizza/` | A complete neutral style C film to start from: `beats.json`, `pizza.svg`, `pizza.js`, `theme.css` |
 | `deck/embed_anims.py`, `howtest.py`, `howtest2.py` | Host side: embed all films + switcher slide + zoom-to-fit into a stacked-slide deck; tests (labels and anchor ids are the worked deck's, change first) |
 
 Dependencies: `uv`, Google Chrome, ffmpeg (styles A and B), Pillow for contact sheets, the
@@ -215,6 +228,11 @@ each animated in all three styles (3 × 3 films). Everything above
 (timings, sizes, traps, heights) comes from that build. Keep your own worked example's files (spec, the films,
 each style's NOTES.md) somewhere lasting, outside any session scratchpad, and point to it from your project notes,
 not from this skill.
+
+A second, neutral example ships with the skill: `examples/pizza/` (an order going from a phone app to a kitchen
+to a door, five beats, style C, 21 KB, 42.6 s loop). It was the first test of these instructions on a diagram other
+than the client deck; what they got wrong is fixed above and listed in `references/traps.md` ("Learned on the
+pizza example").
 
 ## Credits
 

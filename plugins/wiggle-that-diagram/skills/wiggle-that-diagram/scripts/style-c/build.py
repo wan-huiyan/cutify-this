@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # Style C builder: assembles shell.html + shell.css + head.js + src/<film>.svg + src/<film>.js + tail.js into one self-contained <film>.html per film, with a pacing gate and size budget. Inputs: beats.json, src dir.
-"""python3 build.py beats.json --src src --out final [--budget 40960] [--runtime <dir with shell.html, shell.css, head.js, tail.js>]
+"""python3 build.py beats.json --src src --out final [--budget 40960] [--css theme.css] [--runtime <dir with shell.html, shell.css, head.js, tail.js>]
+
+--css appends a theme file after shell.css: redefine the :root tokens there (--panel, --ink, --muted, --line, --gold, --teal,
+--cap-ink, --on-gold, ...) to match the host page. Colours inside src/<film>.svg are your own.
 
 Fails (exit 1) if a beat is shorter than its reading floor, if a <text> has no data-b beat, or if a file is over budget.
 beats.json format: ../common/beats.example.json (title, verdict, beats[title, caption, dur, still]); the film key names
@@ -11,17 +14,20 @@ Reading floor per beat:
   max(4.5, (caption words + NEW picture words) / 3 + 1.5) seconds
 NEW picture words = words in <text> elements tagged data-b="k" (inherited from the nearest ancestor), minus words the
 beat's own caption already says. Words shown in an earlier beat, or earlier in the same beat, are not counted again.
+If a beat in beats.json has a "picture" field, the build warns when its words differ from the SVG's words for that beat
+(pace_check.py reads the field, this build reads the SVG). Tag a label with the beat in which the camera first shows it.
 """
 import argparse, json, pathlib, re, sys, xml.etree.ElementTree as ET
 
 HERE = pathlib.Path(__file__).resolve().parent
 ap = argparse.ArgumentParser(); ap.add_argument('beats'); ap.add_argument('--src', default='src'); ap.add_argument('--out', default='final')
-ap.add_argument('--budget', type=int, default=40 * 1024); ap.add_argument('--runtime', default=str(HERE))
+ap.add_argument('--budget', type=int, default=40 * 1024); ap.add_argument('--runtime', default=str(HERE)); ap.add_argument('--css', default=None)
 A = ap.parse_args()
 SRC, RT, ROOT, BUDGET = pathlib.Path(A.src), pathlib.Path(A.runtime), pathlib.Path(A.out), A.budget
 ROOT.mkdir(parents=True, exist_ok=True)
+SPEC = {k: v for k, v in json.loads(pathlib.Path(A.beats).read_text()).items() if not k.startswith("_")}
 WAYS = {k: dict(title=v["title"], tell=v["verdict"] - 1, beats=[(b["title"], b["caption"], b["dur"], b["still"]) for b in v["beats"]])
-        for k, v in json.loads(pathlib.Path(A.beats).read_text()).items() if not k.startswith("_")}
+        for k, v in SPEC.items()}
 
 
 def norm(tok):
@@ -61,6 +67,8 @@ def main():
     head = (RT / "head.js").read_text()
     tail = (RT / "tail.js").read_text()
     css = "\n".join(l for l in (RT / "shell.css").read_text().splitlines() if not l.startswith("/* Style C")) + "\n"
+    if A.css:
+        css += pathlib.Path(A.css).read_text() + "\n"
     shell = (RT / "shell.html").read_text()
     ok = True
     report = {}
@@ -80,6 +88,10 @@ def main():
             floor = max(4.5, (len(cw) + len(new)) / 3 + 1.5)
             good = d + 1e-9 >= floor and 0 < st <= d
             ok &= good
+            declared = SPEC[n]["beats"][k - 1].get("picture")
+            if declared is not None and set(toks(declared)) != set(pic.get(k, [])):
+                print(f"WARN {n} beat {k}: SVG words {sorted(set(pic.get(k, [])))} differ from beats.json picture {sorted(set(toks(declared)))}"
+                      " -- pace_check.py and this build are counting different words; make them match")
             rows.append(dict(beat=k, title=title, caption_words=len(cw), new_picture_words=len(new),
                              floor=round(floor, 2), dur=d, still=st, ok=good, new=new))
         beats = [dict(t=t, say=s, d=d, still=st) for (t, s, d, st) in w["beats"]]
