@@ -17,6 +17,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+      - name: Install zsh (for the terminal skill's syntax check)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq zsh
       - name: Install Playwright and Chromium
         run: |
           npm install --prefix tests --no-audit --no-fund
