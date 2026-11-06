@@ -1,8 +1,10 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "wan-huiyan-cutify-this",
-  "description": "cutify-this — a bundle of cute skills. Cutify the browser tab (hand-authored SVG favicons), sparkle up the whole page (fairy cursor, sparkle trails, scroll progress, confetti, floaters), pop your repo's README (cute house-style front page), and cutify your terminal (Ghostty themes, rounded Nerd Fonts, a Starship prompt, and a glyph check that catches the \"?\" boxes).",
-  "owner": { "name": "Huiyan Wan" },
+  "description": "cutify-this — a bundle of cute skills. Cutify the browser tab (hand-authored SVG favicons), sparkle up the whole page (fairy cursor, sparkle trails, scroll progress, confetti, floaters), pop your repo's README (cute house-style front page), cutify your terminal (Ghostty themes, rounded Nerd Fonts, a Starship prompt, and a glyph check that catches the \"?\" boxes), and hatch a whole app as a little drawn world (scenes, worlds, a mascot with moods, and checks that can fail).",
+  "owner": {
+    "name": "Huiyan Wan"
+  },
   "plugins": [
     {
       "name": "cutify-that-tab",
@@ -26,6 +28,12 @@
       "name": "cutify-that-terminal",
       "source": "./plugins/cutify-that-terminal",
       "description": "Make a macOS terminal cute and then prove it renders: 463 built-in Ghostty themes, rounded Nerd Fonts, a Starship prompt, and a verify-glyphs script that catches the \"?\" boxes before you see them. Ships a per-terminal prompt split so Ghostty keeps its icons while Apple Terminal, VS Code and ssh get a prompt that cannot break. macOS + Homebrew + zsh.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "hatch-that-world",
+      "source": "./plugins/hatch-that-world",
+      "description": "Build a cute app or daily page as a little drawn world: data drawn as a scene, switchable light/dark worlds with their own sounds, a mascot with moods, clickable drawings, and checks that can fail (copy, pixel, geometry, click) with three Playwright scripts.",
       "version": "1.0.0"
     }
   ]
