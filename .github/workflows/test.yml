@@ -1,0 +1,27 @@
+name: tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check-all:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install zsh (for the terminal skill's syntax check)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq zsh
+      - name: Install Playwright and Chromium
+        run: |
+          npm install --prefix tests --no-audit --no-fund
+          npx --prefix tests playwright install --with-deps chromium
+      - name: Run every check
+        run: bash scripts/check-all.sh
