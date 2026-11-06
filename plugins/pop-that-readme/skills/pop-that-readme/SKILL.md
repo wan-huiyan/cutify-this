@@ -112,6 +112,38 @@ The recurring set — keep 3–5, drop what doesn't apply:
 Add language/test/aesthetic badges as relevant (`python-3.9--3.12`,
 `actions/workflows/test.yml/badge.svg`, a `style-arcade%2Fpixel` vanity badge).
 
+## Hand-drawn status badges (jokes and claims with no live data)
+
+Use a drawn badge, not shields.io, for a **claim no service can measure**: "Robot
+vouched" (an agent saw it work in a browser), "A human peeked", "Fuelled by tea". Never
+draw a badge that imitates a live metric (tests passing, coverage, build, downloads):
+a picture cannot go red, so it would lie. Those stay shields.io / Actions badges.
+Rule of thumb: if the claim could become false without anyone editing the file, it must
+not be a static SVG.
+
+- **Size:** height 20-28 px (24 is the sweet spot), width under ~160 px, so it sits in
+  the same row as shields.io badges. Set `width`/`height` on the `<svg>` and a matching
+  `viewBox`; add `vertical-align` only if the row looks off.
+- **Pattern:** a rounded pill (`rx` = half the height), a ~20 px drawn character on the
+  left, a 2-3 word label on the right. Under 4 KB, hand-authored, no `<script>`, no
+  `<style>` needing the page.
+- **Dark and light:** GitHub shows README SVGs on `#ffffff` and `#0d1117`. Give the pill
+  its own solid mid-tone fill (white text passes contrast on it) plus a 1 px
+  `#fff` at 35% outline, and it reads on both with no `<picture>`. Use `<picture>` with
+  `prefers-color-scheme` only if the badge is transparent or needs two palettes.
+- **Text:** GitHub serves README SVGs as `<img>`, so scripts and external fonts never
+  load. Use a system font stack (`-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif`)
+  and pin the width with `textLength` + `lengthAdjust="spacingAndGlyphs"` so a
+  wider fallback font cannot overflow the pill. Outline the text as paths only when the
+  exact letterforms matter (it costs size and kills selectable text).
+- **Alt text:** `<img alt="Robot vouched: an agent saw this work in a browser">` in the
+  README, plus `role="img"`, `aria-label` and `<title>` inside the SVG. Say what the
+  claim means, not what is drawn. Link the badge to a page that explains the claim.
+- **Check it:** render at 1x and 3x on white and `#0d1117` before shipping.
+
+Examples in `examples/badges/`: `robot-vouched.svg`, `human-peeked.svg`,
+`fuelled-by-tea.svg`, and `examples/badges/README.md` (how to copy and recolour).
+
 ## Install block (for Claude Code skill/plugin repos)
 
 Lead with the marketplace add; tuck variants in a `<details>`:
@@ -153,12 +185,16 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
 - [ ] Badge/owner/repo slugs resolve (no 404 shields).
 - [ ] Renders cleanly on GitHub (preview it) — tables aligned, code fences closed,
       `<p align="center">` blocks balanced.
+- [ ] Badges are honest: anything that implies a live measurement (tests, coverage, build,
+      version) is a live shields.io/Actions badge; hand-drawn badges only carry jokes or
+      claims a person or agent made, and the claim is true today.
 - [ ] Contributors credited if anyone else helped (`contrib.rocks`).
 
 ## Examples directory
 
 - `README.template.md` — the full fill-in template (every section, `<PLACEHOLDER>`s).
 - `hero_examples.md` — the ASCII box hero + a worked pixel-SVG hero, copy-and-edit.
+- `badges/` — three hand-drawn status-badge SVGs (robot, girl peeking over a wall, teacup) + how-to.
 
 ## See also
 
@@ -169,6 +205,11 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
 
 ## Changelog
 
+- **v1.1.0** (2026-11-06) — Hand-drawn status badges: a recipe for drawn pill badges
+  that carry claims no service can measure ("Robot vouched", "A human peeked"), never
+  a fake live metric; size, dark/light, system-font and alt-text rules; three example
+  SVGs in `examples/badges/`; a new "badges are honest" checklist line. Idea from the
+  pomodo README's hand-drawn badges.
 - **v1.0.0** (2026-06-17) — Initial skill: the house-style README recipe (11-section
   order), voice/copy rules, baked-in ASCII + pixel-SVG hero recipes, badge + install
   patterns, a fill-in template, and a pre-ship quality checklist.
