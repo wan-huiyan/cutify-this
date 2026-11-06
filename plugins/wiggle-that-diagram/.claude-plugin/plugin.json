@@ -1,7 +1,7 @@
 {
   "name": "wiggle-that-diagram",
   "description": "Turn a static \"how it works\" diagram into a short, captioned, looping explainer animation that sits inside an HTML slide deck or report, in three styles to pick from: a clean diagram clip, a hand-drawn whiteboard, and live SVG with a virtual camera. Paced so people can actually read it, with a step rail, Play/Pause, reduced motion, a deck switcher that fits the animation and its caption on one laptop screen, and checks that can fail. Built on huashu-art-motion.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": { "name": "Huiyan Wan" },
   "repository": "https://github.com/wan-huiyan/cutify-this",
   "license": "MIT",

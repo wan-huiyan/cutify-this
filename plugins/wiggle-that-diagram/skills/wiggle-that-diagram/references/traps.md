@@ -12,7 +12,7 @@ Re-check machine-specific items (paths, installed tools) with `command -v` befor
 | `ffprobe` missing (ffmpeg present) | huashu `film_gate.py` / `deliver.py` crash | Put `scripts/common/ffprobe-shim` first on PATH: `PATH=<skill>/scripts/common/ffprobe-shim:$PATH uv run film_gate.py film.mp4`. It answers only the width/height/duration query. |
 | ffmpeg not on PATH | Encoders fail | A common user-level install is `~/.local/bin/ffmpeg`; the scripts look in `$FFMPEG`, then PATH, then there. |
 | Engine boot over sync XHR occasionally fails against the threaded local server | `render_way.py` hangs or reports `__bootFailed` | The script already retries 3 times; if it still fails, rerun. |
-| huashu `render.py` logs one page error per film | "页面报错 1 条": a 404 for `scenes/<id>.js`, which the engine probes before reading `SCENE_LIBS` | Frames come out correct; believed harmless, not proven. The engine probes `${SCENE_DIR or 'scenes'}/<id>.js`; setting `window.SCENE_DIR` to the folder that holds the scene file (as style A did) should avoid it (suspected, untested). A second 404 for `favicon.ico` is not counted. |
+| huashu `render.py` logs one page error per film and exits 1 | "页面报错 1 条": under real Chrome (`channel='chrome'`, which style B patches in) it is a 404 for `/favicon.ico`, counted as a console error; the video is written first, so a `| tail` hides the failed exit code. Tested on the pizza example: not the scene-file probe (the loader skips the probe when `SCENE_LIBS` already registered the scene). | `touch engine/favicon.ico` in the engine copy; `render.py` then exits 0. |
 
 ## Content and timing
 
@@ -62,6 +62,10 @@ Re-check machine-specific items (paths, installed tools) with `command -v` befor
 | A label visible from t = 0 is counted in the beat its `data-b` names, not when it is on screen. | Tag it with the beat in which the camera first shows it. |
 | The timing test samples the camera only at 1100 px, so narrow (`t`) frames are never speed-checked; a whole-world pull-back in a 4:5 frame shrank picture text to ~3 px. | Give every frame a `t` rect; on narrow screens end on a closer frame (the pizza's `all.t` shows only the road and the house). Check the 390 px stills by eye. |
 | No README picture tool. | `gif.py` seeks the film frame by frame in real Chrome and encodes a GIF (181 KB for 6.7 s at 960 px) or one PNG. |
+| Style B ends with an eraser wipe, but the last beat's `still` (shared by every style) was 0.6 s before the end, so B's poster and reduced-motion frame landed mid-wipe. | Put the last beat's `still` before the wipe starts (the pizza wipes from 8.5 s into a 10 s beat; `still` is 8.4). |
+| Style B: an object drawn as a time-positioned `K.custom` item stays on the board for the rest of the film; the pizza showed two boxes at the door. | Give every moving object an end time (`t1` / a visibility window), and hand over to the next object at the same instant. |
+| Style A's recipe had the scene file carry its own copy of the captions. | `scripts/style-a/beats_js.py` writes `ways/<film>_beats.js` from beats.json; the scene reads that. |
+| The three players expose different test hooks: C and A have `window.__anim` (C: `time()`, A: `state().t`), B has none (read `#v.currentTime`). | A host-page test that checks all three must read each one its own way (the pizza's switcher test does). |
 
 ## huashu gates that disagree with explainers paced for reading
 

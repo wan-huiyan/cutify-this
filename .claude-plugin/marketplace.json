@@ -40,7 +40,7 @@
       "name": "wiggle-that-diagram",
       "source": "./plugins/wiggle-that-diagram",
       "description": "Make a \"how it works\" diagram move: a captioned, looping explainer animation for an HTML deck or report, in three styles (diagram clip, whiteboard, live SVG), paced to be readable, with a deck switcher that fits it on one screen. Built on huashu-art-motion.",
-      "version": "1.1.0"
+      "version": "1.2.0"
     }
   ]
 }
