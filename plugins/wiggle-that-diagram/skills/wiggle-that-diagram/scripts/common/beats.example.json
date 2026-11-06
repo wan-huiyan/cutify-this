@@ -1,0 +1,13 @@
+{
+ "_doc": "One file for every style: the caption script and beat timing. Keys under the top level are films (one per mechanism). Per film: title (short name), alt (one-paragraph text alternative for screen readers), verdict (1-based beat whose finished frame is the poster and the reduced-motion still), beats. Per beat: title (2-4 words, shown on the step rail), caption (the exact sentence under the picture; identical in every style), dur (seconds), still (seconds into the beat of its finished frame, where a paused step jump lands), picture (every word that will be written ON the picture during this beat, space separated), reveals (optional: beat-local seconds at which each new group of picture words appears). Checked by scripts/common/pace_check.py.",
+ "film1": {
+  "title": "Ticket routing",
+  "alt": "Animation in three steps. A support ticket arrives in the shared inbox. Written rules read its product and urgency and send it to the right queue. A person checks the queue before anyone replies.",
+  "verdict": 2,
+  "beats": [
+   {"title": "Ticket arrives", "caption": "A customer's ticket lands in the shared inbox, with the product and the account attached.", "dur": 7.0, "still": 6.4, "picture": "Inbox new", "reveals": [2.5]},
+   {"title": "Rules route it", "caption": "Written rules read the product and the urgency, and send the ticket to one queue. The same ticket always goes to the same queue.", "dur": 11.0, "still": 10.4, "picture": "Billing queue Urgent: card declined", "reveals": [2.5, 5.0]},
+   {"title": "A person checks", "caption": "A team lead checks the queue before anyone replies. The rules sort; people decide.", "dur": 7.5, "still": 6.9, "picture": "Checked", "reveals": [3.0]}
+  ]
+ }
+}

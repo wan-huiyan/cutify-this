@@ -1,0 +1,213 @@
+<!doctype html>
+<!-- Style A player: text-free video + HTML label track + caption strip + step rail + play/pause, following references/embed-contract.md. build.py fills the TITLE, ARIA, ALT, DATA, VIDEO and POSTER placeholders (comment-style markers below). Token colours in :root. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>/*TITLE*/</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1420;--ink:#f3f1ea;--muted:#a8b0c0;--line:#2a3346;--gold:#e9b949;--teal:#5cc8d6;--green:#5fd08a;--amber:#f0b24a;--red:#f07a6e;--card:#1a2233;--panel:#121826}
+*{box-sizing:border-box}
+html{color-scheme:dark}
+html,body{margin:0;background:#121826}
+body{color:var(--ink);font:16px/1.45 "Outfit",-apple-system,"Segoe UI",sans-serif;overflow:hidden}
+.how{container-type:inline-size;margin:0;position:relative}
+.stage{position:relative;aspect-ratio:16/9;background:#121826;overflow:hidden}
+.stage video,.stage img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}
+.stage img.poster{z-index:0;display:none}.how.static .stage img.poster,.how.novideo .stage img.poster{display:block}.stage video{z-index:1}.lbs{z-index:2}
+.lbs{position:absolute;inset:0;pointer-events:none}
+.lb{position:absolute;white-space:nowrap;font-weight:500;font-size:clamp(11px,1.45cqw,16px);line-height:1.25;color:var(--ink);opacity:0}
+.lb.small{font-size:clamp(11px,1.3cqw,14.5px)} .lb.tiny{font-size:clamp(10.5px,1.18cqw,13.5px)}
+.lb.muted{color:var(--muted)} .lb.gold{color:var(--gold)}
+.lb.onbtn{color:#1a1405;font-weight:700}
+.lb.slot{text-align:center;font-weight:600;font-size:clamp(11px,1.45cqw,16px);line-height:1.35}
+.lb.slot b,.lb .tag{color:var(--gold)}
+.lb .tag{display:inline-block;border:1.5px solid var(--gold);border-radius:999px;padding:0 .5em;margin-top:2px;white-space:nowrap}
+.lb.reason{white-space:normal;width:14.6cqw;text-align:center;font-size:clamp(10.5px,1.22cqw,14px);line-height:1.3}
+.lb.wide{white-space:normal;width:24cqw}
+.lb.reason b{font-weight:700}
+.lb.dimmed{color:rgba(26,20,5,.75)}
+.lb.bub{white-space:normal;text-align:left;font-size:clamp(11px,1.3cqw,14.5px);line-height:1.35}
+.lb.qq{width:18.5cqw}.lb.aa{width:24.5cqw}.lb .g{color:var(--green)}
+.lb.chipl{border:1.5px solid var(--amber);color:var(--amber);border-radius:999px;padding:.2em .8em;background:#121826}
+.lb.red b{color:var(--red)} .lb.green b{color:var(--green)} .lb.amber b{color:var(--amber)}
+.a-n{transform:translate(-50%,0)} .a-s{transform:translate(-50%,-100%)} .a-c{transform:translate(-50%,-50%)}
+.a-e{transform:translate(-100%,-50%)} .a-w{transform:translate(0,-50%)} .a-sw{transform:translate(0,-100%)} .a-nw{transform:translate(0,0)}
+.ctrl{display:flex;align-items:center;gap:10px;padding:10px 14px 0}
+.rail{display:flex;gap:6px;flex-wrap:wrap;flex:1;align-items:center}
+.rail button{width:30px;height:30px;border-radius:999px;border:0;background:var(--card);color:var(--muted);box-shadow:inset 0 0 0 1.5px var(--line);
+  font:600 14px/1 "Outfit",sans-serif;cursor:pointer;padding:0;position:relative;overflow:hidden}
+.rail button[aria-current="step"]{background:var(--gold);color:#1a1405;box-shadow:none}
+.rail button.done{color:var(--ink)}
+.rail button:focus-visible,.ctl:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.beatbar{height:3px;background:var(--line);border-radius:2px;margin:8px 14px 0;overflow:hidden}
+.beatbar i{display:block;height:100%;width:0;background:var(--gold)}
+.ctl{border:0;background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line);border-radius:999px;padding:6px 14px;
+  font:600 14px "Outfit",sans-serif;cursor:pointer;white-space:nowrap;min-height:30px}
+.ctl:hover,.rail button:hover{box-shadow:inset 0 0 0 1.5px var(--teal)}
+.capbox{padding:10px 14px 14px;position:relative}
+.cap{font-size:clamp(16px,1.72cqw,19px);line-height:1.45;color:var(--ink);margin:0}
+.cap .n{color:var(--gold);font-weight:700;margin-right:.45em}
+.cap b{color:var(--gold);font-weight:600}
+.ex{list-style:none;margin:6px 0 0;padding:0;font-size:16px;line-height:1.4}
+.ex li{display:grid;grid-template-columns:12px 1fr;gap:9px;margin:5px 0;opacity:0;transition:opacity .35s}
+.ex li.on{opacity:1}
+.ex li::before{content:"";width:11px;height:11px;border-radius:50%;margin-top:6px;background:var(--muted)}
+.ex li.red::before{background:var(--red)} .ex li.green::before{background:var(--green)} .ex li.amber::before{background:var(--amber)}
+.ex li b{font-weight:600}
+.ex li.red b{color:var(--red)} .ex li.green b{color:var(--green)} .ex li.amber b{color:var(--amber)}
+.list{margin:0;padding-left:1.6em;font-size:16px;line-height:1.45}
+.list>li{margin:0 0 8px;padding-left:.2em;color:var(--muted)}
+.list>li::marker{color:var(--gold);font-weight:700}
+.list>li.cur{color:var(--ink)}
+.list .ex li{opacity:1}
+.sr{position:absolute;left:0;top:0;width:1px;height:1px;margin:0;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.measure{position:absolute;left:0;top:0;visibility:hidden;pointer-events:none}
+/* phones: only the key words stay on the picture; the rest moves into the caption box */
+@container (max-width:560px){
+  .lb:not(.key){display:none}
+  .lb.reason{width:auto}
+  .ctrl{padding:8px 12px 0}.capbox{padding:8px 12px 12px}.beatbar{margin:7px 12px 0}
+}
+.how.static .ctl,.how.static .beatbar{display:none}
+.how.novideo .rail{display:none}
+</style>
+</head>
+<body>
+<figure class="how" aria-label="/*ARIA*/">
+  <div class="stage">
+    <img class="poster" alt="/*ALT*/">
+    <video muted playsinline loop preload="auto" aria-hidden="true"></video>
+    <div class="lbs" aria-hidden="true"></div>
+  </div>
+  <div class="ctrl">
+    <div class="rail" role="group" aria-label="Steps"></div>
+    <button class="ctl" type="button">Play</button>
+  </div>
+  <div class="beatbar" aria-hidden="true"><i></i></div>
+  <div class="capbox"><div class="live"></div></div>
+  <ol class="sr" aria-label="What the animation shows"></ol>
+</figure>
+<script>
+const DATA = /*DATA*/null;
+const VIDEO_SRC = "/*VIDEO*/";
+const POSTER_SRC = "/*POSTER*/";
+(() => {
+  const RM = matchMedia('(prefers-reduced-motion: reduce)');
+  const inFrame = window.parent !== window;
+  const fig = document.querySelector('.how'), stage = fig.querySelector('.stage'), video = fig.querySelector('video'), img = fig.querySelector('img.poster');
+  const lbs = fig.querySelector('.lbs'), rail = fig.querySelector('.rail'), btn = fig.querySelector('.ctl'), live = fig.querySelector('.live');
+  const capbox = fig.querySelector('.capbox'), bar = fig.querySelector('.beatbar i'), srl = fig.querySelector('ol.sr');
+  const FPS = DATA.fps, N = DATA.n, DUR = DATA.dur, BEATS = DATA.beats, CAM = DATA.cam, FADE = 0.3;
+  img.src = 'data:image/webp;base64,' + POSTER_SRC;
+  const bin = atob(VIDEO_SRC), u8 = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+  video.src = URL.createObjectURL(new Blob([u8], { type: 'video/mp4' }));
+
+  // ---------- labels: world anchor → screen through the camera track ----------
+  const camAt = fr => { let lo = 0, hi = CAM.length - 1; while (lo < hi) { const m = (lo + hi + 1) >> 1; if (CAM[m][0] <= fr) lo = m; else hi = m - 1; } return CAM[lo]; };
+  const LB = DATA.labels.map(L => { const e = document.createElement('div'); e.className = `lb a-${L.a} ${L.cls}`; lbs.appendChild(e); return { L, e, mode: null }; });
+  let narrow = false;
+  function paintLabels(t) {
+    const fr = Math.min(N - 1, Math.max(0, Math.floor(t * FPS + 1e-3))), k = camAt(fr);
+    for (const o of LB) { const L = o.L;
+      const want = narrow && L.short ? 'short' : 'full'; if (o.mode !== want) { o.e.innerHTML = want === 'short' ? L.short : L.html; o.mode = want; }
+      const op = Math.max(0, Math.min(1, (t - L.t0) / FADE, (L.t1 - t) / FADE));
+      if (op <= 0) { if (o.e.style.opacity !== '0') o.e.style.opacity = '0'; continue; }
+      o.e.style.left = (50 + (L.wx - k[1]) * k[3] / 12.8).toFixed(3) + '%';
+      o.e.style.top = (50 + (L.wy - k[2]) * k[3] / 7.2).toFixed(3) + '%';
+      o.e.style.opacity = op.toFixed(3); }
+  }
+  // ---------- captions ----------
+  const exHTML = (b, all) => b.extras.length ? '<ul class="ex">' + b.extras.map((x, i) => `<li class="${x.cls}${all ? ' on' : ''}" data-i="${i}"><span>${x.html}</span></li>`).join('') + '</ul>' : '';
+  const capHTML = b => `<p class="cap"><span class="n">${b.n}</span>${b.cap}</p>` + (narrow ? exHTML(b, false) : '');
+  srl.innerHTML = BEATS.map(b => `<li>${b.cap}${b.extras.length ? ' ' + b.extras.map(x => x.html).join(' ') : ''}</li>`).join('');
+  const meas = document.createElement('div'); meas.className = 'measure'; meas.setAttribute('aria-hidden', 'true'); capbox.appendChild(meas);
+  function reserve() {                     // the caption box never changes height between beats (no iframe jumps)
+    narrow = fig.clientWidth <= 560;
+    if (staticMode) { live.style.minHeight = ''; return; }
+    meas.style.width = live.clientWidth + 'px'; let h = 0;
+    for (const b of BEATS) { meas.innerHTML = capHTML(b); h = Math.max(h, meas.offsetHeight); }
+    meas.innerHTML = ''; live.style.minHeight = Math.ceil(h) + 'px'; lastBeat = -1;
+  }
+  let lastBeat = -1, cur = 0;
+  const beatAt = t => { for (let i = BEATS.length - 1; i >= 0; i--) if (t >= BEATS[i].t0 - 1e-3) return i; return 0; };
+  function paintCaption(t) {
+    const i = beatAt(t), b = BEATS[i]; cur = i;
+    if (staticMode) { [...live.querySelectorAll('.list>li')].forEach((li, j) => li.classList.toggle('cur', j === i)); }
+    else {
+      if (i !== lastBeat) { live.innerHTML = capHTML(b); lastBeat = i; }
+      live.querySelectorAll('.ex li').forEach(li => li.classList.toggle('on', t >= b.extras[+li.dataset.i].t - 0.05));
+      bar.style.width = (100 * Math.min(1, (t - b.t0) / (b.t1 - b.t0))).toFixed(2) + '%';
+    }
+    railBtns.forEach((r, j) => { if (j === i) r.setAttribute('aria-current', 'step'); else r.removeAttribute('aria-current'); r.classList.toggle('done', j < i); });
+  }
+  const railBtns = BEATS.map((b, i) => { const r = document.createElement('button'); r.type = 'button'; r.textContent = b.n;
+    r.setAttribute('aria-label', `Step ${b.n}: ${b.title}`); r.title = b.title; rail.appendChild(r);
+    r.addEventListener('click', () => jump(i)); return r; });
+  function paint(t) { paintLabels(t); paintCaption(t); }
+
+  // ---------- playback ----------
+  let ready = false, wantPlay = !inFrame && !RM.matches, staticMode = false, raf = 0, holdT = null;
+  const tick = () => { paint(holdT ?? (video.currentTime % DUR)); raf = requestAnimationFrame(tick); };
+  function setBtn() { btn.textContent = video.paused ? 'Play' : 'Pause'; btn.setAttribute('aria-pressed', String(!video.paused)); }
+  function play() { if (staticMode) return; wantPlay = true; if (!ready) return; holdT = null; video.play().then(setBtn).catch(() => { wantPlay = false; setBtn(); }); }
+  function pause() { wantPlay = false; video.pause(); setBtn(); }
+  function seek(t) { holdT = t; video.currentTime = Math.min(DUR - 0.5 / FPS, t + 0.5 / FPS); paint(t);
+    const done = () => { if (video.paused) holdT = t; }; video.addEventListener('seeked', done, { once: true }); }
+  function jump(i) {
+    const b = BEATS[i];
+    if (!ready) return;
+    if (!video.paused) { holdT = null; video.currentTime = b.t0 + 0.02; }
+    else seek(b.still);
+  }
+  btn.addEventListener('click', () => { if (video.paused) play(); else pause(); });
+  function enterStatic() {                 // reduced motion: one still per step + every caption as a numbered list
+    staticMode = true; fig.classList.add('static'); pause();
+    live.innerHTML = '<ol class="list">' + BEATS.map(b => `<li>${b.cap}${exHTML(b, true)}</li>`).join('') + '</ol>';
+    live.style.minHeight = '';
+    if (ready) seek(DATA.poster); else { paint(DATA.poster); }
+    post();
+  }
+  video.addEventListener('loadeddata', () => { ready = true;
+    if (staticMode) { seek(DATA.poster); return; }
+    if (wantPlay) play(); else { seek(0); setBtn(); } }, { once: true });
+  video.addEventListener('play', setBtn); video.addEventListener('pause', setBtn);
+  video.addEventListener('error', () => { fig.classList.add('novideo'); video.style.display = 'none'; enterStatic(); paintLabels(DATA.poster); });
+  window.addEventListener('message', e => { const m = e.data; if (!m || typeof m !== 'object') return;
+    if (m.type === 'anim-play') { if (!RM.matches) play(); }
+    else if (m.type === 'anim-pause') pause(); });
+  RM.addEventListener('change', () => { if (RM.matches) enterStatic(); });
+
+  // ---------- height for the deck ----------
+  let lastH = 0;
+  function post() { if (!inFrame) return; const h = Math.ceil(fig.getBoundingClientRect().height);
+    if (h !== lastH) { lastH = h; parent.postMessage({ type: 'anim-height', h }, '*'); } }
+  new ResizeObserver(() => { reserve(); paint(holdT ?? video.currentTime % DUR); post(); }).observe(fig);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { reserve(); post(); });
+  window.addEventListener('load', () => { reserve(); post(); });
+
+  if (RM.matches) enterStatic(); else { reserve(); paint(0); }
+  setBtn(); raf = requestAnimationFrame(tick);
+  window.__anim = { video, seek, jump, play, pause, data: DATA, state: () => ({ t: video.currentTime, paused: video.paused, ready, staticMode, narrow, beat: cur }) };
+})();
+</script>
+<script>
+(function(){ if (window.parent === window) return;
+  var send=function(m){ parent.postMessage(m,'*'); };
+  window.addEventListener('wheel',function(e){ e.preventDefault(); send({type:'deck-wheel',dy:e.deltaY,mode:e.deltaMode}); },{passive:false});
+  document.addEventListener('keydown',function(e){
+    var nav=['ArrowDown','ArrowUp','ArrowLeft','ArrowRight','PageDown','PageUp','Home','End',' '];
+    if(nav.indexOf(e.key)<0) return;
+    if(e.key===' ' && e.target.closest && e.target.closest('button')) return;
+    e.preventDefault(); send({type:'deck-key',key:e.key}); });
+  var y0=null,x0=null;
+  window.addEventListener('touchstart',function(e){ if(e.touches.length===1){y0=e.touches[0].clientY;x0=e.touches[0].clientX;} },{passive:true});
+  window.addEventListener('touchend',function(e){ if(y0===null) return; var t=e.changedTouches[0];
+    send({type:'deck-swipe',dy:y0-t.clientY,dx:x0-t.clientX}); y0=null; },{passive:true});
+})();
+</script>
+</body>
+</html>

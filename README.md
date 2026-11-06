@@ -1,12 +1,12 @@
 # cutify-this ✨
 
-> A little **bundle of cute skills** for Claude Code. Cutify the browser **tab** (hand-authored SVG favicons), sparkle up the whole **page** (fairy cursor, sparkle trails, scroll progress, confetti, floaters), pop your repo's **README** (a cute house-style front page), cutify your **terminal** (Ghostty themes, rounded Nerd Fonts, a Starship prompt — and a glyph check that catches the `?` boxes before you do), and **hatch a whole app** as a little drawn world.
+> A little **bundle of cute skills** for Claude Code. Cutify the browser **tab** (hand-authored SVG favicons), sparkle up the whole **page** (fairy cursor, sparkle trails, scroll progress, confetti, floaters), pop your repo's **README** (a cute house-style front page), cutify your **terminal** (Ghostty themes, rounded Nerd Fonts, a Starship prompt — and a glyph check that catches the `?` boxes before you do), **hatch a whole app** as a little drawn world, and **wiggle a diagram** into a captioned explainer animation.
 
 [![license](https://img.shields.io/github/license/wan-huiyan/cutify-this)](LICENSE)
 [![last commit](https://img.shields.io/github/last-commit/wan-huiyan/cutify-this)](https://github.com/wan-huiyan/cutify-this/commits)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-skills-orange)](https://claude.com/claude-code)
 
-## Five skills in the bundle
+## Six skills in the bundle
 
 | Skill | What it does | Install |
 |---|---|---|
@@ -15,6 +15,7 @@
 | 🪄 **pop-that-readme** | a cute, high-signal README in the house style — pixel hero, badges, value-prop, emoji feature table, install block, honesty box | `/plugin install pop-that-readme@wan-huiyan-cutify-this` |
 | ⌨️ **cutify-that-terminal** | a cute macOS terminal that provably renders — Ghostty themes, rounded Nerd Fonts, a Starship prompt, and a glyph check that catches the `?` boxes | `/plugin install cutify-that-terminal@wan-huiyan-cutify-this` |
 | 🐛 **hatch-that-world** | a whole app or daily page as a little drawn world — data as a scene, switchable worlds, a mascot with moods, clickable drawings, and checks that can fail | `/plugin install hatch-that-world@wan-huiyan-cutify-this` |
+| 🪱 **wiggle-that-diagram** | make a "how it works" diagram move — a captioned, looping explainer animation for an HTML deck or report, in three styles, paced so people can read it | `/plugin install wiggle-that-diagram@wan-huiyan-cutify-this` |
 
 Add the marketplace once, then install any (or all):
 
@@ -22,7 +23,7 @@ Add the marketplace once, then install any (or all):
 /plugin marketplace add wan-huiyan/cutify-this
 ```
 
-> Renamed from `cutify-that-tab` → `cutify-this` (the repo now hosts five skills). Old links redirect automatically.
+> Renamed from `cutify-that-tab` → `cutify-this` (the repo now hosts six skills). Old links redirect automatically.
 >
 > ⚠️ **One of these is not like the others.** The web skills drop a file into
 > your project and revert by deleting it. **`cutify-that-terminal` installs software
@@ -118,6 +119,45 @@ The method behind [morning-fairy](https://github.com/wan-huiyan/morning-fairy), 
 - **Checks that can fail**, each shown to fail on the old version first — three ready Playwright scripts: `copy_identical.cjs` (the copied text didn't change), `pixel_regress.cjs` (the other worlds didn't move a pixel, with a noise floor) and `hit_check.cjs` (each thing in the drawing is clickable and lands on its row).
 
 Needs Node + Playwright and an installed Chrome for the scripts. Pairs with `sparkle-that-page` and `cutify-that-tab`.
+
+---
+
+## 🪱 wiggle-that-diagram — make a diagram explain itself
+
+Turn one static "how it works" picture (files flow in, rules check them, a person approves) into a short,
+**captioned, looping animation** that drops into an HTML slide deck or report, and offer it in **three styles**
+so people can pick:
+
+| Style | Looks like | Made with |
+|---|---|---|
+| **Diagram clip** | a clean, 3Blue1Brown-style diagram; labels stay sharp | huashu-art-motion engine → text-free video + HTML labels |
+| **Whiteboard** | someone explaining at a whiteboard, hand-lettered | huashu-art-motion's whiteboard grammar → square video |
+| **Live** | a polished product animation, ~30 KB | inline SVG + GSAP with a virtual camera |
+
+What makes it different from "add some animation":
+
+- **Readable, not flashy.** Captions are written first; every step holds for at least `max(4.5 s, words/3 + 1.5 s)`, and
+  something new appears only after the last words have been up for 2.5 s. The first cut of the worked example was
+  "so fast"; this rule is the fix, and `pace_check.py` fails any step shorter than its reading time.
+- **Same story, three ways.** One caption script and one set of beats feed all three styles, so a switcher compares
+  styles, not content.
+- **Behaves inside a deck.** Each film is one self-contained file in an `iframe srcdoc`: step rail, Play/Pause,
+  reduced motion, and wheel/keys/swipes forwarded so one gesture still moves one slide. The deck-side script adds a
+  Way × Style switcher and fits animation + caption on one laptop screen by narrowing the layout before it zooms,
+  so captions keep their size.
+- **Checks that can fail:** pacing gate, contract tests in real Chrome, edge-clipping checks, size budgets, and
+  independent reviewers who check every picture word against the source material.
+
+Needs `uv`, Google Chrome, ffmpeg (video styles) and the
+[huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion) skill for the two video styles.
+
+**Credits.** Built on **[huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion)** by 花叔 (alchaincyf, MIT):
+its direction method (shot lists, camera grammar, the ways an explainer fails) and its rendering engine are the
+foundation for the diagram-clip and whiteboard styles. Live style uses [GSAP](https://gsap.com); fonts
+[Outfit](https://fonts.google.com/specimen/Outfit) and [Kalam](https://fonts.google.com/specimen/Kalam) (OFL).
+Made by Huiyan Wan with **Claude** (Anthropic) in Claude Code, which built the first nine films as parallel agents
+and wrote the skill down from what worked and what broke. Third-party licence text:
+[`THIRD_PARTY_NOTICES.md`](plugins/wiggle-that-diagram/skills/wiggle-that-diagram/THIRD_PARTY_NOTICES.md).
 
 ---
 

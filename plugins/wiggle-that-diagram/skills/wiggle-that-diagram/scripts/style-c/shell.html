@@ -1,0 +1,38 @@
+<!doctype html>
+<!-- Style C shell: picture (inline SVG world) + caption strip + step rail + play/pause, following references/embed-contract.md. build.py fills the TITLE, CSS, SVG and JS placeholders (double-brace markers below) with shell.css, src/<film>.svg and head.js + src/<film>.js + tail.js. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{TITLE}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>{{CSS}}</style>
+</head>
+<body>
+<div class="anim" id="anim">
+<div class="stage">{{SVG}}</div>
+<div class="cap" id="cap"></div>
+<div class="rail"><button class="pp" id="pp" type="button" aria-label="Play animation"></button><ol class="steps" id="steps" aria-label="Steps"></ol></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+{{JS}}
+</script>
+<script>
+(function(){ if (window.parent === window) return;
+  var send=function(m){ parent.postMessage(m,'*'); };
+  window.addEventListener('wheel',function(e){ e.preventDefault(); send({type:'deck-wheel',dy:e.deltaY,mode:e.deltaMode}); },{passive:false});
+  document.addEventListener('keydown',function(e){
+    var nav=['ArrowDown','ArrowUp','ArrowLeft','ArrowRight','PageDown','PageUp','Home','End',' '];
+    if(nav.indexOf(e.key)<0) return;
+    if(e.key===' ' && e.target.closest && e.target.closest('button')) return;
+    e.preventDefault(); send({type:'deck-key',key:e.key}); });
+  var y0=null,x0=null;
+  window.addEventListener('touchstart',function(e){ if(e.touches.length===1){y0=e.touches[0].clientY;x0=e.touches[0].clientX;} },{passive:true});
+  window.addEventListener('touchend',function(e){ if(y0===null) return; var t=e.changedTouches[0];
+    send({type:'deck-swipe',dy:y0-t.clientY,dx:x0-t.clientX}); y0=null; },{passive:true});
+})();
+</script>
+</body>
+</html>
