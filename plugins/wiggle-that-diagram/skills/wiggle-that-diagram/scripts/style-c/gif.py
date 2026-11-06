@@ -15,10 +15,12 @@ ap.add_argument('--from', dest='t0', type=float, default=0.0); ap.add_argument('
 ap.add_argument('--still', type=float); ap.add_argument('--out', required=True); ap.add_argument('--width', type=int, default=960)
 ap.add_argument('--fps', type=int, default=12); ap.add_argument('--colors', type=int, default=128); ap.add_argument('--hold', type=float, default=1.5)
 A = ap.parse_args()
-if A.still is None and A.t1 is None:
-    sys.exit("give --to (GIF) or --still (PNG)")
+if A.still is None and (A.t1 is None or A.t1 <= A.t0):
+    sys.exit("give --still (PNG), or --to later than --from (GIF)")
 ff = os.environ.get("FFMPEG") or shutil.which("ffmpeg") or str(pathlib.Path.home() / ".local/bin/ffmpeg")
-tmp = pathlib.Path(tempfile.mkdtemp())
+if A.still is None and not pathlib.Path(ff).exists() and not shutil.which(ff):
+    sys.exit(f"ffmpeg not found (tried $FFMPEG, PATH, {ff})")
+tmpdir = tempfile.TemporaryDirectory(); tmp = pathlib.Path(tmpdir.name)
 with sync_playwright() as p:
     b = p.chromium.launch(channel="chrome")
     pg = b.new_page(viewport={"width": A.width, "height": 1000}, device_scale_factor=1)
@@ -37,5 +39,5 @@ with sync_playwright() as p:
 vf = (f"tpad=stop_mode=clone:stop_duration={A.hold},split[a][b];[a]palettegen=max_colors={A.colors}:stats_mode=diff[p];"
       "[b][p]paletteuse=dither=none:diff_mode=rectangle")
 subprocess.run([ff, "-loglevel", "error", "-y", "-framerate", str(A.fps), "-i", str(tmp / "%04d.png"), "-vf", vf, A.out], check=True)
-shutil.rmtree(tmp)
+tmpdir.cleanup()
 print(f"{A.out}  {n + 1} frames  {pathlib.Path(A.out).stat().st_size / 1024:.0f} KB")
