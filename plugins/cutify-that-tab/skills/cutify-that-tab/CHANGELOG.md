@@ -3,6 +3,26 @@
 Newest first. The skill itself is in `SKILL.md`; diagnosis and field-testing detail is in
 `references/troubleshooting.md`.
 
+## v1.14.0 (2026-11-06)
+
+- **Favicon builder** (`examples/builder.html`): pick a subject (6) × style (6) ×
+  colour and see the 16×16 SVG at real size on the four Chrome tab colours, with a
+  64 px enlargement; the page's own tab icon follows the pick. Copy or download the
+  SVG (and the dark pair for 1-bit silhouettes). Each tab colour gets a badge from a
+  JavaScript port of `check-favicon.py`; its test checks the port agrees with the
+  Python checker on all 132 builder renders and on 108 shipped files and fixtures.
+  Chibi blob is left out (vector, not a 16×16 cell map).
+- **Mood and sleep favicons** (`examples/moods/`): a sleep face for 10 mascots (mochi
+  cat, bunny, bear, frog, fox, chick, panda, corgi, axolotl, ghost), plus sad and
+  starry faces for the mochi cat; all 12 pass `check-favicon.py`. `favicon_mood.js`
+  puts the icon to sleep after bedtime (`data-bedtime`, default 18–7) and while the
+  tab is in the background, and `CutifyTab.mood.set('sad')` shows page state. Works
+  alongside sparkle-that-page's tab peekaboo. `moods.html` shows every pair. Idea
+  from morning-fairy's sleeping tab icon. Only 10 of the 56 pixel starters have a
+  sleep face so far.
+- New fixture `scripts/fixtures/tile_transform.svg` (a tile with a transform, which
+  the checker reports as UNCHECKED).
+
 ## v1.13.0 (2026-10-29)
 
 - **Style vocabulary** (`references/styles.md`): seven named styles that survive a

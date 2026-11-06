@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- ghost asleep: ../pixel_ghost.svg with the same body and palette; eyes closed (3-cell curves), a z. No free corner, so the z sits on the body (violet-600). -->
+  <!-- body -->
+  <rect x="4" y="2" width="8" height="1" fill="#c4b5fd"/>
+  <rect x="3" y="3" width="10" height="9" fill="#c4b5fd"/>
+  <!-- tails -->
+  <rect x="3" y="12" width="2" height="2" fill="#c4b5fd"/>
+  <rect x="6" y="12" width="2" height="2" fill="#c4b5fd"/>
+  <rect x="9" y="12" width="2" height="2" fill="#c4b5fd"/>
+  <rect x="12" y="12" width="1" height="2" fill="#c4b5fd"/>
+  <!-- closed eyes -->
+  <rect x="5" y="6" width="1" height="1" fill="#1f2937"/>
+  <rect x="6" y="7" width="1" height="1" fill="#1f2937"/>
+  <rect x="7" y="6" width="1" height="1" fill="#1f2937"/>
+  <rect x="9" y="6" width="1" height="1" fill="#1f2937"/>
+  <rect x="10" y="7" width="1" height="1" fill="#1f2937"/>
+  <rect x="11" y="6" width="1" height="1" fill="#1f2937"/>
+  <!-- mouth -->
+  <rect x="7" y="9" width="2" height="1" fill="#fda4af"/>
+  <!-- z on the body -->
+  <rect x="11" y="3" width="2" height="1" fill="#7c3aed"/>
+  <rect x="11" y="4" width="1" height="1" fill="#7c3aed"/>
+  <rect x="10" y="5" width="2" height="1" fill="#7c3aed"/>
+</svg>

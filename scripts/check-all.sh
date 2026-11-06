@@ -83,6 +83,17 @@ sweep() {
 }
 sweep
 
+# Mood favicons live in examples/moods/ (kept out of the starter sweep): every one must PASS, none UNCHECKED.
+moods_sweep() { local f n=0 bad=""
+  for f in $TAB/examples/moods/*.svg; do n=$((n + 1))
+    "$PY" $TAB/scripts/check-favicon.py "$f" >"$TMP/fav" 2>&1 || bad="$bad$(basename "$f") (exit $?)"$'\n'
+  done
+  if [ $n -gt 0 ] && [ -z "$bad" ]; then pass "tab: mood favicons, $n files, all PASS"; else fail "tab: mood favicon sweep ($n files)" "$bad"; fi; }
+moods_sweep
+js_syntax "tab: node --check examples/moods/*.js" $TAB/examples/moods/*.js
+browser_suite "tab: mood favicon browser test" tests/tab_moods_smoke.mjs
+browser_suite "tab: favicon builder browser test" tests/tab_builder_smoke.mjs
+
 echo "== sparkle-that-page"
 js_syntax "sparkle: node --check examples/*.js" $SPK/examples/*.js
 js_syntax "sparkle: node --check site/*.js (ES modules)" site/*.js

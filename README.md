@@ -50,11 +50,24 @@ done
 | | Skill | Say this to Claude | You get | Try it |
 |---|---|---|---|---|
 | ✨ | [**sparkle-that-page**](#-sparkle-that-page--cute-page-effects) | "make this page more magical" | 10 drop-in effects (cursor, trail, confetti, stamp, sounds, secret word, sky switch…), 3 palettes, zero dependencies | [live demo](https://wan-huiyan.github.io/cutify-this/site/aurora.html) |
-| 🎀 | [**cutify-that-tab**](#-cutify-that-tab--a-cute-favicon-that-survives-the-tab) | "put something cute in the browser tab" | 1 SVG favicon from 78 starters in 7 styles, checked against 4 Chrome tab colours | [style gallery](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/styles.html) |
+| 🎀 | [**cutify-that-tab**](#-cutify-that-tab--a-cute-favicon-that-survives-the-tab) | "put something cute in the browser tab" | 1 SVG favicon from 78 starters in 7 styles, checked against 4 Chrome tab colours; a builder; icons that sleep at night | [builder](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/builder.html) · [style gallery](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/styles.html) |
 | 🐛 | [**hatch-that-world**](#-hatch-that-world--your-app-as-a-little-world) | "make this dashboard cute, like the morning brief" | your data drawn as a scene, switchable worlds, a mascot with moods | [morning-fairy](https://github.com/wan-huiyan/morning-fairy) |
 | 🪱 | [**wiggle-that-diagram**](#-wiggle-that-diagram--make-a-diagram-explain-itself) | "animate this how-it-works diagram" | a captioned, looping explainer in 3 styles, paced so people can read it | [3 styles](https://wan-huiyan.github.io/cutify-this/wiggle/) |
 | ⌨️ | [**cutify-that-terminal**](#️-cutify-that-terminal--a-cute-terminal-that-provably-renders) | "make my terminal prettier" | a theme, a rounded Nerd Font, a Starship prompt, and a check for `?` boxes | macOS + zsh |
 | 🪄 | [**pop-that-readme**](#-pop-that-readme--a-readme-that-pops) | "give my README a glow-up" | an 11-section front page in this house style, with a fill-in template | this page |
+
+<table>
+<tr>
+<td width="33%" align="center"><a href="#-sparkle-that-page--cute-page-effects"><img src="docs/readme/sparkle-stamp.png" alt="A PAID! rubber stamp landing on a pink button with a burst of hearts"/></a><br/><sub><b>sparkle-that-page</b>: a stamp and a burst for the big moments</sub></td>
+<td width="33%" align="center"><a href="#-cutify-that-tab--a-cute-favicon-that-survives-the-tab"><img src="docs/readme/tab-builder.png" alt="The favicon builder with an NES-outline frog shown in four browser tab colours, each marked Reads"/></a><br/><sub><b>cutify-that-tab</b>: build a tab icon and see it pass on all 4 tab colours</sub></td>
+<td width="33%" align="center"><a href="#-hatch-that-world--your-app-as-a-little-world"><img src="https://raw.githubusercontent.com/wan-huiyan/morning-fairy/main/docs/three-worlds.png" alt="The same morning brief drawn in three worlds: a storybook garden, a cosmic orbit and candy pop"/></a><br/><sub><b>hatch-that-world</b>: one app, three switchable worlds (morning-fairy)</sub></td>
+</tr>
+<tr>
+<td align="center"><a href="#-wiggle-that-diagram--make-a-diagram-explain-itself"><img src="docs/wiggle-that-diagram/expenses.gif" alt="A whiteboard animation explaining how an expense claim gets checked, from receipts to payment"/></a><br/><sub><b>wiggle-that-diagram</b>: a diagram that explains itself, step by step</sub></td>
+<td align="center"><a href="#️-cutify-that-terminal--a-cute-terminal-that-provably-renders">⌨️<br/><b>No screenshot yet</b></a><br/><sub><b>cutify-that-terminal</b>: a cute prompt, and a check that the icons really render</sub></td>
+<td align="center"><a href="#-pop-that-readme--a-readme-that-pops"><img src="plugins/pop-that-readme/skills/pop-that-readme/examples/badges/robot-vouched.svg" height="24" alt="Robot vouched badge"/> <img src="plugins/pop-that-readme/skills/pop-that-readme/examples/badges/human-peeked.svg" height="24" alt="A human peeked badge"/></a><br/><sub><b>pop-that-readme</b>: this page, hand-drawn badges included</sub></td>
+</tr>
+</table>
 
 ## 🌱 Used in the wild
 
@@ -149,10 +162,23 @@ supports `<link rel="icon" type="image/svg+xml">`.
 | 🎨 | **7 styles** | kawaii pixel, 1-bit silhouette, Game Boy, NES outline, die-cut sticker, chibi blob, riso two-ink: each with rules written to survive 16 px |
 | 🎲 | **Explores before it draws** | 6 candidates across at least 3 styles (picked by a real random draw, so not always the pink cat); you choose from the 3 most different |
 | ✅ | **A checker that can fail** | `check-favicon.py` scores the icon against Chrome's 4 tab colours, its edge margin and crisp edges: PASS, FAIL or UNCHECKED, with a 17-case self-test. None of the 78 starters fails it |
+| 🛠️ | **A favicon builder** | `builder.html`: pick a subject (6) × style (6) × colour, see it at real size on all 4 tab colours with a live pass/fail from the same rule as the checker, then copy or download the SVG |
+| 😴 | **Icons that sleep** | `examples/moods/`: a sleep face for 10 mascots, plus sad and starry for the cat; `favicon_mood.js` puts the icon to sleep after bedtime and while the tab is in the background, and shows page state with `CutifyTab.mood.set('sad')` |
 | 🔍 | **Tab-size preview** | `preview.html` shows your icon at 16, 32 and 64 px in a real tab chip on all 4 colours, light and dark files side by side |
 | 🌗 | **Dark mode that works in Chrome** | Two files and two `<link media>` tags; Chrome ignores `@media` inside a favicon SVG |
 | ♻️ | **Replacing an icon?** | Bump `?v=2` on the link. Browsers cache favicons by URL, and a hard refresh won't clear it |
 | 📚 | **Sources to study, not copy** | Lospec, OpenMoji, Twemoji, Fluent Emoji, Kenney, Phosphor, with their licences checked |
+
+<table>
+<tr>
+<td width="50%"><a href="https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/builder.html"><img src="docs/readme/tab-builder.png" alt="The favicon builder: subject buttons (cat, bunny, bear, frog, ghost, chick), a style list, and an NES-outline frog shown at real size in four browser tabs, each marked Reads with its colour difference"/></a></td>
+<td width="50%"><a href="https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/moods/moods.html"><img src="docs/readme/tab-moods.png" alt="The mochi cat favicon awake and asleep, in tab chips and 64 px enlargements on the four Chrome tab colours; asleep has closed eyes and a small z"/></a></td>
+</tr>
+<tr>
+<td><sub><b>The builder.</b> Subject × style × colour, checked live on all four tab colours. <a href="https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/builder.html">Try it →</a></sub></td>
+<td><sub><b>Bedtime.</b> After 6 pm, and whenever you're on another tab, the icon closes its eyes. <a href="https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/moods/moods.html">See all 10 →</a></sub></td>
+</tr>
+</table>
 
 ```
 You:    the browser tab is a blank square. can you put something cute in there?
@@ -289,6 +315,12 @@ starts from it:
 | 🧭 | **Options before building** | An options page with live slices of your real data, and a dated plan per change |
 | ✅ | **Checks that can fail** | 3 Playwright scripts, each shown failing on the old version first: `copy_identical.cjs` (copied text unchanged), `pixel_regress.cjs` (other worlds didn't move a pixel) and `hit_check.cjs` (every drawn thing is clickable and lands on its row) |
 
+```text
+You:    make my sales dashboard cute, like the morning brief
+Claude: [picks the axis (the last 30 days) and draws it as a garden: revenue is the hill's height, deals are
+         flowers, the mascot's mood follows the target; shows you an options page with your real numbers first]
+```
+
 Needs Node, Playwright and Chrome for the scripts. Pairs with sparkle-that-page and cutify-that-tab.
 
 ---
@@ -316,6 +348,12 @@ report, offered in three styles so people can pick:
 | 🎞️ | **Behaves inside a deck** | One self-contained file per film in an `iframe srcdoc`: step rail, play/pause, reduced motion, and one gesture still moves one slide |
 | ✅ | **Checks that can fail** | A pacing gate, contract tests in real Chrome, edge-clipping checks, size budgets, and reviewers who check every word in the picture against the source |
 
+```text
+You:    animate slide 4, the "how a claim gets approved" diagram, it's too much to take in at once
+Claude: [writes the captions first, builds the film in all three styles with a switcher, checks every step
+         is on screen long enough to read, and drops it into the slide as one file]
+```
+
 Needs `uv`, Google Chrome, ffmpeg (video styles) and the
 [huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion) skill for the two video styles.
 
@@ -337,6 +375,12 @@ nothing falls back silently, and a terminal that never got the font just draws b
 
 **The finding it's built on:** Ghostty bundles its own Symbols Nerd Font as a fallback, so icons render in Ghostty even
 when your `font-family` is wrong. The terminal you configured looks perfect; only the *other* one shows boxes.
+
+```text
+You:    make my terminal prettier
+Claude: [suggests a theme and a rounded font, backs up ~/.zshrc and shows the diff, sets up Starship,
+         then runs verify-glyphs.sh on your real prompt] PASS: every icon is drawn by the Nerd Font.
+```
 
 > ⚠️ **One of these is not like the others.** The other skills drop a file into your project and you undo them by
 > deleting it. This one **installs software and edits your `~/.zshrc`**, so it backs the file up first, shows you the
@@ -377,10 +421,14 @@ Claude: [reads the repo, drafts the hero, badge row, one bold promise and a feat
 bash scripts/check-all.sh
 ```
 
-One script runs every check, on every push and pull request (the **tests** badge above). Today it runs 86 checks:
+One script runs every check, on every push and pull request (the **tests** badge above). Today it runs 200 checks:
 
 - **Favicons:** the checker's 17-fixture self-test, then every starter SVG on the four Chrome tab colours (0 fail; the
   3 known blobs it can't measure must stay UNCHECKED).
+- **Mood favicons:** all 12 pass the checker, and a browser test (79 checks) fakes the clock and a hidden tab to
+  prove the icon sleeps at bedtime, wakes at 07:00, and lets a page-state face win.
+- **Builder:** a browser test (33 checks) shows the page's pass/fail agrees with `check-favicon.py` on all 132
+  builder icons and on 108 shipped files and fixtures, and that copy and download give the right file.
 - **Sparkle:** a real Chromium clicks, types and scrolls around the demo and checks 70 things, among them: confetti
   only on celebrate buttons by default; the trail's animation loop stops when idle; the stamp lands and follows its
   button; no sound system exists before the speaker is pressed; the secret word works on the page but not in a text

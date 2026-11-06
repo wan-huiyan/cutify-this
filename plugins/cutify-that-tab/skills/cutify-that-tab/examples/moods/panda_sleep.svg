@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- panda asleep: ../pixel_panda.svg with the same body and palette; eyes closed (3-cell curves), a z. The eye-patch highlights become closed-eye curves. -->
+  <!-- tile (emerald-500), 1-cell outer margin -->
+  <rect x="1" y="1" width="14" height="14" fill="#10b981" rx="3"/>
+  <!-- ears -->
+  <rect x="2" y="3" width="3" height="3" fill="#1f2937"/>
+  <rect x="11" y="3" width="3" height="3" fill="#1f2937"/>
+  <!-- face -->
+  <rect x="3" y="5" width="10" height="9" fill="#f9fafb"/>
+  <!-- eye patches -->
+  <rect x="4" y="7" width="3" height="3" fill="#1f2937"/>
+  <rect x="9" y="7" width="3" height="3" fill="#1f2937"/>
+  <!-- closed eyes (white curve on the patch) -->
+  <rect x="4" y="8" width="1" height="1" fill="#f9fafb"/>
+  <rect x="5" y="9" width="1" height="1" fill="#f9fafb"/>
+  <rect x="6" y="8" width="1" height="1" fill="#f9fafb"/>
+  <rect x="9" y="8" width="1" height="1" fill="#f9fafb"/>
+  <rect x="10" y="9" width="1" height="1" fill="#f9fafb"/>
+  <rect x="11" y="8" width="1" height="1" fill="#f9fafb"/>
+  <!-- nose + mouth -->
+  <rect x="7" y="11" width="2" height="1" fill="#1f2937"/>
+  <rect x="8" y="12" width="1" height="1" fill="#1f2937"/>
+  <!-- z on the tile (amber-200) -->
+  <rect x="8" y="2" width="2" height="1" fill="#fde68a"/>
+  <rect x="8" y="3" width="1" height="1" fill="#fde68a"/>
+  <rect x="7" y="4" width="2" height="1" fill="#fde68a"/>
+</svg>
