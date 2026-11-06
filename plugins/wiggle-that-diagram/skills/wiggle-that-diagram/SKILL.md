@@ -4,7 +4,7 @@ description: "Use when someone asks to animate an illustration in an HTML slide 
 metadata:
   author: "Huiyan Wan, built with Claude (Anthropic)"
   license: "MIT"
-  version: "1.1.0"
+  version: "1.2.0"
   created: "2026-11-05"
   base_skill: "huashu-art-motion 1.2.0"
 ---
@@ -71,17 +71,22 @@ Each step ends with the check that proves it is done.
    user before launching. → Check: each returns files, stills, NOTES.md and an honest open-issues list.
 
 6. **Build recipes** (what each style agent actually did; scripts are in `scripts/style-a|b|c/`):
-   - **A.** `cp -R ~/.claude/skills/huashu-art-motion/scripts/engine <A>/engine`. Add `engine/ways/way_make.js`
-     (from `scripts/style-a/`), a scene file `engine/ways/<film>.js` that calls `WAY.make({poster, beats, camBase,
-     cam, labels})` and registers `SCENES['<film>']`, and `engine/eras_<film>.js` setting `FILM_SIZE=[1280,720]`,
-     `PUNCH=0` (otherwise the engine adds a 0.03 punch-in on transitions), `SCENE_LIBS=['ways/way_make.js',
-     'ways/<film>.js']`, `SCENE_DIR='ways'`, `ERAS=[{id:'<film>',dur:1}]`. Draw NO text on the canvas. The
-     drawing helpers (boxes, lines, cursor, ticks) are written per film; the worked example's set lives
-     in its temporary `A/final/build/engine/ways/common.js` and is not part of this skill.
+   All three styles of one neutral film are in `examples/pizza/` (`beats.json` plus `style-a/`, `style-b/`,
+   `style-c/`): start from the folder for your style.
+   - **A.** `cp -R ~/.claude/skills/huashu-art-motion/scripts/engine <A>/engine` and `touch <A>/engine/favicon.ico`.
+     Add `engine/ways/way_make.js` (from `scripts/style-a/`), run `beats_js.py beats.json --engine engine --var
+     <VAR>` (captions and timing from the shared script, never a hand copy), a scene file `engine/ways/<film>.js`
+     that calls `WAY.make({poster, beats, camBase, cam, labels})` and registers `SCENES['<film>']`, and
+     `engine/eras_<film>.js` setting `FILM_SIZE=[1280,720]`, `PUNCH=0` (otherwise the engine adds a 0.03 punch-in on
+     transitions), `SCENE_LIBS=['ways/way_make.js','ways/<film>_beats.js','ways/<film>.js']`, `SCENE_DIR='ways'`,
+     `ERAS=[{id:'<film>',dur:1}]`. Draw NO text on the canvas. The drawing helpers (rounded boxes, dots, lines,
+     fades, moves along a path) are written per film; `examples/pizza/style-a/pizza.js` has a small set to copy.
      Then `render_way.py <film> --scale 0.75 --crf 30` → `build.py <film> --meta meta.json` → `pace_check.py
      work/<film>_data.json` → `test_embed.py final/<film>.html:<verdict beat>` (or all at once: `make.sh`).
      After any scene edit, re-render and run `midmove.py` at mid-move times: labels must sit on their objects.
-   - **B.** Copy the engine the same way and patch `render.py` to `chromium.launch(channel='chrome', …)`. Put
+   - **B.** Copy the engine the same way (with the empty `favicon.ico`: under real Chrome its 404 counts as a page
+     error and `render.py` exits 1 after writing a good video) and patch `render.py` to
+     `chromium.launch(channel='chrome', …)`. Put
      `kit.js` in `engine/demos/_hb/`, write `engine/demos/<film>/board.js` (uses `HB.make()`, anchors events to
      `BEATS[k].t0 + offset`) and `engine/demos/<film>/eras.js` (`FILM_SIZE=[1080,1080]`, `PUNCH=0`, Kalam font face,
      `SCENE_LIBS=['demos/<film>/beats.js','demos/_hb/kit.js','demos/<film>/board.js']`). Then
@@ -89,7 +94,11 @@ Each step ends with the check that proves it is done.
      demos/<film> --fps 30 --crf 12 --out work/<film>_master.mp4` → `build_html.py <film> --beats beats.json`
      (720², 24 fps, lowest CRF that fits) → `test_contract.py final/<film>.html --beats beats.json`. Each film
      ends with a pull-back to the whole board, a ≥ 1 s hold, then an eraser wipe; the empty board is where the loop restarts.
-   - **C.** Start from `examples/pizza/` (a complete neutral film: beats.json, SVG, timeline, theme). Write
+     The last beat's `still` in beats.json is shared by every style and must land before the wipe starts, or the
+     poster and the reduced-motion frame show a half-erased board. Objects that move (a scooter, a box) are
+     `K.custom` items with `handed: false` whose position is a function of time; give each one an end time, or it
+     stays on the board after its job is done.
+   - **C.** Start from `examples/pizza/style-c/` (SVG, timeline, theme). Write
      `src/<film>.svg` (one `<svg id="scene" class="scene">` holding `<g id="world">`; tag every `<text>` or its group
      with `data-b="<beat>"`, 1-based, set to the beat in which the camera FIRST shows it) and `src/<film>.js` (camera
      frames `FR` / `ORDER`, each frame with a `w` rect for wide screens and a `t` rect for narrow ones; reveals with
@@ -202,8 +211,11 @@ A `build.py` and C `build.py` rebuilt byte-identical files; B `build_html.py` re
 and C contract tests passed on one film each (28, 34 and all checks); A `render_way.py` rendered stills; A
 `pace_check.py`, `midmove.py`, B `build_beats.py`, C `camdbg.py`, `widthcheck.py`, `common/*` ran once each.
 Not run: `make.sh` (syntax check only) and `kit.js` (syntax check only; it runs inside the engine).
-On a new diagram (the neutral pizza example, 6 Nov 2026): `common/pace_check.py`, C `build.py --css`, C
-`test_contract.py` (all checks at 1100 and 360 px), `widthcheck.py`, `common/contact_sheet.py` and `gif.py` ran.
+On a new diagram (the neutral pizza example, 6 Nov 2026), every style end to end: `common/pace_check.py`; C
+`build.py --css`, `test_contract.py` (all checks), `widthcheck.py`, `gif.py`; B `build_beats.py`, the engine render,
+`build_html.py`, `test_contract.py` (32/32); A `beats_js.py`, `make.sh` (render, build, `pace_check.py`,
+`test_embed.py`: no failures), `midmove.py`; huashu `film_gate.py` on both videos (pass, one yellow);
+`common/contact_sheet.py`.
 
 | Script | Use |
 |---|---|
@@ -211,11 +223,11 @@ On a new diagram (the neutral pizza example, 6 Nov 2026): `common/pace_check.py`
 | `common/beats.example.json` | The shared beats format (neutral example) |
 | `common/contact_sheet.py` | Tile stills into one image to look at |
 | `common/ffprobe-shim/ffprobe` | Stand-in for a missing ffprobe (huashu film_gate) |
-| `style-a/way_make.js`, `render_way.py`, `build.py`, `pace_check.py`, `test_embed.py`, `midmove.py`, `make.sh`, `player_template.html` | Style A pipeline: label track, render, inline, gates, contract test |
+| `style-a/way_make.js`, `beats_js.py`, `render_way.py`, `build.py`, `pace_check.py`, `test_embed.py`, `midmove.py`, `make.sh`, `player_template.html` | Style A pipeline: label track, captions from beats.json, render, inline, gates, contract test |
 | `style-b/kit.js`, `build_beats.py`, `build_html.py`, `test_contract.py`, `player.html` | Style B pipeline: board kit, timing bridge, encode + inline, contract test |
 | `style-c/shell.html`, `shell.css`, `head.js`, `tail.js`, `build.py`, `test_contract.py`, `camdbg.py`, `widthcheck.py` | Style C runtime, builder (`--css` theme), contract + timing test, camera and width checks |
 | `style-c/gif.py` | GIF of one beat (or a PNG still) from a built style C film, by seeking in real Chrome |
-| `examples/pizza/` | A complete neutral style C film to start from: `beats.json`, `pizza.svg`, `pizza.js`, `theme.css` |
+| `examples/pizza/` | One neutral film in all three styles to start from: `beats.json`, `style-a/` (scene, eras, meta), `style-b/` (board, eras), `style-c/` (SVG, timeline, theme) |
 | `deck/embed_anims.py`, `howtest.py`, `howtest2.py` | Host side: embed all films + switcher slide + zoom-to-fit into a stacked-slide deck; tests (labels and anchor ids are the worked deck's, change first) |
 
 Dependencies: `uv`, Google Chrome, ffmpeg (styles A and B), Pillow for contact sheets, the
@@ -230,7 +242,7 @@ each style's NOTES.md) somewhere lasting, outside any session scratchpad, and po
 not from this skill.
 
 A second, neutral example ships with the skill: `examples/pizza/` (an order going from a phone app to a kitchen
-to a door, five beats, style C, 21 KB, 42.6 s loop). It was the first test of these instructions on a diagram other
+to a door, five beats, 42 s, in all three styles: A 423 KB, B 513 KB, C 21 KB). It was the first test of these instructions on a diagram other
 than the client deck; what they got wrong is fixed above and listed in `references/traps.md` ("Learned on the
 pizza example").
 

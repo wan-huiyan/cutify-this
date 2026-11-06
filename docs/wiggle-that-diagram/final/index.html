@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pizza order, three ways</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff8ef;--ink:#3a2a24;--muted:#6f5a4f;--line:#ead9c6;--accent:#e5533d;--card:#fffdf9}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Outfit",-apple-system,"Segoe UI",sans-serif}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 40px}
+h1{font-size:clamp(24px,4vw,34px);line-height:1.15;margin:0 0 6px}
+p.lead{margin:0 0 18px;color:var(--muted);max-width:62ch}
+.pick{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.pick button{font:600 15px/1 "Outfit",sans-serif;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:10px 16px;cursor:pointer;min-height:44px}
+.pick button small{font-weight:400;color:var(--muted);margin-left:6px}
+.pick button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pick button[aria-pressed=true] small{color:#e9dccf}
+.pick button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.frame{border-radius:14px;overflow:hidden;border:1.5px solid var(--line);background:#121826}
+iframe{display:block;width:100%;height:520px;border:0}
+footer{margin-top:14px;font-size:14px;color:var(--muted)}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<main>
+<h1>One pizza order, three ways</h1>
+<p class="lead">A made-up example for <a href="https://github.com/wan-huiyan/cutify-this#-wiggle-that-diagram--make-a-diagram-explain-itself">wiggle-that-diagram</a>: the same five steps and the same captions, drawn in each of the skill's three styles. Pick one; use the numbered steps to jump.</p>
+<div class="pick" role="group" aria-label="Style">
+  <button type="button" data-src="pizza.html" aria-pressed="true">Live SVG<small>21 KB</small></button>
+  <button type="button" data-src="pizza-diagram.html" aria-pressed="false">Diagram clip<small>423 KB</small></button>
+  <button type="button" data-src="pizza-whiteboard.html" aria-pressed="false">Whiteboard<small>513 KB</small></button>
+</div>
+<div class="frame"><iframe id="film" title="Animation: how a pizza order travels" src="pizza.html"></iframe></div>
+<footer>Every name, number and address here is invented. Each style is one self-contained HTML file, built for an iframe in a slide deck or report.</footer>
+</main>
+<script>
+(function(){
+  var f = document.getElementById('film'), btns = [].slice.call(document.querySelectorAll('.pick button'));
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  btns.forEach(function(b){ b.addEventListener('click', function(){
+    btns.forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+    f.src = b.getAttribute('data-src');
+  }); });
+  // embed contract, parent side: size the frame from anim-height, start it on load, and pass forwarded gestures to this page
+  f.addEventListener('load', function(){ if (!reduce) f.contentWindow.postMessage({type:'anim-play'}, '*'); });
+  window.addEventListener('message', function(e){
+    if (e.source !== f.contentWindow || !e.data || typeof e.data !== 'object') return;
+    var d = e.data;
+    if (d.type === 'anim-height' && d.h > 0) f.style.height = d.h + 'px';
+    else if (d.type === 'deck-wheel') window.scrollBy(0, d.mode === 1 ? d.dy * 16 : d.dy);
+    else if (d.type === 'deck-swipe') window.scrollBy(0, d.dy);
+    else if (d.type === 'deck-key') {
+      var k = d.key, step = Math.round(window.innerHeight * 0.85);
+      if (k === 'ArrowDown' || k === 'PageDown' || k === ' ') window.scrollBy(0, k === 'ArrowDown' ? 60 : step);
+      else if (k === 'ArrowUp' || k === 'PageUp') window.scrollBy(0, k === 'ArrowUp' ? -60 : -step);
+      else if (k === 'Home') window.scrollTo(0, 0); else if (k === 'End') window.scrollTo(0, document.body.scrollHeight);
+    }
+  });
+})();
+</script>
+</body>
+</html>
