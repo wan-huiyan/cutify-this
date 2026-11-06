@@ -16,7 +16,7 @@ description: |
   a corporate/photographic logo — this skill is for hand-authored, cute,
   low-effort icons.
 author: Claude Code
-version: 1.13.0
+version: 1.14.0
 date: 2026-10-28
 ---
 
@@ -69,6 +69,12 @@ named a style or mascot). Without this, every project gets the same pink cat.
 
 Want something outside the seven? `references/styles.md` lists sources to study
 (with checked licences) and the styles that don't survive 16 px.
+
+**Or build it:** open `examples/builder.html` (works from `file://`). Pick a subject, style and colour; it draws the
+16×16 SVG, shows it at real size on the four tab colours, and badges each one with the same dE ≥ 22.5 rule as
+`scripts/check-favicon.py` (a JavaScript port that measures one body colour per icon, like the script). For 1-bit
+silhouettes it offers the dark pair. Copy or download the SVG, then still run `scripts/check-favicon.py` on the
+file you ship. Chibi blob is vector, so draw it by hand from `style_chibi_cat.svg`.
 
 ### Step 2 — author the SVG
 
@@ -292,6 +298,41 @@ light tab, so after shipping confirm in a force-refreshed real tab. Chrome tab
 colours, the tab-strip mock HTML and the manual preview loop:
 `references/troubleshooting.md#tab-colours-and-the-browser-tab-mock`
 
+## Moods: a tab icon that sleeps, grieves and cheers
+
+Optional, after the icon exists. The mascot falls asleep at night and while the tab is in the background; the page can
+also show it sad (an error) or starry-eyed (a success). Files and demo: `examples/moods/` (`moods.html` shows every
+mascot awake vs asleep on the four tab colours; open it straight from disk (double-click or `open`), which loads all 192 images. Do not
+serve it with `python3 -m http.server`: that server is single-threaded and resets connections when the page asks for
+that many images at once).
+
+```html
+<link rel="icon" type="image/svg+xml" href="/static/mochi_cat.svg"
+      data-mood-awake="/static/mochi_cat.svg"   data-mood-sleep="/static/mochi_cat_sleep.svg"
+      data-mood-sad="/static/mochi_cat_sad.svg" data-mood-starry="/static/mochi_cat_starry.svg"
+      data-bedtime="18-7">
+<script src="/static/favicon_mood.js"></script>
+```
+
+- **Which icon wins** (first match): a page override from `CutifyTab.mood.set(...)`; a hidden tab (sleep); the clock inside
+  the bedtime window (sleep, default `18-7`, local time, minutes allowed: `22:30-6:15`, `18-18` = clock off; hours 0-23 and minutes 0-59, anything else warns and uses `18-7`); otherwise awake.
+- **API:** `CutifyTab.mood.set('sad' | 'starry' | 'sleep' | 'awake' | null)`: `null` returns control to the clock; an override
+  also beats a hidden tab, so an error still shows while the user is in another tab. `get()` says which mood the script is asking for (peekaboo's away icon can still be what the tab shows),
+  `start()` / `destroy()` attach and detach (destroy puts the original `href` back). Only `data-mood-awake` is required; a
+  mood with no file shows the awake icon.
+- **With `sparkle-that-page`'s `tab_title_peekaboo.js`:** its away icon wins while the tab is hidden, and the mood icon
+  comes back when the tab is visible again. Mechanism: while hidden, the mood script leaves a link whose `href` somebody else
+  changed. Script load order does not matter; an explicit `set('sad')` still shows while hidden.
+- **Making the sleep file:** copy the awake starter, keep the body and palette, close the eyes as 3-cell curves (ends one
+  row above the middle cell, every cell 1 high), and add a 3x3 `z` (top bar leaning right, centre cell, bottom bar leaning
+  left; a plain bar-stem-bar reads as an `I`). Put the `z` in free air if the mascot has a free corner (indigo-400
+  `#818cf8` reads on light and dark tabs), otherwise on the body in a darker or lighter shade of its own colour. A tile
+  mascot keeps the `z` inside the tile. Run `scripts/check-favicon.py` on it like any other icon.
+- **Shipped:** sleep files for mochi cat, bunny, bear, frog, fox, chick, panda, corgi, axolotl and ghost, plus a sad and a
+  starry mochi cat. No nightcaps: the `z` already uses the free space. The awake icon is the starter in `examples/`
+  (`../pixel_<name>.svg`), not a copy, so copy both files into your project.
+- Tab icons do not animate: the swap runs on `visibilitychange` and once a minute for the clock.
+
 ## Verification
 
 - [ ] `curl /static/favicon.svg` (or your path) returns 200 + the SVG
@@ -337,6 +378,8 @@ you have users there, next to the SVG link:
 and grid positions); `README.md` has thumbnails. Plus 5 **style specimens**
 (`style_gameboy_cat`, `style_nes_cat`, `style_diecut_cat`, `style_chibi_cat`,
 `style_riso_cat`) and `styles.html`, which shows all seven styles side by side.
+`examples/moods/` (see Moods above) ships 12 more SVGs (10 sleep variants, a sad and a starry mochi cat),
+`favicon_mood.js` and `moods.html`. They live in the subfolder, so the 78 count above is unchanged.
 
 **Gradient blobs (Option B — 22 emotion variants):** `blob_brand_grad.svg` happy, sunset gradient ·
 `blob_mint.svg` wink, mint→cyan · `blob_heart_eyes.svg` in love · `blob_smug.svg` smug / smirk ·

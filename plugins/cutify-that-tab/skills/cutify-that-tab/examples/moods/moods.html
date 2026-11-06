@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tab icon moods</title>
+<!-- This page's own tab icon is driven by favicon_mood.js: switch to another tab and it falls asleep. -->
+<link rel="icon" type="image/svg+xml" href="../pixel_mochi_cat.svg"
+      data-mood-awake="../pixel_mochi_cat.svg"
+      data-mood-sleep="mochi_cat_sleep.svg"
+      data-mood-sad="mochi_cat_sad.svg"
+      data-mood-starry="mochi_cat_starry.svg"
+      data-bedtime="18-7">
+<style>
+  :root { --bg:#faf8f5; --fg:#2b2a28; --mute:#7a766f; --card:#fff; --line:#e4e0d9; --link:#9d174d; --btn:#fce7f3; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#17171a; --fg:#e8e6e1; --mute:#9a968e; --card:#1f1f23; --line:#2e2e33; --link:#f9a8d4; --btn:#3b1d2e; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:32px 20px 48px; background:var(--bg); color:var(--fg);
+         font:14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width:1040px; margin:0 auto; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  h2.sec { font-size:16px; margin:28px 0 4px; }
+  p.sub { margin:0 0 16px; color:var(--mute); }
+  code { font-size:12px; }
+  .scroll { overflow-x:auto; padding-bottom:4px; }
+  .grid { min-width:960px; }
+  .head, .row { display:grid; grid-template-columns:150px repeat(4, 1fr); gap:14px; align-items:start; }
+  .head { padding:0 16px 6px; font-size:12px; color:var(--mute); }
+  .row { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 16px; margin-bottom:10px; }
+  .row h3 { font-size:14px; font-weight:600; margin:0; }
+  .row p { margin:2px 0 0; font-size:12px; color:var(--mute); }
+  .bar { display:flex; flex-direction:column; gap:2px; padding:8px 8px 0; background:#8a8d91; border-radius:8px 8px 0 0; width:fit-content; }
+  .tab { display:flex; align-items:center; gap:8px; padding:6px 12px; min-width:150px;
+         border-radius:8px 8px 0 0; font:12px system-ui, sans-serif; }
+  .tab img { width:16px; height:16px; image-rendering:pixelated; }
+  .bigs { display:flex; gap:8px; margin-top:8px; }
+  .big { display:flex; flex-direction:column; align-items:center; gap:2px; width:84px; padding:6px 0 4px;
+         border-radius:6px; border:1px solid rgba(128,128,128,.35); font:11px system-ui, sans-serif; }
+  .big img { width:64px; height:64px; image-rendering:pixelated; }
+  .live { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+  .live .btns { display:flex; flex-wrap:wrap; gap:8px; margin:8px 0; }
+  button { font:inherit; padding:6px 12px; border-radius:8px; border:1px solid var(--line); background:var(--btn); color:var(--fg); cursor:pointer; }
+  button[aria-pressed="true"] { outline:2px solid var(--link); }
+  .readout { font:12px ui-monospace, Menlo, monospace; color:var(--mute); }
+  a { color:var(--link); }
+  /* phone: no sideways scroller; each row stacks its four tab-colour columns, each labelled with its colour */
+  @media (max-width: 700px) {
+    body { padding:24px 16px 40px; }
+    .grid { min-width:0; }
+    .head { display:none; }
+    .row { grid-template-columns:1fr; gap:12px; }
+    .row > [data-col]::before { content:attr(data-col); display:block; margin-bottom:4px; font-size:12px; color:var(--mute); }
+    .bar { max-width:100%; }
+    .tab { min-width:0; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Tab icon moods</h1>
+  <p class="sub">Each mascot awake and asleep, at 16 px in a tab and as a 64 px pixelated enlargement, on the four Chrome
+    tab colours. Wiring and rules: <code>favicon_mood.js</code>, and the "Moods" section of <code>SKILL.md</code>.</p>
+
+  <section class="live">
+    <strong>This page's own tab icon</strong>
+    <p class="sub" style="margin:2px 0 0">It sleeps between 18:00 and 07:00 and whenever you are in another tab. The buttons
+      are a page-state override: <code>CutifyTab.mood.set(...)</code>.</p>
+    <div class="btns" id="btns"></div>
+    <div class="readout" id="readout"></div>
+  </section>
+
+  <h2 class="sec">Awake and asleep</h2>
+  <p class="sub">The sleep file keeps the starter's body and palette. The eyes become 3-cell curves and a small z appears, in the free
+    air when there is some, otherwise on the body.</p>
+  <div class="scroll"><div class="grid">
+    <div class="head" id="head1"></div>
+    <div id="sleepers"></div>
+  </div></div>
+
+  <h2 class="sec">Page states: mochi cat, sad and starry</h2>
+  <p class="sub">An error and a success. Set them from the page with <code>CutifyTab.mood.set('sad')</code> /
+    <code>set('starry')</code>; <code>set(null)</code> hands the icon back to the clock.</p>
+  <div class="scroll"><div class="grid">
+    <div class="head" id="head2"></div>
+    <div id="states"></div>
+  </div></div>
+</main>
+<script src="favicon_mood.js"></script>
+<script>
+const TABS = [
+  ["Light active",   "#f0eee9", "#1f1f1f"],
+  ["Light inactive", "#c2c5be", "#3c3c3c"],
+  ["Dark active",    "#202124", "#e8eaed"],
+  ["Dark inactive",  "#2f3033", "#bdc1c6"],
+];
+const MASCOTS = ["mochi_cat", "bunny", "bear", "frog", "fox", "chick", "panda", "corgi", "axolotl", "ghost"];
+const el = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
+
+// A row: a name, then for each tab colour one tab per icon plus a 64 px enlargement per icon.
+function row(title, note, icons) {
+  const r = el("section", { className: "row" });
+  r.append(el("div", {}, el("h3", { textContent: title }), el("p", { textContent: note })));
+  for (const [colour, hex, fg] of TABS) {
+    const bar = el("div", { className: "bar" });
+    const bigs = el("div", { className: "bigs" });
+    for (const [label, src] of icons) {
+      const tab = el("div", { className: "tab" }, el("img", { src, alt: title + " " + label }), label);
+      tab.style.cssText = `background:${hex};color:${fg}`;
+      bar.append(tab);
+      const big = el("div", { className: "big" }, el("img", { src, alt: "" }), label);
+      big.style.cssText = `background:${hex};color:${fg}`;
+      bigs.append(big);
+    }
+    const col = el("div", {}, bar, bigs);
+    col.dataset.col = `${colour} ${hex}`;
+    r.append(col);
+  }
+  return r;
+}
+const head = id => document.getElementById(id).append(el("span"), ...TABS.map(([n, hex]) =>
+  el("span", {}, n + " ", el("code", { textContent: hex }))));
+head("head1"); head("head2");
+
+const hasTile = { panda: "tile" };
+for (const m of MASCOTS) {
+  document.getElementById("sleepers").append(row(m.replace("_", " "), hasTile[m] ? "on a tile" : "free-floating",
+    [["awake", `../pixel_${m}.svg`], ["asleep", `${m}_sleep.svg`]]));
+}
+document.getElementById("states").append(
+  row("mochi cat: error", "sad: worried brows, a tear, a frown", [["awake", "../pixel_mochi_cat.svg"], ["sad", "mochi_cat_sad.svg"]]),
+  row("mochi cat: success", "starry: star eyes, a wide smile", [["awake", "../pixel_mochi_cat.svg"], ["starry", "mochi_cat_starry.svg"]]));
+
+// the page's own icon: flip it through the moods
+const btns = document.getElementById("btns"), readout = document.getElementById("readout");
+const link = document.querySelector("link[data-mood-awake]");
+function show() {
+  const m = CutifyTab.mood.get();
+  readout.textContent = `get() = ${m}   href = ${link.getAttribute("href")}   hidden = ${document.hidden}   hour = ${new Date().getHours()}`;
+}
+const MODES = [["Clock + tab", null], ["Awake", "awake"], ["Asleep", "sleep"], ["Sad", "sad"], ["Starry", "starry"]];
+let current = null;
+for (const [label, value] of MODES) {
+  const b = el("button", { type: "button", textContent: label });
+  b.onclick = () => { current = value; CutifyTab.mood.set(value); paint(); };
+  b.dataset.value = String(value);
+  btns.append(b);
+}
+const cycle = el("button", { type: "button", textContent: "Flip to the next mood", id: "cycle" });
+cycle.onclick = () => {
+  const i = MODES.findIndex(([, v]) => v === current);
+  current = MODES[(i + 1) % MODES.length][1];
+  CutifyTab.mood.set(current); paint();
+};
+btns.append(cycle);
+function paint() {
+  for (const b of btns.querySelectorAll("button[data-value]")) b.setAttribute("aria-pressed", String(b.dataset.value === String(current)));
+  show();
+}
+document.addEventListener("visibilitychange", () => setTimeout(show, 10));
+setInterval(show, 1000);
+paint();
+</script>
+</body>
+</html>

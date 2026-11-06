@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- mochi cat, starry-eyed: the success face. Star eyes, a wide smile. Same body as ../pixel_mochi_cat.svg. -->
+  <!-- ears (pink-500) -->
+  <rect x="3" y="3" width="2" height="2" fill="#ec4899"/>
+  <rect x="11" y="3" width="2" height="2" fill="#ec4899"/>
+  <!-- head (pink-300) -->
+  <rect x="3" y="5" width="10" height="9" fill="#f9a8d4"/>
+  <!-- star eyes: amber cross, pale centre -->
+  <rect x="5" y="7" width="1" height="1" fill="#f59e0b"/>
+  <rect x="4" y="8" width="1" height="1" fill="#f59e0b"/>
+  <rect x="6" y="8" width="1" height="1" fill="#f59e0b"/>
+  <rect x="5" y="9" width="1" height="1" fill="#f59e0b"/>
+  <rect x="5" y="8" width="1" height="1" fill="#fffbeb"/>
+  <rect x="10" y="7" width="1" height="1" fill="#f59e0b"/>
+  <rect x="9" y="8" width="1" height="1" fill="#f59e0b"/>
+  <rect x="11" y="8" width="1" height="1" fill="#f59e0b"/>
+  <rect x="10" y="9" width="1" height="1" fill="#f59e0b"/>
+  <rect x="10" y="8" width="1" height="1" fill="#fffbeb"/>
+  <!-- blush (pink-600) -->
+  <rect x="4" y="10" width="1" height="1" fill="#db2777"/>
+  <rect x="11" y="10" width="1" height="1" fill="#db2777"/>
+  <!-- wide smile -->
+  <rect x="6" y="10" width="1" height="1" fill="#1f2937"/>
+  <rect x="7" y="11" width="2" height="1" fill="#1f2937"/>
+  <rect x="9" y="10" width="1" height="1" fill="#1f2937"/>
+</svg>

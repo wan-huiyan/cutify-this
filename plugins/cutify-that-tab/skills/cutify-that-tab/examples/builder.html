@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Favicon builder</title>
+<link rel="icon" type="image/svg+xml" id="fav" href="pixel_mochi_cat.svg">
+<style>
+  :root {
+    --bg:#faf8f5; --fg:#2b2a28; --mute:#6b675f; --card:#fff; --line:#e4e0d9; --line-strong:#cfc9bf;
+    --accent:#9d174d; --accent-soft:#fdf0f6; --on-accent:#fff;
+    --pass-fg:#166534; --pass-bg:#e7f6ec; --warn-fg:#8a3c0b; --warn-bg:#fdf1dc; --fail-fg:#9f1c1c; --fail-bg:#fde8e8;
+    --frame:#8a8d91;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:#17171a; --fg:#e8e6e1; --mute:#a5a198; --card:#1f1f23; --line:#2e2e33; --line-strong:#45454c;
+      --accent:#f9a8d4; --accent-soft:#33202b; --on-accent:#2b0a1a;
+      --pass-fg:#86efac; --pass-bg:#15291c; --warn-fg:#fcd34d; --warn-bg:#33270f; --fail-fg:#fca5a5; --fail-bg:#371717;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:#17171a; --fg:#e8e6e1; --mute:#a5a198; --card:#1f1f23; --line:#2e2e33; --line-strong:#45454c;
+    --accent:#f9a8d4; --accent-soft:#33202b; --on-accent:#2b0a1a;
+    --pass-fg:#86efac; --pass-bg:#15291c; --warn-fg:#fcd34d; --warn-bg:#33270f; --fail-fg:#fca5a5; --fail-bg:#371717;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:32px 20px 56px; background:var(--bg); color:var(--fg);
+         font:14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width:1120px; margin:0 auto; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  h2 { font-size:14px; font-weight:600; margin:0; }
+  p.sub { margin:0 0 24px; color:var(--mute); max-width:70ch; }
+  a { color:var(--accent); }
+  code, .mono { font-family:ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size:12px; }
+  img.px { image-rendering:pixelated; display:block; }
+  :focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  .sr { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+
+  .app { display:grid; gap:20px; grid-template-columns:minmax(330px, 400px) minmax(0, 1fr);
+         grid-template-areas:"controls preview" "controls export"; align-items:start; }
+  .controls { grid-area:controls; }
+  .preview  { grid-area:preview; }
+  .export   { grid-area:export; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .panel > h2 { margin-bottom:12px; }
+
+  /* ---------- controls */
+  fieldset { border:0; margin:0 0 20px; padding:0; min-width:0; }
+  fieldset:last-child { margin-bottom:0; }
+  legend { font-size:14px; font-weight:600; padding:0; margin-bottom:8px; }
+  .opts { display:grid; gap:6px; }
+  .opts.subjects { grid-template-columns:repeat(3, 1fr); }
+  .opt { position:relative; }
+  .opt input { position:absolute; opacity:0; inset:0; margin:0; cursor:pointer; }
+  .opt .card { display:flex; align-items:center; gap:10px; padding:8px 10px; border:1px solid var(--line);
+               border-radius:10px; background:var(--card); transition:border-color .15s, background-color .15s; }
+  .opt input:hover + .card { border-color:var(--line-strong); }
+  .opt input:checked + .card { border-color:var(--accent); background:var(--accent-soft); box-shadow:inset 0 0 0 1px var(--accent); }
+  .opt input:focus-visible + .card { outline:2px solid var(--accent); outline-offset:2px; }
+  .subjects .card { flex-direction:column; gap:4px; padding:10px 6px 8px; font-size:12px; }
+  .thumb { width:32px; height:32px; flex:none; }
+  .style-card b { display:block; font-weight:600; font-size:14px; }
+  .style-card span { display:block; font-size:12px; color:var(--mute); }
+  .note { font-size:12px; color:var(--mute); margin:8px 0 0; }
+
+  .swatches { display:flex; flex-wrap:wrap; gap:6px; }
+  .swatches .card { flex-direction:column; gap:4px; padding:8px 8px 6px; min-width:64px; font-size:12px; }
+  .chip { width:28px; height:20px; border-radius:4px; display:flex; overflow:hidden; box-shadow:inset 0 0 0 1px rgba(0,0,0,.12); }
+  .chip i { flex:1; }
+  .custom-row { display:flex; align-items:center; gap:8px; margin-top:8px; font-size:12px; color:var(--mute); }
+  .custom-row input[type=color] { width:36px; height:28px; padding:0; border:1px solid var(--line-strong); border-radius:6px; background:none; cursor:pointer; }
+  .fixed { display:flex; align-items:center; gap:10px; font-size:12px; color:var(--mute); }
+  .fixed .chip { width:auto; height:20px; }
+  .fixed .chip i { width:20px; }
+  .toggle { display:flex; align-items:flex-start; gap:8px; margin-top:12px; font-size:14px; }
+  .toggle input { margin:2px 0 0; width:16px; height:16px; accent-color:var(--accent); }
+  .toggle small { display:block; color:var(--mute); font-size:12px; }
+
+  /* ---------- preview */
+  .tabs { display:grid; gap:12px; }
+  .tabs { gap:10px; }
+  .tabrow { display:grid; grid-template-columns:auto 88px minmax(0,1fr); gap:16px; align-items:center; }
+  .where { display:flex; flex-direction:column; gap:6px; }
+  .where .label { font-size:12px; color:var(--mute); }
+  .where .label code { color:var(--mute); }
+  .bar { display:inline-flex; padding:8px 8px 0; background:var(--frame); border-radius:8px 8px 0 0; }
+  .tab { display:flex; align-items:center; gap:8px; padding:8px 10px 8px 14px; min-width:190px;
+         border-radius:8px 8px 0 0; font:12px system-ui, sans-serif; }
+  .tab img { width:16px; height:16px; }
+  .tab .x { margin-left:auto; width:10px; height:10px; opacity:.7; }
+  .big { width:88px; height:88px; display:flex; align-items:center; justify-content:center; border-radius:6px;
+         border:1px solid rgba(128,128,128,.35); }
+  .big img { width:64px; height:64px; }
+  .badge { display:inline-flex; flex-direction:column; gap:1px; padding:6px 10px; border-radius:8px; font-size:12px; line-height:1.35; justify-self:start; }
+  .badge b { font-weight:600; font-size:14px; }
+  .badge[data-state="pass"] { color:var(--pass-fg); background:var(--pass-bg); }
+  .badge[data-state="warn"] { color:var(--warn-fg); background:var(--warn-bg); }
+  .badge[data-state="fail"], .badge[data-state="unchecked"] { color:var(--fail-fg); background:var(--fail-bg); }
+  .callout { margin-top:16px; padding:12px 14px; border-radius:10px; background:var(--warn-bg); color:var(--warn-fg);
+             display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; font-size:14px; }
+  .callout p { margin:0; flex:1 1 260px; }
+  .callout.ok { background:var(--pass-bg); color:var(--pass-fg); }
+
+  /* ---------- export */
+  .verdict { display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 10px; margin:0 0 12px; font-size:14px; }
+  .verdict b { font-size:14px; letter-spacing:.02em; }
+  .verdict[data-exit="0"] b { color:var(--pass-fg); }
+  .verdict[data-exit="1"] b, .verdict[data-exit="3"] b { color:var(--fail-fg); }
+  .checks { list-style:none; margin:0 0 16px; padding:0; border-top:1px solid var(--line); }
+  .checks li { display:grid; grid-template-columns:72px 136px minmax(0,1fr); gap:8px; padding:6px 0; border-bottom:1px solid var(--line); font-size:12px; }
+  .checks .st { font-weight:600; }
+  .checks .st[data-s="PASS"] { color:var(--pass-fg); }
+  .checks .st[data-s="WARN"] { color:var(--warn-fg); }
+  .checks .st[data-s="FAIL"], .checks .st[data-s="UNCHECKED"] { color:var(--fail-fg); }
+  .checks .k { color:var(--mute); }
+  .checks .m { overflow-wrap:anywhere; }
+  .file { display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; padding:10px 0; border-top:1px solid var(--line); }
+  .file .name { flex:1 1 180px; font-size:14px; }
+  .file .name small { display:block; color:var(--mute); font-size:12px; }
+  .file details { min-width:0; }   /* an open code panel scrolls inside the card instead of stretching the page */
+  .btns { display:flex; gap:8px; }
+  button { font:inherit; font-size:14px; display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border-radius:8px;
+           border:1px solid var(--line-strong); background:var(--card); color:var(--fg); cursor:pointer; min-height:34px;
+           transition:background-color .15s, border-color .15s, color .15s; }
+  button:hover { border-color:var(--fg); }
+  button.primary { background:var(--accent); color:var(--on-accent); border-color:var(--accent); }
+  button.primary:hover { filter:brightness(1.08); }
+  button[data-copied="true"] { background:var(--pass-bg); color:var(--pass-fg); border-color:var(--pass-fg); }
+  button[data-copied="error"] { background:var(--fail-bg); color:var(--fail-fg); border-color:var(--fail-fg); }
+  button svg { width:14px; height:14px; flex:none; }
+  details { margin-top:4px; }
+  summary { cursor:pointer; font-size:12px; color:var(--mute); padding:4px 0; }
+  pre { margin:6px 0 0; padding:10px 12px; background:var(--bg); border:1px solid var(--line); border-radius:8px;
+        overflow:auto; font-size:12px; line-height:1.45; max-height:220px; white-space:pre; }
+  .limits { font-size:12px; color:var(--mute); margin:14px 0 0; max-width:75ch; }
+
+  @media (max-width: 860px) {
+    body { padding:20px 16px 40px; }
+    .app { grid-template-columns:minmax(0,1fr); grid-template-areas:"preview" "controls" "export"; }
+  }
+  @media (max-width: 520px) {
+    .tabrow { grid-template-columns:minmax(0,1fr) 88px; grid-template-areas:"where big" "badge big"; gap:6px 12px; }
+    .tabrow .where { grid-area:where; }
+    .tabrow .big { grid-area:big; }
+    .tabrow .badge { grid-area:badge; padding:4px 8px; }
+    .tab { min-width:0; }
+    .bar { max-width:100%; }
+    .checks li { grid-template-columns:80px minmax(0,1fr); }
+    .checks .k { grid-column:2; grid-row:1; }
+    .checks .m { grid-column:1 / -1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition:none !important; animation:none !important; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Favicon builder</h1>
+  <p class="sub">Pick a subject, a style and a colour. The icon is drawn on a 16×16 grid, shown at real size on the four Chrome tab
+    colours, and checked with the same rule as <code>scripts/check-favicon.py</code>. Style rules:
+    <a href="../references/styles.md">references/styles.md</a> · all seven specimens: <a href="styles.html">styles.html</a> ·
+    test your own file: <a href="preview.html">preview.html</a>.</p>
+
+  <div class="app">
+    <form class="controls panel" id="controls" aria-label="Favicon options" onsubmit="return false">
+      <fieldset>
+        <legend>Subject</legend>
+        <div class="opts subjects" id="subjects"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Style</legend>
+        <div class="opts" id="styles"></div>
+        <p class="note">Chibi blob is not here: it is vector on a 32-unit grid, so it cannot come from these 16×16 cell maps.
+          Start from <a href="style_chibi_cat.svg">style_chibi_cat.svg</a> instead.</p>
+      </fieldset>
+      <fieldset id="palette-set">
+        <legend id="palette-legend">Colour</legend>
+        <div id="palette"></div>
+      </fieldset>
+    </form>
+
+    <section class="preview panel" aria-labelledby="pv-h">
+      <h2 id="pv-h">At real tab size</h2>
+      <div class="tabs" id="tabs"></div>
+      <div id="callout"></div>
+    </section>
+
+    <section class="export panel" aria-labelledby="ex-h">
+      <h2 id="ex-h">Check and export</h2>
+      <p class="verdict" id="verdict" aria-live="polite"></p>
+      <ul class="checks" id="checks"></ul>
+      <div id="files"></div>
+      <p class="limits">The check is a JavaScript port of the <code>xml</code>, <code>crisp</code>, <code>margin</code> and
+        <code>contrast</code> checks in <code>check-favicon.py</code>, run on the exact SVG you copy. Contrast is CIEDE2000
+        dE ≥ 22.5 against one colour per icon: the tile fill if there is a tile, otherwise the colour covering the most cells.
+        Eyes, outlines and accents are not measured, and the threshold is calibrated on five field results, so treat it as a
+        smoke alarm. The <code>--html</code> link check is not ported.</p>
+    </section>
+  </div>
+  <p class="sr" id="live" aria-live="polite"></p>
+</main>
+
+<script>
+"use strict";
+/* ============================================================== subjects
+   One 16×16 cell map per subject. Roles: B body · A ear/accent · E eye · H blush · M mouth · L light detail
+   (eye whites, snout). Every map stays inside columns and rows 3–12, so an outline (NES, Game Boy) lands in
+   2–13 and the die-cut sticker's two rings in 1–14. */
+const SUBJECTS = [
+  { id: "cat", name: "Cat", map: [
+    "................", "................", "................",
+    "...A........A...",
+    "...AA......AA...",
+    "...BBBBBBBBBB...",
+    "...BBBBBBBBBB...",
+    "...BBBBBBBBBB...",
+    "...BBEBBBBEBB...",
+    "...BBEBBBBEBB...",
+    "...BHBBMMBBHB...",
+    "...BBBBBBBBBB...",
+    "....BBBBBBBB....",
+    "................", "................", "................" ] },
+  { id: "bunny", name: "Bunny", map: [
+    "................", "................", "................",
+    "....BB....BB....",
+    "....BA....AB....",
+    "....BA....AB....",
+    "...BBBBBBBBBB...",
+    "...BBBBBBBBBB...",
+    "...BBEBBBBEBB...",
+    "...BBEBBBBEBB...",
+    "...BHBBAABBHB...",
+    "...BBBMBBMBBB...",
+    "....BBBBBBBB....",
+    "................", "................", "................" ] },
+  { id: "bear", name: "Bear", map: [
+    "................", "................", "................",
+    "...AA......AA...",
+    "...AABBBBBBAA...",
+    "...BBBBBBBBBB...",
+    "...BBBBBBBBBB...",
+    "...BBEBBBBEBB...",
+    "...BBEBBBBEBB...",
+    "...BHBLLLLBHB...",
+    "...BBBLMMLBBB...",
+    "...BBBLLLLBBB...",
+    "....BBBBBBBB....",
+    "................", "................", "................" ] },
+  { id: "frog", name: "Frog", map: [
+    "................", "................", "................",
+    "...BBBB..BBBB...",
+    "...BLEB..BELB...",
+    "...BBBBBBBBBB...",
+    "...BBBBBBBBBB...",
+    "...BHBBBBBBHB...",
+    "...BBMBBBBMBB...",
+    "...BBBMMMMBBB...",
+    "...BBBBBBBBBB...",
+    "...ABBBBBBBBA...",
+    "...AA......AA...",
+    "................", "................", "................" ] },
+  { id: "ghost", name: "Ghost", map: [
+    "................", "................", "................",
+    ".....BBBBBB.....",
+    "....BBBBBBBB....",
+    "...BBBBBBBBBB...",
+    "...BBEBBBBEBB...",
+    "...BBEBBBBEBB...",
+    "...BHBBMMBBHB...",
+    "...BBBBBBBBBB...",
+    "...BBBBBBBBBB...",
+    "...BBBBBBBBBB...",
+    "...BB.BBBB.BB...",
+    "................", "................", "................" ] },
+  { id: "chick", name: "Chick", map: [
+    "................", "................", "................",
+    ".......AA.......",
+    ".....BBBBBB.....",
+    "....BBBBBBBB....",
+    "...BBEBBBBEBB...",
+    "...BBEBAABEBB...",
+    "...BHBBAABBHB...",
+    "...BBBBBBBBBB...",
+    "...BBBBBBBBBB...",
+    "....BBBBBBBB....",
+    ".....AA..AA.....",
+    "................", "................", "................" ] },
+];
+
+/* ============================================================== styles */
+const INK = "#1f2937";
+const P = (id, name, body, accent, blush) => ({ id, name, body, accent, blush });
+const STYLES = [
+  { id: "kawaii", name: "Kawaii pixel", feel: "soft pastel, the house default", custom: true,
+    palettes: [P("pink", "Pink", "#f9a8d4", "#ec4899", "#db2777"), P("peach", "Peach", "#fdba74", "#f97316", "#f472b6"),
+               P("honey", "Honey", "#fbbf24", "#d97706", "#f87171"), P("lilac", "Lilac", "#c4b5fd", "#8b5cf6", "#f472b6"),
+               P("mint", "Mint", "#34d399", "#059669", "#f472b6"), P("sky", "Sky", "#38bdf8", "#0284c7", "#f472b6")] },
+  { id: "silhouette", name: "1-bit silhouette", feel: "one colour, eyes cut out, octocat-like", pairable: true,
+    palettes: [{ id: "charcoal", name: "Charcoal", body: "#24292f", dark: "#e5e7eb" },
+               { id: "ink", name: "Ink blue", body: "#1e3a8a", dark: "#bfdbfe" }] },
+  { id: "gameboy", name: "Game Boy", feel: "four DMG greens on a screen tile",
+    fixed: { name: "Lospec dmg-nso greens", inks: ["#8cad28", "#6c9421", "#426b29", "#214231"] } },
+  { id: "nes", name: "NES outline", feel: "arcade sprite, 1-cell near-black outline", custom: true,
+    palettes: [P("orange", "Orange", "#fb923c", "#ea580c", "#f472b6"), P("pink", "Pink", "#f472b6", "#db2777", "#f43f5e"),
+               P("sky", "Sky", "#38bdf8", "#0284c7", "#f472b6"), P("lime", "Lime", "#a3e635", "#65a30d", "#f472b6"),
+               P("violet", "Violet", "#a78bfa", "#7c3aed", "#f472b6")] },
+  { id: "diecut", name: "Die-cut sticker", feel: "white cut line on a grey edge", custom: true,
+    palettes: [P("honey", "Honey", "#fbbf24", "#d97706", "#f87171"), P("pink", "Pink", "#f9a8d4", "#ec4899", "#db2777"),
+               P("lilac", "Lilac", "#c4b5fd", "#8b5cf6", "#f472b6"), P("peach", "Peach", "#fdba74", "#f97316", "#f472b6"),
+               P("sky", "Sky", "#38bdf8", "#0284c7", "#f472b6")] },
+  { id: "riso", name: "Riso two-ink", feel: "pink and blue inks, 1-cell misregistration",
+    fixed: { name: "Fluorescent pink, blue, and their overprint", inks: ["#ff48b0", "#0078bf", "#002284"] } },
+];
+const GB = ["#8cad28", "#6c9421", "#426b29", "#214231"];
+const RISO = { pink: "#ff48b0", blue: "#0078bf", both: "#002284" };
+
+const blank = v => Array.from({ length: 16 }, () => Array(16).fill(v));
+const rolesOf = s => s.map.map(r => [...r]);
+const at = (g, x, y) => y >= 0 && y < 16 && x >= 0 && x < 16 ? g[y][x] : false;
+function dilate(mask) {           // 4-neighbour: rounder corners than 8-neighbour, like hand-drawn sprite outlines
+  const o = blank(false);
+  for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++)
+    o[y][x] = mask[y][x] || at(mask, x - 1, y) || at(mask, x + 1, y) || at(mask, x, y - 1) || at(mask, x, y + 1);
+  return o;
+}
+const fillBy = (roles, f) => roles.map((r, y) => r.map((c, x) => c === "." ? null : f(c, x, y)));
+
+const BUILD = {
+  kawaii(roles, p) {
+    const col = { B: p.body, A: p.accent, E: INK, H: p.blush, M: INK, L: "#ffffff" };
+    return { grid: fillBy(roles, c => col[c]) };
+  },
+  silhouette(roles, p) {          // interior detail is cut out: eyes and mouth are gaps, not drawn on top
+    const one = hex => fillBy(roles, c => (c === "E" || c === "M") ? null : hex);
+    return { grid: one(p.body), dark: one(p.dark) };
+  },
+  gameboy(roles) {
+    const sil = roles.map(r => r.map(c => c !== "."));
+    const ring = dilate(sil);
+    const col = { B: GB[1], A: GB[2], H: GB[2], E: GB[3], M: GB[3], L: null };   // L: the screen shows through
+    const grid = roles.map((r, y) => r.map((c, x) => c !== "." ? col[c] : ring[y][x] ? GB[3] : null));
+    return { grid, tile: GB[0] };
+  },
+  nes(roles, p) {
+    const sil = roles.map(r => r.map(c => c !== "."));
+    const ring = dilate(sil);
+    const col = { B: p.body, A: p.accent, H: p.blush, E: INK, M: INK, L: "#ffffff" };
+    return { grid: roles.map((r, y) => r.map((c, x) => c !== "." ? col[c] : ring[y][x] ? INK : null)) };
+  },
+  diecut(roles, p) {               // face simplified to eyes + blush: the mouth is dropped into the body
+    const sil = roles.map(r => r.map(c => c !== "."));
+    const cut = dilate(sil), edge = dilate(cut);
+    const col = { B: p.body, A: p.accent, H: p.blush, E: INK, M: p.body, L: "#ffffff" };
+    return { grid: roles.map((r, y) => r.map((c, x) => c !== "." ? col[c] : cut[y][x] ? "#ffffff" : edge[y][x] ? "#9ca3af" : null)) };
+  },
+  riso(roles) {
+    // pink plate: body, blush and the face. blue plate: ears/accent, eyes and mouth (so they print as the
+    // overprint), plus a shadow sliver from the same shape printed 1 cell right and down (misregistration).
+    const sil = roles.map(r => r.map(c => c !== "."));
+    const grid = blank(null);
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+      const c = roles[y][x];
+      const pink = "BHEM".includes(c);
+      const blue = "AEM".includes(c) || (!sil[y][x] && at(sil, x - 1, y - 1));
+      grid[y][x] = pink && blue ? RISO.both : pink ? RISO.pink : blue ? RISO.blue : null;
+    }
+    return { grid };
+  },
+};
+
+/* ============================================================== grid -> SVG
+   Colours are painted as layers. Each layer covers its own cells plus every cell of a colour painted
+   after it (those get painted over), which turns rings and bodies into a few solid rects. The checker's
+   "last painter wins" raster of the result is exactly this grid. Layer order is greedy: next comes the
+   colour whose layer needs the fewest rects. One rect per maximal run, merged down while the run repeats. */
+function rectsOf(m) {
+  const rects = [];
+  let open = new Map();
+  for (let y = 0; y <= 16; y++) {
+    const runs = new Map();
+    if (y < 16) for (let x = 0; x < 16; x++) {
+      if (!m[y][x]) continue;
+      let w = 1; while (x + w < 16 && m[y][x + w]) w++;
+      runs.set(x + "," + w, { x, w }); x += w - 1;
+    }
+    const next = new Map();
+    for (const [k, r] of runs) {
+      if (open.has(k)) { const o = open.get(k); o.h++; next.set(k, o); open.delete(k); }
+      else { const o = { x: r.x, y, w: r.w, h: 1 }; rects.push(o); next.set(k, o); }
+    }
+    open = next;
+  }
+  return rects.sort((a, b) => a.y - b.y || a.x - b.x);
+}
+function toSVG(grid, tile, note) {           // whichever of the two encodings is shorter
+  const a = encode(grid, tile, note, true), b = encode(grid, tile, note, false);
+  return a.length <= b.length ? a : b;
+}
+function encode(grid, tile, note, layered) {
+  const left = [];
+  for (const row of grid) for (const c of row) if (c && !left.includes(c)) left.push(c);
+  const layerMask = (c, rest) => grid.map(r => r.map(v => v === c || (layered && rest.includes(v))));
+  let out = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">\n`;
+  if (note) out += `<!-- ${note} -->\n`;
+  if (tile) out += `<rect x="1" y="1" width="14" height="14" rx="3" fill="${tile}"/>\n`;
+  while (left.length) {
+    let best = null;
+    for (const c of left) {
+      const rects = rectsOf(layerMask(c, left.filter(o => o !== c)));
+      if (!best || rects.length < best.rects.length) best = { c, rects };
+    }
+    left.splice(left.indexOf(best.c), 1);
+    const r = best.rects.map(r => `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}"`);
+    out += r.length === 1 ? r[0] + ` fill="${best.c}"/>\n` : `<g fill="${best.c}">` + r.join("/>") + `/></g>\n`;
+  }
+  return out + `</svg>\n`;
+}
+
+/* ============================================================== check (port of check-favicon.py)
+   Ported: xml, crisp, margin, contrast-light / contrast-dark, the tile rule, the 16×16 raster with
+   "last painter wins", the largest-fill body pick, gradient stop means, and the exit code (0 / 1 / 3).
+   Not ported: --html. Fill resolution handles style="" , <style> .class rules and attributes, like the script. */
+const THRESHOLD = 22.5;
+const TABS = [["Light active", "#f0eee9", "#1f1f1f", "light"], ["Light inactive", "#c2c5be", "#3c3c3c", "light"],
+              ["Dark active", "#202124", "#e8eaed", "dark"], ["Dark inactive", "#2f3033", "#bdc1c6", "dark"]];
+const TABS_LIGHT = TABS.filter(t => t[3] === "light"), TABS_DARK = TABS.filter(t => t[3] === "dark");
+const SHAPES = new Set(["rect", "circle", "ellipse", "path", "polygon", "polyline", "line", "text", "image", "use"]);
+const SKIP = new Set(["defs", "clipPath", "mask", "symbol", "style", "title", "desc", "metadata",
+                      "linearGradient", "radialGradient", "pattern", "filter"]);
+
+function hexNorm(s) {
+  s = s.trim().toLowerCase();
+  if (/^#[0-9a-f]{3}$/.test(s)) return "#" + [...s.slice(1)].map(c => c + c).join("");
+  if (/^#[0-9a-f]{6}$/.test(s)) return s;
+  const m = s.match(/^rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/);
+  if (m && m.slice(1).every(g => +g <= 255)) return "#" + m.slice(1).map(g => (+g).toString(16).padStart(2, "0")).join("");
+  return { white: "#ffffff", black: "#000000" }[s] || null;
+}
+function lab(h) {
+  const [r, g, b] = [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255)
+    .map(c => c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+  const x = (0.4124564 * r + 0.3575761 * g + 0.1804375 * b) / 0.95047;
+  const y = 0.2126729 * r + 0.7151522 * g + 0.0721750 * b;
+  const z = (0.0193339 * r + 0.1191920 * g + 0.9503041 * b) / 1.08883;
+  const f = t => t > 216 / 24389 ? Math.cbrt(t) : (24389 / 27 * t + 16) / 116;
+  return [116 * f(y) - 16, 500 * (f(x) - f(y)), 200 * (f(y) - f(z))];
+}
+const rad = d => d * Math.PI / 180, deg = r => r * 180 / Math.PI;
+function de2000Lab([L1, a1, b1], [L2, a2, b2]) {
+  const C1 = Math.hypot(a1, b1), C2 = Math.hypot(a2, b2), Cb = (C1 + C2) / 2;
+  const G = 0.5 * (1 - Math.sqrt(Cb ** 7 / (Cb ** 7 + 25 ** 7)));
+  const a1p = (1 + G) * a1, a2p = (1 + G) * a2;
+  const C1p = Math.hypot(a1p, b1), C2p = Math.hypot(a2p, b2);
+  const mod = v => ((v % 360) + 360) % 360;
+  const h1 = mod(deg(Math.atan2(b1, a1p))), h2 = mod(deg(Math.atan2(b2, a2p)));
+  const dL = L2 - L1, dC = C2p - C1p;
+  let dh = h2 - h1;
+  if (C1p * C2p === 0) dh = 0; else if (dh > 180) dh -= 360; else if (dh < -180) dh += 360;
+  const dH = 2 * Math.sqrt(C1p * C2p) * Math.sin(rad(dh / 2));
+  const Lb = (L1 + L2) / 2, Cbp = (C1p + C2p) / 2;
+  let hb;
+  if (C1p * C2p === 0) hb = h1 + h2;
+  else if (Math.abs(h1 - h2) <= 180) hb = (h1 + h2) / 2;
+  else if (h1 + h2 < 360) hb = (h1 + h2 + 360) / 2;
+  else hb = (h1 + h2 - 360) / 2;
+  const T = 1 - 0.17 * Math.cos(rad(hb - 30)) + 0.24 * Math.cos(rad(2 * hb)) + 0.32 * Math.cos(rad(3 * hb + 6)) - 0.20 * Math.cos(rad(4 * hb - 63));
+  const SL = 1 + 0.015 * (Lb - 50) ** 2 / Math.sqrt(20 + (Lb - 50) ** 2), SC = 1 + 0.045 * Cbp, SH = 1 + 0.015 * Cbp * T;
+  const RT = -2 * Math.sqrt(Cbp ** 7 / (Cbp ** 7 + 25 ** 7)) * Math.sin(rad(60 * Math.exp(-(((hb - 275) / 25) ** 2))));
+  return Math.sqrt((dL / SL) ** 2 + (dC / SC) ** 2 + (dH / SH) ** 2 + RT * (dC / SC) * (dH / SH));
+}
+const de2000 = (a, b) => de2000Lab(lab(a), lab(b));
+const decls = s => Object.fromEntries((s || "").split(";").filter(d => d.includes(":"))
+  .map(d => { const i = d.indexOf(":"); return [d.slice(0, i).trim(), d.slice(i + 1).trim()]; }));
+const toNum = v => { const s = v.trim().replace(/[px]+$/, ""); return s === "" || isNaN(Number(s)) ? null : Number(s); };
+const num = (el, n, d = 0) => { const v = el.getAttribute(n); return v === null ? d : toNum(v); };
+
+function checkOne(text, label, role, rows) {
+  const add = (key, status, msg) => rows.push({ file: label, key, status, msg });
+  const doc = new DOMParser().parseFromString(text, "image/svg+xml");
+  if (doc.getElementsByTagName("parsererror").length) { add("xml", "FAIL", "does not parse"); return; }
+  const root = doc.documentElement;
+  if (root.localName !== "svg") { add("xml", "FAIL", `root element is <${root.localName}>, not <svg>`); return; }
+  const vbRaw = (root.getAttribute("viewBox") || "").trim().split(/[\s,]+/).map(toNum);
+  const vb = vbRaw.length === 4 && !vbRaw.includes(null) ? vbRaw : null;
+  if (!vb) { add("xml", "FAIL", "root <svg> has no usable viewBox"); return; }
+  add("xml", "PASS", "parses; <svg> viewBox=" + vb.join(" "));
+
+  const rules = {};
+  for (const st of root.getElementsByTagName("style"))
+    for (const m of st.textContent.matchAll(/\.([\w-]+)\s*\{([^}]*)\}/g)) Object.assign(rules[m[1]] ||= {}, decls(m[2]));
+  const prop = (el, name) => {
+    for (; el; el = el.parentElement) {
+      const d = decls(el.getAttribute("style")); if (name in d) return d[name];
+      for (const c of (el.getAttribute("class") || "").split(/\s+/)) if (c && rules[c] && name in rules[c]) return rules[c][name];
+      if (el.getAttribute(name) !== null) return el.getAttribute(name);
+    }
+    return null;
+  };
+  const up = (el, test) => { for (; el; el = el.parentElement) if (test(el)) return true; return false; };
+  const alpha = el => up(el, e => ["opacity", "fill-opacity"].some(n => {
+    const v = e.getAttribute(n) ?? decls(e.getAttribute("style"))[n];
+    if (v === undefined || v === null) return false;
+    const f = Number(v.trim()); return v.trim() === "" || isNaN(f) || f < 1;
+  }));
+  const fillOf = el => {
+    let f = prop(el, "fill"); f = f === null ? "#000000" : f.trim();
+    if (["none", "transparent"].includes(f.toLowerCase())) return ["none"];
+    const h = hexNorm(f); if (h) return ["colors", [h]];
+    const m = f.match(/^url\(\s*#([^)\s]+)\s*\)$/);
+    if (m) {
+      const g = doc.getElementById(m[1]);
+      const stops = g ? [...g.children].filter(s => s.localName === "stop") : [];
+      const cols = [];
+      for (const s of stops) {
+        const c = s.getAttribute("stop-color") || decls(s.getAttribute("style"))["stop-color"];
+        const hh = c ? hexNorm(c) : null; if (!hh) return ["unresolved", "gradient stop colour " + c]; cols.push(hh);
+      }
+      return cols.length ? ["colors", cols] : ["unresolved", "gradient has no stops"];
+    }
+    return ["unresolved", "fill " + f];
+  };
+  const shapes = [];
+  (function walk(el, skipped) {
+    const t = el.localName; skipped = skipped || SKIP.has(t);
+    if (!skipped && SHAPES.has(t)) {
+      const fill = fillOf(el), stroke = (prop(el, "stroke") || "none").trim().toLowerCase() !== "none";
+      if (fill[0] !== "none" || stroke)
+        shapes.push({ el, tag: t, fill, stroke, alpha: alpha(el), transform: up(el, e => !!e.getAttribute("transform")) });
+    }
+    for (const c of el.children) walk(c, skipped);
+  })(root, false);
+
+  const pixel = vb.join() === "0,0,16,16" && shapes.length > 0 && shapes.every(s => s.tag === "rect");
+  let tile = null;
+  if (shapes.length && shapes[0].tag === "rect") {
+    const el = shapes[0].el, [w, h, rx, ry] = ["width", "height", "rx", "ry"].map(n => num(el, n));
+    if (![w, h, rx, ry].includes(null) && (rx > 0 || ry > 0) && w * h >= 0.5 * vb[2] * vb[3]) tile = shapes[0];
+  }
+  if (pixel) {
+    const sr = root.getAttribute("shape-rendering") || decls(root.getAttribute("style"))["shape-rendering"];
+    if (sr === "crispEdges") add("crisp", "PASS", 'pixel art; shape-rendering="crispEdges" on root');
+    else add("crisp", "FAIL", "pixel art without crispEdges on root: rects antialias to mush");
+  } else add("crisp", "n/a", "not pixel art (needs all <rect>, viewBox 0 0 16 16)");
+
+  let grid = null, why = null;
+  if (pixel) {
+    grid = blank(null);
+    for (const s of shapes) {
+      if (s === tile) continue;
+      const [x, y, w, h] = ["x", "y", "width", "height"].map(n => num(s.el, n));
+      if (s.transform || s.stroke) { why = "a rect has a transform or stroke"; break; }
+      if ([x, y, w, h].some(v => v === null || v !== Math.trunc(v))) { why = "non-integer rect coordinates"; break; }
+      if ((num(s.el, "rx") || 0) > 0 || (num(s.el, "ry") || 0) > 0) { why = "a non-tile rect has rounded corners"; break; }
+      const key = JSON.stringify([s.fill, s.alpha]);
+      for (let cy = Math.max(0, y); cy < Math.min(16, y + h); cy++)
+        for (let cx = Math.max(0, x); cx < Math.min(16, x + w); cx++) grid[cy][cx] = key;
+    }
+    if (why) grid = null;
+  }
+  if (!pixel) add("margin", "n/a", "not pixel art");
+  else if (tile && (tile.transform || tile.stroke)) add("margin", "UNCHECKED", "tile has a transform or stroke");
+  else if (tile) {
+    const [x, y, w, h] = ["x", "y", "width", "height"].map(n => num(tile.el, n));
+    const edge = grid && [...Array(16).keys()].some(i => grid[i][0] || grid[i][15] || grid[0][i] || grid[15][i]);
+    if ([x, y, w, h].includes(null)) add("margin", "UNCHECKED", "tile geometry is not numeric");
+    else if (x < 1 || y < 1 || x + w > 15 || y + h > 15) add("margin", "FAIL", "tile touches the viewBox edge; needs a 1-cell outer margin");
+    else if (!grid) add("margin", "UNCHECKED", "mascot could not be rasterised: " + why);
+    else if (edge) add("margin", "FAIL", "tiled sticker: mascot paint in the outer ring (row/col 0 or 15)");
+    else add("margin", "PASS", `tiled sticker: tile (${x},${y},${w}x${h}) leaves a 1-cell outer margin`);
+  } else if (!grid) add("margin", "UNCHECKED", "could not rasterise: " + why);
+  else {
+    let r0 = 0, r1 = 0;
+    for (let r = 0; r < 16; r++) for (let c = 0; c < 16; c++) if (grid[r][c]) {
+      if ([0, 15].includes(r) || [0, 15].includes(c)) r0++; else if ([1, 14].includes(r) || [1, 14].includes(c)) r1++;
+    }
+    if (r0) add("margin", "FAIL", `paint in row/col 0 or 15 (${r0} cells); tab bars shave 1-2px`);
+    else if (r1) add("margin", "WARN", `paint in row/col 1 or 14 (${r1} cells); skill rule is >= 2 cells clear`);
+    else add("margin", "PASS", "free-floating; nothing in rows/cols 0, 1, 14, 15");
+  }
+
+  let body = null, how = "";
+  if (tile) {
+    if (tile.alpha || tile.fill[0] !== "colors") how = "tile fill not resolvable";
+    else { body = tile.fill[1]; how = "tile fill"; }
+  } else if (grid) {
+    const counts = new Map();
+    for (const row of grid) for (const k of row) if (k) counts.set(k, (counts.get(k) || 0) + 1);
+    let best = null, n = 0, total = 0;
+    for (const [k, v] of counts) { total += v; if (v > n) { best = k; n = v; } }
+    if (!best) how = "nothing painted on the grid";
+    else {
+      const [fill, a] = JSON.parse(best);
+      if (a || fill[0] !== "colors") how = "largest fill is not resolvable";
+      else { body = fill[1]; how = `largest fill, ${n} of ${total} painted cells`; }
+    }
+  } else how = "cannot compute painted area and no background tile";
+
+  const sets = role === "dark" ? [["contrast-dark", TABS_DARK]] : [["contrast-light", TABS_LIGHT]];
+  if (role === "light") sets.push(["contrast-dark", TABS_DARK]);
+  for (const [key, tabs] of sets) {
+    if (!body) { add(key, "UNCHECKED", how); continue; }
+    const per = tabs.map(([name, hex]) => ({ name, hex, de: body.reduce((s, c) => s + de2000(c, hex), 0) / body.length }));
+    const low = per.filter(p => p.de < THRESHOLD);
+    const txt = `body ${body.length === 1 ? body[0] : "gradient " + body.join(",")} (${how})`;
+    let status = "PASS", msg = `${txt}; all >= ${THRESHOLD}`;
+    if (low.length && key === "contrast-dark" && role === "light") { status = "WARN"; msg = `${txt}; below ${THRESHOLD} on a dark tab: add a dark pair`; }
+    else if (low.length) { status = "FAIL"; msg = `${txt}; below ${THRESHOLD} on ${low.map(p => p.name.toLowerCase()).join(", ")}`; }
+    rows.push({ file: label, key, status, msg, per, body: body[0] });
+  }
+}
+function check(light, dark, names = ["favicon.svg", "favicon-dark.svg"]) {
+  const rows = [];
+  checkOne(light, names[0], dark ? "paired" : "light", rows);
+  if (dark) checkOne(dark, names[1], "dark", rows);
+  const st = rows.map(r => r.status);
+  const exit = st.includes("FAIL") ? 1 : st.includes("UNCHECKED") ? 3 : 0;
+  const tabs = TABS.map(([name, hex, , mode]) => {
+    const row = rows.find(r => r.key === "contrast-" + mode && r.per);
+    const un = rows.find(r => r.key === "contrast-" + mode && r.status === "UNCHECKED");
+    if (!row) return { name, hex, state: "unchecked", de: null, file: un ? un.file : names[0] };
+    const p = row.per.find(q => q.name === name);
+    return { name, hex, de: p.de, file: row.file, body: row.body,
+             state: p.de >= THRESHOLD ? "pass" : row.status === "WARN" ? "warn" : "fail" };
+  });
+  return { exit, rows, tabs };
+}
+
+/* ============================================================== state + render */
+const state = { subject: "cat", style: "kawaii", pal: {}, custom: "#2dd4bf", pair: false };
+for (const s of STYLES) if (s.palettes) state.pal[s.id] = s.palettes[0].id;
+
+function hsl(hex) {
+  const [r, g, b] = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255);
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn;
+  if (!d) return [0, 0, l];
+  const s = d / (1 - Math.abs(2 * l - 1));
+  const h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+  return [(h * 60 + 360) % 360, s, l];
+}
+function hex([h, s, l]) {
+  const a = s * Math.min(l, 1 - l), f = n => { const k = (n + h / 30) % 12; return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)); };
+  return "#" + [f(0), f(8), f(4)].map(v => Math.round(Math.max(0, Math.min(1, v)) * 255).toString(16).padStart(2, "0")).join("");
+}
+function paletteFor(styleId, palId = state.pal[styleId], custom = state.custom) {
+  const st = STYLES.find(s => s.id === styleId);
+  if (!st.palettes) return null;
+  if (palId === "custom") {
+    const [h, s, l] = hsl(custom);
+    return { id: "custom", name: "Custom " + custom, body: custom, accent: hex([h, Math.min(1, s + .05), Math.max(0, l - .2)]), blush: "#f43f5e" };
+  }
+  return st.palettes.find(p => p.id === palId) || st.palettes[0];
+}
+function render({ subject = state.subject, style = state.style, palette, custom = state.custom, pair = state.pair } = {}) {
+  const subj = SUBJECTS.find(s => s.id === subject), st = STYLES.find(s => s.id === style);
+  if (!subj || !st) throw new Error("unknown subject or style: " + subject + " / " + style);
+  const pal = paletteFor(style, palette ?? state.pal[style], custom);
+  const out = BUILD[style](rolesOf(subj), pal);
+  const note = `${subj.name.toLowerCase()} · ${st.name.toLowerCase()}${pal ? " · " + pal.name.toLowerCase() : ""} (cutify-that-tab builder)`;
+  const light = toSVG(out.grid, out.tile, note);
+  const dark = st.pairable && pair ? toSVG(out.dark, null, note + " · dark") : null;
+  return { light, dark, grid: out.grid, tile: out.tile || null, check: check(light, dark) };
+}
+const url = svg => "data:image/svg+xml," + encodeURIComponent(svg);
+function el(tag, props = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (k === "dataset") Object.assign(e.dataset, v);
+    else if (k === "style") e.style.cssText = v;
+    else if (k === "role" || k.includes("-")) e.setAttribute(k, v);
+    else e[k] = v;
+  }
+  e.append(...kids); return e;
+}
+const svgIcon = d => { const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  s.setAttribute("viewBox", "0 0 16 16"); s.setAttribute("shape-rendering", "crispEdges"); s.setAttribute("aria-hidden", "true");
+  s.innerHTML = `<path fill="currentColor" d="${d}"/>`; return s; };
+const ICON = {
+  copy: "M6 1h9v9h-2V3H6zM1 5h9v10H1zm2 2v6h5V7z",
+  done: "M13 3h2v2h-1v1h-1v1h-1v1h-1v1h-1v1H9v1H8v1H7v1H5v-1H4v-1H3v-1H2V9H1V8h2v1h1v1h1v1h2v-1h1V9h1V8h1V7h1V6h1V5h1z",
+  down: "M7 1h2v7h2V7h2v2h-1v1h-1v1h-1v1H7v-1H6v-1H5V9H4V7h2v1h1zM1 12h2v1h10v-1h2v3H1z",
+  close: "M3 3h2v1h1v1h1v1h2V5h1V4h1V3h2v2h-1v1h-1v1H9v2h1v1h1v1h1v2h-2v-1H9v-1H7v1H6v1H5v1H3v-2h1v-1h1V9h1V7H5V6H4V5H3z",
+};
+
+/* ---------- controls */
+function radio(name, value, checked, cardKids, onPick, extraClass = "") {
+  const input = el("input", { type: "radio", name, value, checked });
+  input.addEventListener("change", () => input.checked && onPick(value));
+  return el("label", { className: "opt" }, input, el("span", { className: "card " + extraClass }, ...cardKids));
+}
+function buildControls() {
+  const subjects = document.getElementById("subjects"), styles = document.getElementById("styles");
+  subjects.replaceChildren(...SUBJECTS.map(s => radio("subject", s.id, s.id === state.subject,
+    [el("img", { className: "px thumb", alt: "", width: 32, height: 32, dataset: { thumb: "subject:" + s.id } }), el("span", { textContent: s.name })],
+    v => { state.subject = v; update(); })));
+  styles.replaceChildren(...STYLES.map(s => radio("style", s.id, s.id === state.style,
+    [el("img", { className: "px thumb", alt: "", width: 32, height: 32, dataset: { thumb: "style:" + s.id } }),
+     el("span", {}, el("b", { textContent: s.name }), el("span", { textContent: s.feel }))],
+    v => { state.style = v; buildPalette(); update(); }, "style-card")));
+  buildPalette();
+}
+function chip(colors) { return el("span", { className: "chip", "aria-hidden": "true" }, ...colors.map(c => { const i = el("i"); i.style.background = c; return i; })); }
+function buildPalette() {
+  const st = STYLES.find(s => s.id === state.style), box = document.getElementById("palette");
+  document.getElementById("palette-legend").textContent = st.fixed ? "Colour (fixed by the style)" : "Colour";
+  if (st.fixed) { box.replaceChildren(el("div", { className: "fixed" }, chip(st.fixed.inks), el("span", { textContent: st.fixed.name + ": " + st.fixed.inks.join(" ") }))); return; }
+  const pick = v => { state.pal[st.id] = v; update(); };
+  const opts = st.palettes.map(p => radio("palette", p.id, state.pal[st.id] === p.id,
+    [chip(p.dark ? [p.body, p.dark] : [p.body, p.accent]), el("span", { textContent: p.name })], pick));
+  const kids = [el("div", { className: "swatches", role: "radiogroup", "aria-labelledby": "palette-legend" }, ...opts)];
+  if (st.custom) {
+    const customRadio = radio("palette", "custom", state.pal[st.id] === "custom", [chip([state.custom]), el("span", { textContent: "Custom" })], pick);
+    kids[0].append(customRadio);
+    const input = el("input", { type: "color", id: "custom-colour", value: state.custom });
+    input.addEventListener("input", () => {
+      state.custom = input.value; state.pal[st.id] = "custom";
+      customRadio.querySelector("input").checked = true; customRadio.querySelector(".chip i").style.background = input.value; update();
+    });
+    kids.push(el("label", { className: "custom-row", htmlFor: "custom-colour" }, input,
+      el("span", { textContent: "Custom body colour, e.g. your brand colour. The check shows whether it reads." })));
+  }
+  if (st.pairable) {
+    const cb = el("input", { type: "checkbox", id: "pair", checked: state.pair });
+    cb.addEventListener("change", () => { state.pair = cb.checked; update(); });
+    kids.push(el("label", { className: "toggle", htmlFor: "pair" }, cb, el("span", {}, "Dark-mode pair",
+      el("small", { textContent: "Ships a second, light-coloured file for dark tab bars, chosen by <link media>." }))));
+  }
+  box.replaceChildren(...kids);
+}
+
+/* ---------- preview, check, export */
+const prefersDark = matchMedia("(prefers-color-scheme: dark)");
+let current = null;
+function update() {
+  current = render();
+  const { light, dark, check: ck } = current;
+  for (const img of document.querySelectorAll("[data-thumb]")) {
+    const [kind, id] = img.dataset.thumb.split(":");
+    // thumbnails follow the page theme the way <link media> would: a 1-bit pick shows its dark twin on a dark page
+    const r = render(kind === "subject" ? { subject: id, pair: true } : { style: id, pair: true });
+    img.src = url(prefersDark.matches && r.dark ? r.dark : r.light);
+  }
+  const tabs = document.getElementById("tabs");
+  tabs.replaceChildren(...TABS.map(([name, hexv, fg, mode], i) => {
+    const t = ck.tabs[i], src = mode === "dark" && dark ? dark : light;
+    const tab = el("div", { className: "tab" }, el("img", { src: url(src), alt: "", width: 16, height: 16 }), "Your App Name");
+    const x = svgIcon(ICON.close); x.setAttribute("class", "x"); tab.append(x);
+    tab.style.cssText = `background:${hexv};color:${fg}`;
+    const big = el("div", { className: "big" }, el("img", { className: "px", src: url(src), alt: `${name} tab, 64 px enlargement`, width: 64, height: 64 }));
+    big.style.background = hexv;
+    const word = { pass: "Reads", warn: "Fades: add a dark pair", fail: "Fades into the tab", unchecked: "Not checked" }[t.state];
+    const badge = el("p", { className: "badge", dataset: { tab: name, state: t.state } }, el("b", { textContent: word }),
+      el("span", { className: "mono", textContent: t.de === null ? "body colour unknown" : `dE ${t.de.toFixed(1)} · needs ${THRESHOLD}${dark && mode === "dark" ? " · dark file" : ""}` }));
+    return el("div", { className: "tabrow" }, el("div", { className: "where" },
+      el("div", { className: "label" }, name + " ", el("code", { textContent: hexv })), el("div", { className: "bar" }, tab)), big, badge);
+  }));
+
+  const st = STYLES.find(s => s.id === state.style), callout = document.getElementById("callout");
+  callout.replaceChildren();
+  if (st.pairable) {
+    const pal = paletteFor(st.id);
+    if (!state.pair) {
+      const lows = ck.tabs.filter(t => t.state !== "pass").map(t => t.de.toFixed(1));
+      const btn = el("button", { type: "button", className: "primary", textContent: "Add the dark pair" });
+      btn.addEventListener("click", () => { state.pair = true; buildPalette(); update(); document.getElementById("pair").focus(); });
+      callout.append(el("div", { className: "callout" }, el("p", { textContent: lows.length
+        ? `${pal.name} fades on dark tab bars (dE ${lows.join(" and ")}, needs ${THRESHOLD}). Chrome does not invert favicons, so a 1-bit icon needs a light twin for dark mode.`
+        : `${pal.name} reads on every tab colour on its own, so the pair is optional.` }), btn));
+    } else {
+      callout.append(el("div", { className: "callout ok" }, el("p", { textContent: `Dark tabs now use favicon-dark.svg (${pal.dark}): same shape, light fill.` })));
+    }
+  }
+
+  const v = document.getElementById("verdict");
+  v.dataset.exit = ck.exit;
+  const warns = ck.rows.filter(r => r.status === "WARN").length;
+  v.replaceChildren(el("b", { textContent: { 0: "PASS", 1: "FAIL", 3: "UNCHECKED" }[ck.exit] }),
+    el("span", { textContent: `check-favicon.py would exit ${ck.exit}${warns ? ` · ${warns} warning${warns > 1 ? "s" : ""}` : ""}` }));
+  document.getElementById("checks").replaceChildren(...ck.rows.filter(r => r.status !== "n/a").map(r =>
+    el("li", {}, el("span", { className: "st", dataset: { s: r.status }, textContent: r.status }),
+      el("span", { className: "k mono", textContent: (r.file.endsWith("dark.svg") ? "dark " : "") + r.key }),
+      el("span", { className: "m", textContent: r.msg }))));
+
+  // keep each "Show the code" panel open across picks (update() rebuilds the whole file list, and a colour drag fires it per input)
+  const openFiles = new Set([...document.querySelectorAll("#files details[open]")].map(d => d.dataset.file));
+  const files = [["favicon.svg", light, "light"]];
+  if (dark) files.push(["favicon-dark.svg", dark, "dark"]);
+  const snippet = dark
+    ? `<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">\n<link rel="icon" type="image/svg+xml" href="/favicon-dark.svg?v=1"\n      media="(prefers-color-scheme: dark)">`
+    : `<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">`;
+  document.getElementById("files").replaceChildren(...files.map(([name, svg, id], i) => {
+    const copy = el("button", { type: "button", className: i === 0 ? "primary" : "", id: "copy-" + id });
+    setCopyLabel(copy, "Copy SVG");
+    copy.addEventListener("click", () => copyText(copy, svg, name, "Copy SVG"));
+    const dl = el("button", { type: "button", id: "download-" + id }, svgIcon(ICON.down), "Download .svg");
+    dl.addEventListener("click", () => download(name, svg));
+    return el("div", { className: "file" },
+      el("div", { className: "name" }, el("code", { textContent: name }),
+        el("small", { textContent: `${new Blob([svg]).size} bytes · 16-unit viewBox · crispEdges` })),
+      el("div", { className: "btns" }, copy, dl),
+      el("details", { style: "flex-basis:100%", dataset: { file: name }, open: openFiles.has(name) }, el("summary", { textContent: "Show the code" }), el("pre", { textContent: svg })));
+  }), (() => {
+    const copy = el("button", { type: "button", id: "copy-html" }); setCopyLabel(copy, "Copy");
+    copy.addEventListener("click", () => copyText(copy, snippet, "the link tags", "Copy"));
+    return el("div", { className: "file" }, el("div", { className: "name" }, "HTML",
+      el("small", { textContent: dark ? "both links; media goes on the dark one" : "one link; ?v= busts the old cached icon" })),
+      el("div", { className: "btns" }, copy), el("pre", { style: "flex-basis:100%", textContent: snippet }));
+  })());
+  setFavicon();
+}
+function setFavicon() {
+  if (!current) return;
+  document.getElementById("fav").href = url(prefersDark.matches && current.dark ? current.dark : current.light);
+}
+prefersDark.addEventListener("change", update);
+
+function setCopyLabel(btn, text, icon = ICON.copy) { btn.replaceChildren(svgIcon(icon), text); }
+const timers = new WeakMap();
+async function copyText(btn, text, what, label) {
+  let ok = true;
+  try { await navigator.clipboard.writeText(text); }
+  catch {
+    const ta = el("textarea", { value: text }); ta.style.cssText = "position:fixed;opacity:0"; document.body.append(ta); ta.select();
+    try { ok = document.execCommand("copy"); } catch { ok = false; } ta.remove();
+  }
+  btn.dataset.copied = ok ? "true" : "error";
+  setCopyLabel(btn, ok ? "Copied" : "Copy failed", ok ? ICON.done : ICON.copy);
+  // a new node each time: some screen readers do not announce the same words set again as plain text
+  document.getElementById("live").replaceChildren(el("span", { textContent: ok ? `Copied ${what} to the clipboard.` : "Copy failed. Open “Show the code” and copy it by hand." }));
+  clearTimeout(timers.get(btn));
+  timers.set(btn, setTimeout(() => { delete btn.dataset.copied; setCopyLabel(btn, label); }, 2000));
+}
+function download(name, svg) {
+  const a = el("a", { href: URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" })), download: name });
+  document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+/* ---------- test hook: drive the builder without the mouse (tests/tab_builder_smoke.mjs) */
+window.builder = {
+  subjects: SUBJECTS.map(s => s.id), styles: STYLES.map(s => s.id),
+  palettes: id => (STYLES.find(s => s.id === id).palettes || []).map(p => p.id),
+  render, check,
+  set(o = {}) {
+    if (o.subject) state.subject = o.subject;
+    if (o.style) state.style = o.style;
+    if (o.custom) state.custom = o.custom;
+    if (o.palette) state.pal[state.style] = o.palette;
+    if ("pair" in o) state.pair = !!o.pair;
+    buildControls(); update(); return current;
+  },
+  get current() { return current; },
+};
+buildControls();
+update();
+</script>
+</body>
+</html>
