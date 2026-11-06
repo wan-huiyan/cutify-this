@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+# Minimal ffprobe stand-in for huashu's film_gate.py on a machine with ffmpeg but no ffprobe. Put this folder first on PATH.
+# Answers only "-show_entries stream=width,height:format=duration -of json <file>" by parsing `ffmpeg -i <file>`.
+# ffmpeg is found via $FFMPEG, then PATH, then ~/.local/bin/ffmpeg.
+import json, os, re, shutil, subprocess, sys
+ff = os.environ.get('FFMPEG') or shutil.which('ffmpeg') or os.path.expanduser('~/.local/bin/ffmpeg')
+f = sys.argv[-1]
+err = subprocess.run([ff, '-hide_banner', '-i', f], capture_output=True, text=True).stderr
+m = re.search(r'Video:.*?(\d{2,5})x(\d{2,5})', err); d = re.search(r'Duration: (\d+):(\d+):([\d.]+)', err)
+if not m:
+    sys.exit('ffprobe shim: no video stream found in ' + f)
+dur = int(d[1]) * 3600 + int(d[2]) * 60 + float(d[3]) if d else 0
+print(json.dumps({'streams': [{'width': int(m[1]), 'height': int(m[2])}], 'format': {'duration': str(dur)}}))
