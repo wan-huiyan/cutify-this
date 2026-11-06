@@ -51,6 +51,18 @@ Re-check machine-specific items (paths, installed tools) with `command -v` befor
 | Words with no beat tag escape the pacing count | `build.py` fails on any `<text>` without `data-b` (it caught reasons tagged to the wrong beat). |
 | The 2.5 s spacing check only sees reveals logged through `R()` | Movement of things already on screen (pointer, token) is not counted; look at the live playback frames. |
 
+## Learned on the pizza example (first film made from the published instructions)
+
+| Trap | Fix |
+|---|---|
+| "Swap the `:root` tokens" did not re-theme the film: the page background, caption colour and the ink on gold were hard-coded, and `build.py` had no way to add CSS. | Fixed: all four are tokens now; pass a theme file with `build.py --css theme.css`. |
+| `R(sel, beat, off)` and `camTo(i, beat, off)` take a 0-based beat; `data-b` in the SVG is 1-based. | Write `R("#x", 0, 3)` for beat 1. |
+| `R()` on a wordless shape, or at offset 0, fails the spacing check: every `R()` is logged as words, and the caption counts as words at offset 0. | `R()` only for words, ≥ 2.5 s into the beat; shapes, movement and words that arrive with the caption use plain `tl` tweens at `T(beat, off)`. A label's background pill belongs inside the `R()` group, or it shows up empty first. |
+| `pace_check.py` counts the `picture` field in beats.json; `build.py` counts the SVG's tagged words. They drifted silently. | Fixed: `build.py` warns when they differ. |
+| A label visible from t = 0 is counted in the beat its `data-b` names, not when it is on screen. | Tag it with the beat in which the camera first shows it. |
+| The timing test samples the camera only at 1100 px, so narrow (`t`) frames are never speed-checked; a whole-world pull-back in a 4:5 frame shrank picture text to ~3 px. | Give every frame a `t` rect; on narrow screens end on a closer frame (the pizza's `all.t` shows only the road and the house). Check the 390 px stills by eye. |
+| No README picture tool. | `gif.py` seeks the film frame by frame in real Chrome and encodes a GIF (181 KB for 6.7 s at 960 px) or one PNG. |
+
 ## huashu gates that disagree with explainers paced for reading
 
 - `film_gate.py` turns RED when fast-motion frames are under 3.5 % of the film. Long still holds for reading do exactly that

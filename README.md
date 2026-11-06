@@ -124,6 +124,11 @@ Needs Node + Playwright and an installed Chrome for the scripts. Pairs with `spa
 
 ## 🪱 wiggle-that-diagram — make a diagram explain itself
 
+<p align="center">
+  <img src="docs/wiggle-that-diagram/pizza.gif" width="720" alt="Step 4 of a five-step animation: a phone shows a map with a red dot moving along an orange route and the words 6 min away, while a delivery scooter rides from the kitchen to a house at 12 Elm St. Under the picture the caption reads: The app follows the driver on a map, so Sam can watch the pizza get closer."/>
+  <br/><sub>Step 4 of 5 from the live style: how a pizza order travels from app to kitchen to door (21 KB, made-up example). <a href="https://wan-huiyan.github.io/cutify-this/wiggle/pizza.html">Watch the whole loop</a>.</sub>
+</p>
+
 Turn one static "how it works" picture (files flow in, rules check them, a person approves) into a short,
 **captioned, looping animation** that drops into an HTML slide deck or report, and offer it in **three styles**
 so people can pick:
