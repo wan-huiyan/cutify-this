@@ -37,6 +37,20 @@ js_syntax() { local name=$1; shift; local bad="" n=0 f
   done
   if [ -z "$bad" ]; then pass "$name ($n files)"; else fail "$name" "$bad"; fi; }
 
+# browser_suite LABEL FILE -> one PASS/FAIL line per assertion the Playwright test prints; exit 2 = setup missing.
+browser_suite() { local label=$1 file=$2 out rc lines l
+  if [ ! -d tests/node_modules/playwright ]; then
+    skip_unless_ci "$label" "Playwright not installed: npm install --prefix tests && npx --prefix tests playwright install chromium"; return; fi
+  out=$(node "$file" 2>&1); rc=$?
+  if [ $rc -eq 2 ]; then skip_unless_ci "$label" "$(printf '%s' "$out" | head -1)"; return; fi
+  lines=$(printf '%s\n' "$out" | grep -E '^(PASS|FAIL)  ' || true)
+  if [ -z "$lines" ]; then fail "$label" "exit $rc: $(printf '%s\n' "$out" | tail -5)"; return; fi
+  while IFS= read -r l; do
+    case "$l" in PASS*) pass "${l#PASS  }" ;; *) fail "${l#FAIL  }" ;; esac
+  done <<< "$lines"
+  [ $rc -ne 0 ] && [ -z "$(printf '%s\n' "$lines" | grep '^FAIL')" ] && fail "$label: exited $rc with no FAIL line" "$(printf '%s\n' "$out" | tail -5)"
+  return 0
+}
 TAB=plugins/cutify-that-tab/skills/cutify-that-tab
 SPK=plugins/sparkle-that-page/skills/sparkle-that-page
 TERM=plugins/cutify-that-terminal/skills/cutify-that-terminal
@@ -72,22 +86,7 @@ sweep
 echo "== sparkle-that-page"
 js_syntax "sparkle: node --check examples/*.js" $SPK/examples/*.js
 js_syntax "sparkle: node --check site/*.js (ES modules)" site/*.js
-if [ ! -d tests/node_modules/playwright ]; then
-  skip_unless_ci "sparkle: headless browser smoke test" "Playwright not installed: npm install --prefix tests && npx --prefix tests playwright install chromium"
-else
-  out=$(node tests/sparkle_smoke.mjs 2>&1); rc=$?
-  if [ $rc -eq 2 ]; then skip_unless_ci "sparkle: headless browser smoke test" "$(printf '%s' "$out" | head -1)"
-  else
-    lines=$(printf '%s\n' "$out" | grep -E '^(PASS|FAIL)  ' || true)
-    if [ -z "$lines" ]; then fail "sparkle: headless browser smoke test" "exit $rc: $(printf '%s\n' "$out" | tail -5)"
-    else
-      while IFS= read -r l; do
-        case "$l" in PASS*) pass "${l#PASS  }" ;; *) fail "${l#FAIL  }" ;; esac
-      done <<< "$lines"
-      [ $rc -ne 0 ] && [ -z "$(printf '%s\n' "$lines" | grep '^FAIL')" ] && fail "sparkle: smoke test exited $rc with no FAIL line" "$(printf '%s\n' "$out" | tail -5)"
-    fi
-  fi
-fi
+browser_suite "sparkle: headless browser smoke test" tests/sparkle_smoke.mjs
 
 echo "== cutify-that-terminal"
 check "terminal: bash -n verify-glyphs.sh" bash -n $TERM/scripts/verify-glyphs.sh

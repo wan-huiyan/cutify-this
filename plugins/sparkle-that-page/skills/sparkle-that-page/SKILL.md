@@ -1,15 +1,16 @@
 ---
 name: sparkle-that-page
-description: Use when a user wants to add cute, playful runtime effects to a web page — a fairy-wand or magic custom cursor (star / heart / moon / pixel / sailor-moon), a sparkle / star / heart / fairy-dust trail following the mouse on move and click, an animated floating scroll-depth / scroll-progress indicator (ring, comet bar, or climbing mascot), tab-title peekaboo ("come back!" when the tab loses focus), click confetti or heart burst, ambient floating petals / leaves / snowflakes / bubbles / fairy-dust, and cute-chrome touches (pastel ::selection, wobble hover, kawaii loading spinner, pastel scrollbar). Pick a color palette (candy / neon / meadow) and a pixel-art style variant on each. Skip for serious / corporate UIs, or when the user wants a full design system or a heavyweight particle framework.
+description: Use when a user wants to add cute, playful runtime effects to a web page — a fairy-wand or magic custom cursor (star / heart / moon / pixel / sailor-moon), a sparkle / star / heart / fairy-dust trail following the mouse on move and click, an animated floating scroll-depth / scroll-progress indicator (ring, comet bar, or climbing mascot), tab-title peekaboo ("come back!" when the tab loses focus), click confetti or heart burst, a rubber-stamp "Done!" on a button, ambient floating petals / leaves / snowflakes / bubbles / fairy-dust, cute-chrome touches (pastel ::selection, wobble hover, kawaii loading spinner, pastel scrollbar), opt-in synthesized sounds (chime / tick / twinkle), a typed secret word that sets off a party, and a sun / moon dark-mode switch that never flashes the wrong theme. Pick a color palette (candy / neon / meadow) and a pixel-art style variant on each. Skip for serious / corporate UIs, or when the user wants a full design system or a heavyweight particle framework.
 ---
 
 # Sparkle That Page ✨
 
 Make the whole browser page delightful — not just the favicon (that's the
-sibling skill `cutify-that-tab`). Seven self-contained, **zero-dependency**
+sibling skill `cutify-that-tab`). Ten self-contained, **zero-dependency**
 effects you paste in: a fairy-wand cursor, a sparkle trail, an animated scroll
-indicator, tab-title peekaboo, click confetti, ambient floaters, and
-cute-chrome touches. Each is one short vanilla file — copy, drop in, tweak a
+indicator, tab-title peekaboo, click confetti (with a rubber stamp), ambient
+floaters, cute-chrome touches, opt-in sounds, a secret word, and a sun / moon
+sky switch. Each is one short vanilla file — copy, drop in, tweak a
 `data-*` attribute. No npm, no build, no framework.
 
 ## Problem
@@ -54,6 +55,15 @@ CSS with a `<link>`, then set options via `data-*` attributes on `<html>`:
 <html data-wand="sailormoon" data-trail="fairydust" data-palette="candy">
 ```
 
+**Every effect starts on load** — drop in the script and it runs. Each also registers
+`window.SparkleThatPage.<name>` with `start()` and `destroy()`, so you can switch it off and
+on (a settings toggle, an SPA route, a reduced-motion change) without re-injecting the file:
+`start()` is idempotent (calling it twice never doubles listeners or layers), `destroy()` then
+`start()` brings the effect back and re-reads the `data-*` attributes, and `start()` keeps the
+same no-op guards as load (touch / coarse pointer, reduced motion). The `<script>` can sit in
+`<head>` or `<body>`: the effects that draw a layer wait for `DOMContentLoaded` when `<body>` does
+not exist yet (and `destroy()` cancels that wait).
+
 ### Step 0 · how often will it fire?
 
 Decide how often an effect fires *before* you decide how it looks — a rule from
@@ -68,6 +78,10 @@ moments. The defaults below follow it.
 | Wobble hover | tens per day | near-imperceptible (±2°, 0.35 s, mouse only) |
 | Floaters / fairy cursor / scroll ring | always on | fine on marketing and demo pages; never over data the user is reading or acting on |
 | Tab peekaboo | rare | fine as is |
+| Stamp (`data-stamp`) | once per finished task | the moment it marks is already rare; keep it on "done", "paid", "shipped" |
+| Sounds | as often as the effects they follow | off until the visitor switches them on; quiet (peak gain ≤ 0.08); only on bursts, celebrate clicks and the party |
+| Secret word / finale | rare (a few times ever) | fine as is; the finale is for "finished everything", not each step |
+| Sky switch | rare | fine as is; it never animates the page, only flips the theme |
 
 ### Color palette (shared across the particle effects)
 
@@ -93,27 +107,44 @@ tokens only when `data-palette` is set; otherwise it keeps the per-variant color
 
 ### 1 · Fairy-wand cursor — `fairy_cursor.js`
 
-Replaces the cursor with a wand SVG via `cursor: url(...) hotspot, auto`.
+Replaces the cursor with a wand SVG via `cursor: url(...) hotspot, auto`. Over anything
+clickable — `a[href]`, `button`, `[role=button]`, `label`, `summary`, `select`, checkbox /
+radio / submit / button inputs, `[data-celebrate]`, `[data-stamp]` — it swaps to a **glowing
+copy** of the wand (gold halo + two glints), so the wand tells you what is clickable. The two
+images live in `--stp-wand` and `--stp-wand-link` on `<html>` (the file injects its own
+`<style>`; set those two properties yourself to use your own art). Text inputs keep the I-beam.
 
 - `data-wand`: `star` (default) · `heart` · `moon` · `pixel` · `sailormoon`
   (gold crescent + pink heart gem).
+- **Gotcha — strict Content-Security-Policy.** The base wand is set on `<html>` through the CSSOM
+  (`root.style.cursor`), which a CSP such as `style-src 'self'` allows; only the glow rules live in an
+  injected `<style>`, which that CSP blocks. So under a strict CSP the wand still shows and you lose only
+  the glow over clickables (they fall back to the browser's own pointer). To keep the glow, allow the
+  style with a nonce / hash or ship the two rules in your own stylesheet.
 - **Gotcha — hotspot & size.** The hotspot (`26 5` in the file = the wand
   tip) must sit *inside* the image, and browsers cap custom cursors around
   128px. The 32×32 SVG is safe.
-- No-op on touch / coarse pointers (keeps the native cursor). Static image, so
-  reduced-motion is unaffected.
+- No-op on touch / coarse pointers and in `forced-colors` mode (keeps the system's
+  high-contrast pointer) — `start()` too. Static image, so reduced-motion is unaffected.
+- `fairyCursor.start()` / `.destroy()`; `destroy()` removes the style, the properties and the
+  `stp-wand` class on `<html>`.
 
 ### 2 · Sparkle trail — `sparkle_trail.js`
 
 A `pointer-events:none` overlay. Particles spawn on `mousemove` (rAF-throttled)
-and burst on `click`; recycled fixed pool (cap 80).
+and burst on `click`; recycled fixed pool (cap 80). **It rests when idle:** the rAF loop
+stops once no particle is alive and no move is pending, and the next `mousemove` or `click`
+wakes it — an untouched page makes zero frame callbacks. (`ambient_floaters` is the one effect
+that keeps a `requestAnimationFrame` loop on, by design: it is a drifting layer with no idle state.
+The scroll ring's idle bob is an endless transform animation run by the browser, not a frame callback.)
 
 - `data-trail`: `sparkle` (default) · `star` · `heart` · `pixel` · `fairydust`
   (small glowing dots). Colors come from `data-palette` (multi-color per particle).
 - `data-trail-density`: omit for the sparse default (a spawn every ≥ 24 px of
   pointer travel) · `storm` = dense, a spawn every ~16 ms (the v1.0 rate).
   Click bursts are the same either way.
-- No-op on touch and on reduced-motion.
+- No-op on touch and on reduced-motion (load and `start()`).
+- `sparkleTrail.start()` / `.destroy()`; the layer carries class `stp-trail`.
 
 ### 3 · Scroll-depth indicator — `scroll_indicator.js`
 
@@ -123,7 +154,13 @@ Fixed floating element driven by `scrollTop / (scrollHeight − innerHeight)`,
 - `data-scroll`: `ring` (default — filling % ring, bottom-right, with an idle
   bob) · `comet` (top progress bar with a sparkle head; `scaleX`) · `mascot` (a
   pixel face that climbs a rail on the right; `translateY`).
+- **Cheers at the bottom.** When you reach the end of the page the indicator element gets
+  the class `is-end` (and loses it when you scroll back up); the mascot hops and smiles, the ring
+  and the comet head pop once. Reduced motion: no hop or pop, but `is-end` still flips — so you
+  can style the finish yourself with `[data-stp-scroll].is-end { … }` (the element carries
+  `data-stp-scroll="<variant>"`).
 - Reduced-motion disables the idle bob; the indicator still tracks position.
+- `scrollIndicator.start()` / `.destroy()`.
 
 ### 4 · Tab-title peekaboo — `tab_title_peekaboo.js`
 
@@ -134,7 +171,10 @@ cute message, then restores on return. The one effect that ties back to
 - `data-peekaboo-msg` (default `come back! 🥺`), `data-peekaboo-favicon` (an
   emoji; **omit** to leave the favicon alone).
 - **Gotcha — taste.** Title-hijacking annoys some users; keep the message
-  gentle and consider not also swapping the favicon. Restores cleanly on focus.
+  gentle and consider not also swapping the favicon. Restores cleanly on focus
+  (the title to restore is read when the tab is hidden, so a title your app changed in
+  between is not overwritten).
+- `tabPeekaboo.start()` / `.destroy()`. Not a motion effect, so no reduced-motion guard.
 
 ### 5 · Click confetti / heart burst — `click_confetti.js`
 
@@ -148,7 +188,18 @@ gravity, time-based so it matches at 60 and 120 Hz) on click.
   `data-palette` recolors it (and `neon` adds glow).
 - Reduced motion: *fewer and gentler, not zero* — a qualifying click draws one
   small glyph that fades out in place over ~400 ms (no movement, no physics).
-- Exposes `SparkleThatPage.clickConfetti.burst(x, y)` to fire programmatically.
+- Exposes `SparkleThatPage.clickConfetti.burst(x, y)` to fire programmatically (it does
+  nothing while the effect is destroyed), plus `.start()` / `.destroy()` and `.active()` — true
+  while it runs. `destroy()` leaves the registry entry in place, so ask `active()` (as
+  `cute_sounds.js` and `secret_word.js` do), not "is the key there". Its canvas has class `stp-confetti`.
+- **Stamp — `data-stamp`.** Any element with `data-stamp="Done!"` gets, on click, a rotated
+  rubber-stamp label that drops onto it and lands with a squash, with a confetti burst from
+  `burst()` on the landing. The label text is the attribute's value (empty = `Done!`). It works
+  whether or not `data-confetti-on` matches, replaces the normal burst for that click, is
+  decorative (`aria-hidden`), takes its colour from `--stp-c1`, stays centred on its element if the page
+  scrolls meanwhile, and removes itself after ~1.6 s.
+  Reduced motion: the label simply appears and goes away — no slam, no confetti. Good for
+  "Mark done", "Paid!", "Saved" buttons. `<button data-stamp="Paid!">Pay invoice</button>`
 
 ### 6 · Ambient floaters — `ambient_floaters.js`
 
@@ -157,7 +208,9 @@ A slow `position:fixed; pointer-events:none` layer **behind** content.
 - `data-floaters`: `sakura` (default) · `leaves` · `snowflake` · `bubbles`
   (shiny gradient circles) · `dust` · `fairydust` (glowing). `data-floaters-count`
   (default 18, capped 60). `dust`/`fairydust` take `data-palette` colors.
-- No-op on reduced-motion.
+- No-op on reduced-motion (load and `start()`). `ambientFloaters.start()` / `.destroy()`.
+- Its loop never rests (a drifting layer has no idle); it is the only effect that keeps
+  requesting frames while nothing is happening — `destroy()` it where that matters.
 
 ### 7 · Cute-chrome touches — `cute_chrome.css`
 
@@ -170,6 +223,82 @@ Drop-in CSS, mostly global:
 - Pastel custom scrollbar (WebKit/Blink + Firefox `scrollbar-color`).
 - The `--stp-c1…c5` palette tokens (see Color palette) drive all three of the above.
 - All motion is wrapped in `@media (prefers-reduced-motion: no-preference)`.
+
+### 8 · Cute sounds — `cute_sounds.js`
+
+Tiny synthesized sounds from WebAudio oscillators and gain envelopes — **no audio files**. They are
+**off until the visitor switches them on**, and no `AudioContext` exists before that opt-in click.
+
+- **The switch.** A round speaker button (bottom-left) is rendered for you; or mark your own element
+  `data-sound-toggle` (an empty one gets the speaker icon; every one gets `aria-pressed`). The first click builds
+  the one `AudioContext` and plays a small confirmation; later toggles reuse it. The choice is remembered in
+  `localStorage` (`stp:sound`, inside try/catch); when "on" was remembered, the context is still not made at load but
+  by the first sound (browsers want a user gesture anyway).
+- **One voice per palette** (`<html data-palette>`, read each time a sound plays): `meadow` = triangle ·
+  `neon` = sine, slightly detuned · `candy` = soft square (low gain, low-passed). Peak gain is ≤ 0.08 —
+  the detuned neon pair feeds one gain node, so each of its two oscillators gets half to keep the sum there.
+- **Sounds:** `chime` (a stamp landing; a `[data-confetti]` burst), `tick` (a click on `[data-celebrate]`, which then
+  chimes with its burst), `twinkle` (the secret-word party), `on` (the confirmation). The click hooks only fire while
+  `click_confetti.js` is running (`clickConfetti.active()`; after `destroy()` they are silent) and follow its rule (`data-confetti-on` selector, else `[data-celebrate], [data-confetti]`);
+  `data-confetti-on="*"` does **not** make every click chime.
+- **Reduced motion:** sound is not motion, so `prefers-reduced-motion` does not mute it — the visitor's own switch does.
+  (A stamp chimes immediately instead of on the landing under reduced motion.)
+- `SparkleThatPage.sounds` = `{ play(name), enabled(), setEnabled(bool), start(), destroy() }`. `play()` returns `true` when
+  it scheduled a sound, `false` when sound is off / destroyed / the name is unknown. `destroy()` removes the button and
+  closes the context. The button is styled inline (it works without `cute_chrome.css`).
+- **Gotcha — taste.** Sound the visitor didn't ask for is the fastest way to be closed. Keep it opt-in, keep it quiet.
+
+### 9 · Secret word — `secret_word.js`
+
+Type a secret word anywhere on the page and it throws a little party: a big confetti burst, a status line and (if
+sound is on) the twinkle. A wink for the curious, not a feature to explain.
+
+- `data-secret` on `<html>` sets the word (default `magic`, case-insensitive, read at every key press).
+- **Never while writing:** ignored inside text inputs, textareas, selects and contenteditable (also inside an open
+  shadow root; a closed one hides its field from the page), and with Ctrl / Cmd /
+  Alt held; typing in a field also forgets the letters typed so far. (Checkboxes and buttons don't count as fields.)
+- **Confetti:** calls `SparkleThatPage.clickConfetti.burst()` from three points when `click_confetti.js` is running
+  (`clickConfetti.active()`); otherwise (or if it was destroyed) a small self-contained canvas draws it and removes
+  itself when empty.
+- **Reduced motion:** no confetti — one calm message in a `role="status"` line (bottom-centre), then it goes away.
+- `SparkleThatPage.secretWord` = `{ party(), finale(msg), start(), destroy() }`. **`finale(msg)` is the hook for
+  "the visitor finished everything"** — call it from your own code (last task ticked, last step done): about two seconds
+  of confetti waves, a chime + twinkle and `msg` (default "All done — well done!") in the status line. Both do nothing
+  while destroyed.
+
+### 10 · Sky switch — `sky_switch.js` + a head snippet
+
+A sun / moon button that flips the page between light and dark and **never flashes the wrong theme**. The theme
+lives on `<html data-theme="light|dark">`; your CSS styles itself from that attribute. Two parts, and the first one
+is the point:
+
+1. **The snippet, pasted into `<head>` before any stylesheet.** It runs synchronously before first paint, reads the saved
+   choice (`localStorage` key `stp:theme`, in try/catch) or falls back to `prefers-color-scheme`, and sets the attribute:
+
+   ```html
+   <script>(function(){var r=document.documentElement,c=r.getAttribute("data-theme"),t;if(c&&c!=="light"&&c!=="dark")return;try{t=localStorage.getItem("stp:theme")}catch(e){}if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";r.setAttribute("data-theme",t)})()</script>
+   ```
+
+   Do **not** `defer` it or move it to the end of `<body>` — that is exactly the flash. (`sky_switch.js` also sets the
+   attribute if the snippet is missing, but by then the first frame may already be painted in the wrong theme.)
+2. **`sky_switch.js`** (anywhere) renders the button — `class="stp-sky"`, top-left, `aria-label="Dark mode"`,
+   `aria-pressed` (true = dark) — flips the attribute on click and saves it. Or mark your own element `data-sky-toggle`.
+   Both glyphs are in the button and the JS hides the unused one, so it works without `cute_chrome.css`; the stylesheet
+   adds the round look and a small crossfade (only under `prefers-reduced-motion: no-preference`).
+
+- **Style the page from the attribute**, and set `color-scheme` so form controls follow:
+  `[data-theme="dark"] { color-scheme: dark; --bg: …; }`. Give cards and panels their own dark backgrounds, not just
+  the page (light cards under light text are unreadable). `demo.html` shows the pattern with CSS variables.
+- **No saved choice:** the page follows the computer's light / dark setting, live, until the visitor presses the button.
+- **Your own theme names are left alone.** If `<html data-theme>` already holds something other than `light` / `dark`
+  (daisyUI's `cupcake`, a Tailwind theme, …), neither the head snippet nor `sky_switch.js` touches it on load or when the
+  computer's setting changes. Only a press of the toggle — an explicit choice — replaces it with `light` or `dark`; if your CSS
+  does not style those two values, do not add the toggle to that page.
+- Fires a `stp:theme` event on `<html>` (`detail` = `"light"` / `"dark"`).
+- `SparkleThatPage.skySwitch` = `{ theme(), set("light"|"dark"), start(), destroy() }`. `destroy()` removes the button and
+  listeners but leaves `data-theme` alone (it is page state).
+- **Known limit:** `cute_chrome.css` keeps its pastel-on-white scrollbar in dark mode; restyle it from `[data-theme="dark"]`
+  if you want it to match.
 
 ## Global constraints (baked into every effect — keep them)
 
@@ -188,25 +317,38 @@ Drop-in CSS, mostly global:
   listeners are `passive`, and only `transform`/`opacity` are animated (plus the
   scroll ring's `stroke-dashoffset`, on a 48 px SVG). The confetti canvas is
   scaled by `devicePixelRatio`.
-- Each JS effect registers a **teardown** on a shared registry:
-  `window.SparkleThatPage.<name>.destroy()` (for SPA route changes). Keys:
-  `fairyCursor`, `sparkleTrail`, `scrollIndicator`, `tabPeekaboo`,
-  `clickConfetti`, `ambientFloaters`.
-- **z-index map:** ambient floaters `0` (behind content); scroll indicator
-  `2147483601`; trail `2147483600`; confetti `2147483602`.
+- Each JS effect auto-starts on load and registers `start()` and a **teardown** on a shared
+  registry: `window.SparkleThatPage.<name>.start()` / `.destroy()` (for SPA route changes, a
+  settings toggle). `start()` is idempotent and keeps the guards above; `destroy()` then
+  `start()` brings the effect back. Keys: `fairyCursor`, `sparkleTrail`, `scrollIndicator`,
+  `tabPeekaboo`, `clickConfetti` (also `.burst(x, y)` and `.active()`), `ambientFloaters`, `sounds`, `secretWord`, `skySwitch`.
+- **Idle means idle:** the sparkle trail and the confetti canvas stop requesting animation
+  frames when nothing is moving; only the ambient floaters (a drifting layer by design) keep a
+  `requestAnimationFrame` loop. (The scroll ring's idle bob is an endless transform animation run by the browser.)
+- **z-index map:** ambient floaters `0` (behind content); trail `2147483600`; scroll indicator
+  `2147483601`; confetti canvas and the stamp `2147483602`; the sound / sky buttons and the secret-word
+  status line `2147483603`.
 
 ## Verify — at real interaction, in a real browser
 
 Like the favicon skill's "file previews lie" rule, but harder: a `cursor:url()`
 and rAF sparkle trails are nearly invisible to DOM snapshots. Open
-`examples/demo.html` (it composes all seven with toggles, palette selector, and
+`examples/demo.html` (it composes the effects with toggles, a palette selector, and
 variant dropdowns — it's both the showcase and the verify tool) and check:
 
 - [ ] Each effect turns on/off; variants and palettes switch live.
+- [ ] Fairy cursor on: hover the link / a button / the checkbox in the "glow" section — the
+      wand lights up over them and is plain over text.
+- [ ] Click confetti on: click the **Mark done** / **Pay invoice** buttons — a rotated stamp
+      lands with a squash and confetti bursts; the stamp removes itself after ~1.6 s.
+- [ ] Scroll indicator on: scroll to the very bottom — it cheers and has class `is-end`; scroll up, it clears.
+- [ ] Trail idle: with the trail on and the mouse still, DevTools shows no animation-frame
+      activity once the dust has faded (`node tests/sparkle_smoke.mjs` checks this and the rest).
 - [ ] Clicks and scrolling are **not** blocked anywhere (overlays are
       `pointer-events:none`).
 - [ ] `prefers-reduced-motion: reduce` → trail / floaters suppress; confetti
-      shows one fading glyph per click; the scroll indicator still tracks.
+      shows one fading glyph per click; a stamp appears without slam or confetti; the
+      scroll indicator still tracks and still flips `is-end`.
 - [ ] No console errors.
 - [ ] **Eyeball it.** Programmatic checks can't prove "cute" — look at the
       cursor, the trail, a confetti burst, the floaters.
@@ -220,18 +362,22 @@ cache. In production this is a non-issue — the files don't change between load
 
 ## Examples directory
 
-`examples/` ships eight files — seven effects + the live demo:
+`examples/` ships eleven files — ten effect files + the live demo. Every `.js` file auto-starts and
+exposes `start()` / `destroy()` on `window.SparkleThatPage.<name>`:
 
 | File | Effect | Key `data-*` |
 |---|---|---|
-| `fairy_cursor.js` | wand cursor | `data-wand` (star/heart/moon/pixel/sailormoon) |
+| `fairy_cursor.js` | wand cursor + glowing wand over clickables | `data-wand` (star/heart/moon/pixel/sailormoon); `--stp-wand`, `--stp-wand-link` |
 | `sparkle_trail.js` | mouse trail | `data-trail` (sparkle/star/heart/pixel/fairydust), `data-trail-density` (storm), `data-palette` |
-| `scroll_indicator.js` | scroll depth | `data-scroll` (ring/comet/mascot) |
+| `scroll_indicator.js` | scroll depth; cheers (`is-end`) at the bottom | `data-scroll` (ring/comet/mascot) |
 | `tab_title_peekaboo.js` | tab blur message | `data-peekaboo-msg`, `data-peekaboo-favicon` |
-| `click_confetti.js` | click burst | `data-confetti` (heart/star/confetti/petal/pixel), `data-confetti-on` (`*` = every click; default `[data-celebrate], [data-confetti]`), `data-palette` |
+| `click_confetti.js` | click burst + rubber-stamp | `data-stamp` (label text; default "Done!"), `data-confetti` (heart/star/confetti/petal/pixel), `data-confetti-on` (`*` = every click; default `[data-celebrate], [data-confetti]`), `data-palette` |
 | `ambient_floaters.js` | background layer | `data-floaters` (sakura/leaves/snowflake/bubbles/dust/fairydust), `data-floaters-count`, `data-palette` |
-| `cute_chrome.css` | selection/wobble/spinner/scrollbar + palette tokens | `.stp-wobble`, `.stp-spinner` classes, `--stp-c1…c5` |
-| `demo.html` | live showcase + verify tool | — |
+| `cute_sounds.js` | opt-in synthesized sounds (`SparkleThatPage.sounds`) | `data-sound-toggle` (your own switch), `data-palette` (the voice); `localStorage` `stp:sound` |
+| `secret_word.js` | typed secret word → party; `finale()` hook (`SparkleThatPage.secretWord`) | `data-secret` (default `magic`) |
+| `sky_switch.js` | sun / moon theme toggle (`SparkleThatPage.skySwitch`) + the no-flash `<head>` snippet (section 10) | `data-sky-toggle` (your own switch); sets `<html data-theme>`; `localStorage` `stp:theme` |
+| `cute_chrome.css` | selection/wobble/spinner/scrollbar + palette tokens + the sky switch's look | `.stp-wobble`, `.stp-spinner` classes, `--stp-c1…c5` |
+| `demo.html` | live showcase + verify tool (stamp buttons, a link to hover for the glow, room to scroll to the bottom, the speaker + sun/moon toggles, the secret word; themed from `data-theme`) | — |
 
 ## Prior art / see also
 
@@ -258,6 +404,18 @@ Sibling skill: **`cutify-that-tab`** — the cute favicon half of the
 
 ## Changelog
 
+- **v1.2.0** (2026-11-06) — Ideas back from pomodo, which ships 6 of these effects, plus
+  three new effects. Every effect keeps starting on load and gains `start()` next to
+  `destroy()` (idempotent; scripts in `<head>` wait for the body). The trail stops its
+  animation loop when no dust is moving. The wand glows over things you can click
+  (base wand set inline, so a strict CSP only loses the glow). The scroll buddy cheers
+  at the bottom (`is-end`). New `data-stamp="Done!"`: a rubber stamp lands with a
+  burst and stays on its button while you scroll; `clickConfetti.active()`. New
+  `cute_sounds.js` (oscillators only, no AudioContext before the opt-in click, one
+  voice per palette), `secret_word.js` (type "magic" for a party; `finale()`), and
+  `sky_switch.js` with a no-flash `<head>` snippet that leaves other `data-theme`
+  values alone. The browser smoke test grows from 6 to 70 assertions, each new one
+  shown to fail when its feature is broken.
 - **v1.1.0** (2026-10-28) — Delight budget + animation fixes. New "Step 0 · how
   often will it fire?" (frequency gate, credited to `animate` in
   emilkowalski/skills). Click confetti now fires only on `[data-celebrate],

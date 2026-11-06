@@ -6,6 +6,7 @@
  * - add class "stp-wobble" to buttons/links for a gentle hover (mouse only)
  * - <span class="stp-spinner"></span> = a kawaii 3-dot bouncing loader
  * - pastel custom scrollbar (WebKit/Blink)
+ * - the sky switch's look (.stp-sky / [data-sky-toggle], made by sky_switch.js): a round sun/moon button that follows the page's color-scheme
  * Motion is disabled under prefers-reduced-motion. */
 :root { --stp-c1: #f472b6; --stp-c2: #c084fc; --stp-c3: #fde047; --stp-c4: #a5b4fc; --stp-c5: #fb7185; --stp-c6: ; --stp-ink: #fff; }
 [data-palette="neon"] { --stp-c1: #2ee6ff; --stp-c2: #b6ff3d; --stp-c3: #ff5ad0; --stp-c4: #ffb43d; --stp-c5: #ffffff; --stp-c6: ; --stp-ink: #0b1020; }
@@ -45,3 +46,18 @@
 ::-webkit-scrollbar-track { background: #fdf2f8; background: color-mix(in srgb, var(--stp-c1) 10%, #fff); }
 ::-webkit-scrollbar-thumb { background: #f9a8d4; background: color-mix(in srgb, var(--stp-c1) 60%, #fff); border-radius: 6px; border: 3px solid #fdf2f8; border-color: color-mix(in srgb, var(--stp-c1) 10%, #fff); }
 ::-webkit-scrollbar-thumb:hover { background: var(--stp-c1); }
+
+/* sky switch (sky_switch.js): the button works without this file (position, size and which glyph shows come from the JS);
+ * this adds the round look and the sun/moon crossfade. Canvas / CanvasText follow the page's color-scheme, so it suits light and dark. */
+.stp-sky, [data-sky-toggle][data-sky-icon] {
+  border-radius: 50%; border: 2px solid var(--stp-c1); background: Canvas; color: CanvasText;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .18);
+}
+.stp-sky:hover, [data-sky-toggle][data-sky-icon]:hover { border-color: var(--stp-c2); }
+.stp-sky:focus-visible, [data-sky-toggle]:focus-visible, [data-sound-toggle]:focus-visible { outline: 3px solid var(--stp-c2); outline-offset: 3px; }
+.stp-sky .stp-sun, .stp-sky .stp-moon { transform-box: fill-box; transform-origin: center; }
+@media (prefers-reduced-motion: no-preference) {
+  .stp-sky .stp-sun, .stp-sky .stp-moon { transition: opacity .3s ease, transform .4s cubic-bezier(0.23, 1, 0.32, 1); }
+  .stp-sky .stp-sun[opacity="0"] { transform: rotate(-60deg) scale(.6); }
+  .stp-sky .stp-moon[opacity="0"] { transform: rotate(60deg) scale(.6); }
+}
