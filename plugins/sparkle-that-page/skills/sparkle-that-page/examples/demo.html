@@ -5,44 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>✨ sparkle-that-page — live demo</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%A8%3C/text%3E%3C/svg%3E">
+  <!-- sky switch, part 1: runs before first paint, so the saved (or system) theme is on <html> before anything is drawn. Keep it here, not deferred. -->
+  <script>(function(){var r=document.documentElement,c=r.getAttribute("data-theme"),t;if(c&&c!=="light"&&c!=="dark")return;try{t=localStorage.getItem("stp:theme")}catch(e){}if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";r.setAttribute("data-theme",t)})()</script>
   <!-- cute-chrome is global (selection / scrollbar) and always on in this demo -->
   <link rel="stylesheet" href="./cute_chrome.css">
   <style>
-    :root { color-scheme: light; }
+    /* the page styles itself from [data-theme]; the sky switch (and the head snippet) set it */
+    :root, [data-theme="light"] {
+      color-scheme: light;
+      --ink: #4c1d63; --bg: linear-gradient(180deg, #fdf2f8 0%, #f5f3ff 50%, #eff6ff 100%); --lede: #7c3aed; --h2: #be185d;
+      --card: rgba(255,255,255,.7); --card-line: #fbcfe8; --card-glow: rgba(192,132,252,.12);
+      --panel: rgba(255,255,255,.96); --panel-line: #f0abfc; --panel-h3: #a855f7; --note: #9333ea;
+      --code-bg: #fff; --code-line: #f0abfc; --code-ink: #a21caf; --link: #a21caf; --field-line: #e9d5ff; --field-bg: #fff; --faint: #c084fc;
+    }
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --ink: #efe2f7; --bg: linear-gradient(180deg, #1a1030 0%, #150f2b 50%, #0f1426 100%); --lede: #c4a8ff; --h2: #f9a8d4;
+      --card: rgba(38,26,66,.78); --card-line: #4a3478; --card-glow: rgba(0,0,0,.35);
+      --panel: rgba(30,20,56,.96); --panel-line: #5b3f94; --panel-h3: #c4a8ff; --note: #d8b4fe;
+      --code-bg: #241a3f; --code-line: #5b3f94; --code-ink: #f0abfc; --link: #f0abfc; --field-line: #5b3f94; --field-bg: #2a1f4a; --faint: #a78bfa;
+    }
     body {
       margin: 0; font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
-      color: #4c1d63; background: linear-gradient(180deg, #fdf2f8 0%, #f5f3ff 50%, #eff6ff 100%);
+      color: var(--ink); background: var(--bg); background-color: #1a1030; background-attachment: fixed; min-height: 100vh;
     }
+    [data-theme="light"] body, :root:not([data-theme]) body { background-color: #fdf2f8; }
     header { text-align: center; padding: 64px 20px 28px; }
     header h1 { font-size: 2.4rem; margin: 0 0 6px; letter-spacing: -.5px; }
-    header p { margin: 4px auto; max-width: 640px; color: #7c3aed; }
+    header p { margin: 4px auto; max-width: 640px; color: var(--lede); }
     code.install {
       display: inline-block; margin-top: 12px; padding: 8px 14px; border-radius: 10px;
-      background: #fff; border: 1px solid #f0abfc; color: #a21caf; font-size: 13.5px;
+      background: var(--code-bg); border: 1px solid var(--code-line); color: var(--code-ink); font-size: 13.5px;
     }
     main { max-width: 720px; margin: 0 auto; padding: 0 24px 160px; }
     section {
-      margin: 28px 0; padding: 28px; border-radius: 18px; background: rgba(255,255,255,.7);
-      border: 1px solid #fbcfe8; box-shadow: 0 6px 24px rgba(192,132,252,.12);
+      margin: 28px 0; padding: 28px; border-radius: 18px; background: var(--card);
+      border: 1px solid var(--card-line); box-shadow: 0 6px 24px var(--card-glow);
     }
-    section h2 { margin-top: 0; color: #be185d; }
+    section h2 { margin-top: 0; color: var(--h2); }
     .btn {
       cursor: pointer; border: none; border-radius: 12px; padding: 12px 20px; margin: 6px 6px 0 0;
       font: inherit; font-weight: 600; color: #fff; background: linear-gradient(135deg, #f472b6, #c084fc);
       box-shadow: 0 4px 14px rgba(192,132,252,.4);
     }
+    a.demo-link { color: var(--link); font-weight: 600; }
     .spinner-row { display: flex; align-items: center; gap: 18px; margin-top: 14px; }
     aside#panel {
       position: fixed; top: 14px; right: 14px; z-index: 2147483640; width: 232px;
-      background: rgba(255,255,255,.96); border: 1px solid #f0abfc; border-radius: 16px;
+      background: var(--panel); border: 1px solid var(--panel-line); border-radius: 16px;
       padding: 14px 16px; box-shadow: 0 10px 30px rgba(168,85,247,.22); font-size: 13.5px;
     }
-    aside#panel h3 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: .5px; color: #a855f7; }
+    aside#panel h3 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: .5px; color: var(--panel-h3); }
     .ctl { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 7px 0; }
     .ctl label { display: flex; align-items: center; gap: 7px; cursor: pointer; }
-    .ctl select { font: inherit; font-size: 12px; border-radius: 7px; border: 1px solid #e9d5ff; padding: 2px 4px; background: #fff; }
-    .note { margin-top: 10px; padding-top: 10px; border-top: 1px dashed #f0abfc; color: #9333ea; font-size: 12px; }
-    @media (max-width: 640px) { aside#panel { position: static; width: auto; margin: 16px; } }
+    .ctl select { font: inherit; font-size: 12px; border-radius: 7px; border: 1px solid var(--field-line); padding: 2px 4px; background: var(--field-bg); color: inherit; }
+    .note { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--panel-line); color: var(--note); font-size: 12px; }
+    /* the text box in the secret-word section follows the theme (a bare UA input stays light grey in dark mode); the placeholder uses --note for contrast */
+    #secret-field { font: inherit; font-size: 14px; color: inherit; background: var(--field-bg); border: 1px solid var(--field-line); border-radius: 8px; padding: 6px 10px; }
+    #secret-field::placeholder { color: var(--note); opacity: 1; font-style: italic; }
+    /* narrow screens: the sun / moon and speaker buttons are fixed at the left edge (14px + 40px), so keep a 62px gutter there instead of letting text slide under them */
+    @media (max-width: 640px) {
+      aside#panel { position: static; width: auto; margin: 16px 16px 16px 62px; }
+      main { padding: 0 16px 160px 62px; }
+      section { padding: 20px; }
+    }
   </style>
 </head>
 <body>
@@ -67,6 +93,19 @@
     </section>
 
     <section>
+      <h2>Stamp it ✅</h2>
+      <p>With <strong>Click confetti</strong> on, a button marked <code>data-stamp</code> lands a rubber-stamp label on itself and bursts confetti. The text is the attribute's value.</p>
+      <button class="btn stp-wobble" data-stamp>Mark done</button>
+      <button class="btn stp-wobble" data-stamp="Paid!">Pay invoice</button>
+    </section>
+
+    <section>
+      <h2>Things worth clicking glow ✨</h2>
+      <p>With <strong>Fairy cursor</strong> on, hover a <a class="demo-link" href="https://github.com/wan-huiyan/cutify-this" target="_blank" rel="noopener">link</a>, a button above, or this
+      <label><input type="checkbox"> checkbox</label> — the wand lights up over anything clickable and goes back to plain over text.</p>
+    </section>
+
+    <section>
       <h2>Loading, the cute way</h2>
       <p>A kawaii three-dot spinner from <code>cute_chrome.css</code> — no SVG, no GIF, pure CSS:</p>
       <div class="spinner-row"><span class="stp-spinner"></span> <em>fetching adorable things…</em></div>
@@ -74,7 +113,7 @@
 
     <section>
       <h2>Scroll down to fill the meter 📜</h2>
-      <p>Turn on the <strong>Scroll indicator</strong> (ring / comet / mascot) and scroll — it tracks how far down the page you are.</p>
+      <p>Turn on the <strong>Scroll indicator</strong> (ring / comet / mascot) and scroll — it tracks how far down the page you are, and cheers (class <code>is-end</code>) when you reach the very bottom.</p>
     </section>
 
     <section>
@@ -88,13 +127,29 @@
     </section>
 
     <section>
+      <h2>Sounds, a secret word and the sky 🔊</h2>
+      <p>The round speaker at the bottom-left turns on tiny synthesized sounds (off until you press it): a chime for confetti and stamps, a soft tick on the celebrate button, a twinkle for the party below. Each palette has its own voice — try neon, then candy.</p>
+      <p>🤫 Psst — type the secret word <strong>magic</strong> anywhere on this page (not inside a text box) for a party. Change the word with <code>data-secret</code> on <code>&lt;html&gt;</code>.</p>
+      <label>Text box (typing here never triggers it): <input type="text" id="secret-field" placeholder="try typing magic here"></label>
+      <p><button class="btn stp-wobble" data-celebrate>🔔 Celebrate (tick + chime)</button>
+      <button class="btn stp-wobble" id="finale-btn">🏁 Finish everything</button></p>
+      <p>The sun / moon button at the top-left flips light and dark, remembers your choice and never flashes the wrong theme on reload.</p>
+    </section>
+
+    <section>
       <h2>Plenty of room to scroll</h2>
       <p>This section exists so the scroll meter has somewhere to go. Keep scrolling…</p>
-      <p style="height:60vh;display:flex;align-items:flex-end;color:#c084fc">…almost at the bottom ✦</p>
+      <p style="height:60vh;display:flex;align-items:flex-end;color:var(--faint)">…almost at the bottom ✦</p>
+      <p style="margin:0;color:var(--h2);font-weight:600">You made it — the bottom! 🎀</p>
     </section>
   </main>
 
+  <!-- always on here: the speaker button is the visitor's opt-in, the secret word is just a typed word, the sky switch is part 2 of the head snippet -->
+  <script src="./cute_sounds.js"></script>
+  <script src="./secret_word.js"></script>
+  <script src="./sky_switch.js"></script>
   <script>
+    document.getElementById("finale-btn").addEventListener("click", function () { window.SparkleThatPage.secretWord.finale(); });
     // Each effect: dataset key it reads, its file, and variant options.
     var EFFECTS = [
       { key: "fairyCursor",     file: "fairy_cursor.js",       label: "🪄 Fairy cursor",      attr: "wand",     variants: ["star", "heart", "moon", "pixel", "sailormoon"] },

@@ -49,7 +49,7 @@ done
 
 | | Skill | Say this to Claude | You get | Try it |
 |---|---|---|---|---|
-| ✨ | [**sparkle-that-page**](#-sparkle-that-page--cute-page-effects) | "make this page more magical" | 7 drop-in effects, 24 variants, 3 palettes, zero dependencies | [live demo](https://wan-huiyan.github.io/cutify-this/site/aurora.html) |
+| ✨ | [**sparkle-that-page**](#-sparkle-that-page--cute-page-effects) | "make this page more magical" | 10 drop-in effects (cursor, trail, confetti, stamp, sounds, secret word, sky switch…), 3 palettes, zero dependencies | [live demo](https://wan-huiyan.github.io/cutify-this/site/aurora.html) |
 | 🎀 | [**cutify-that-tab**](#-cutify-that-tab--a-cute-favicon-that-survives-the-tab) | "put something cute in the browser tab" | 1 SVG favicon from 78 starters in 7 styles, checked against 4 Chrome tab colours | [style gallery](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/styles.html) |
 | 🐛 | [**hatch-that-world**](#-hatch-that-world--your-app-as-a-little-world) | "make this dashboard cute, like the morning brief" | your data drawn as a scene, switchable worlds, a mascot with moods | [morning-fairy](https://github.com/wan-huiyan/morning-fairy) |
 | 🪱 | [**wiggle-that-diagram**](#-wiggle-that-diagram--make-a-diagram-explain-itself) | "animate this how-it-works diagram" | a captioned, looping explainer in 3 styles, paced so people can read it | [3 styles](https://wan-huiyan.github.io/cutify-this/wiggle/) |
@@ -75,8 +75,19 @@ done
 
 **▶ [Live demo](https://wan-huiyan.github.io/cutify-this/) · landing pages: [Aurora (dark)](https://wan-huiyan.github.io/cutify-this/site/aurora.html) · [Bubblegum (bright)](https://wan-huiyan.github.io/cutify-this/site/bubblegum.html)**
 
-Seven self-contained, **zero-dependency** effects: one short vanilla file each, no npm, no build. Wire them with
+Ten self-contained, **zero-dependency** effects: one short vanilla file each, no npm, no build. Wire them with
 `<script>` / `<link>`, then choose options with `data-*` attributes on `<html>`.
+
+<table>
+<tr>
+<td width="50%"><img src="docs/readme/sparkle-stamp.png" alt="A pink Pay invoice button with a tilted PAID! rubber stamp landing on it and a burst of pastel hearts around it"/></td>
+<td width="50%"><img src="docs/readme/sparkle-secret-word.png" alt="The demo page in dark mode covered in confetti after typing the word magic, with a toast that says You found the secret word, a moon button top-left and a muted speaker bottom-left"/></td>
+</tr>
+<tr>
+<td><sub><b>A stamp for the big moments.</b> <code>data-stamp="Paid!"</code> lands a rubber stamp on the button with a burst, and it stays put while you scroll.</sub></td>
+<td><sub><b>A secret, a sky and a speaker.</b> Type <i>magic</i> for a party; the moon button flips the theme with no flash on reload; sounds stay off until you press the speaker. (Dark mode.)</sub></td>
+</tr>
+</table>
 
 | | Effect | File | Variants (`data-*`) |
 |---|---|---|---|
@@ -87,6 +98,10 @@ Seven self-contained, **zero-dependency** effects: one short vanilla file each, 
 | 🎉 | Click confetti | `click_confetti.js` | `data-confetti` = heart · star · confetti · petal · pixel |
 | 🌸 | Ambient floaters | `ambient_floaters.js` | `data-floaters` = sakura · leaves · snowflake · bubbles · dust · fairydust |
 | 🎀 | Cute chrome | `cute_chrome.css` | `.stp-wobble`, `.stp-spinner`, pastel selection and scrollbar |
+| ✅ | Stamp | `click_confetti.js` | `data-stamp="Done!"` on any button; the attribute's value is the stamp text |
+| 🔔 | Cute sounds | `cute_sounds.js` | a speaker toggle (or your own `data-sound-toggle`); one voice per palette: candy soft square, neon sine, meadow triangle |
+| 🤫 | Secret word | `secret_word.js` | `data-secret` (default `magic`); `SparkleThatPage.secretWord.finale()` for "finished everything" |
+| 🌙 | Sky switch | `sky_switch.js` + a `<head>` snippet | sets `<html data-theme="light|dark">` before the first paint; leaves other theme names alone |
 
 **Palettes:** `data-palette` = **candy** (default), **neon** (with glow), **meadow**. All colours come from CSS tokens
 `--stp-c1…c6` in `cute_chrome.css`, so one edit recolours every effect.
@@ -101,7 +116,15 @@ from Emil Kowalski's [animate](https://github.com/emilkowalski/skills) skill):
 | ♿ | With reduced motion on, confetti becomes one small heart that fades in place; the trail and floaters stay off | "Fewer and gentler", not nothing |
 | 🖱️ | Pointer effects do nothing on touch screens; overlays never block a click or a scroll | Effects never get in the way |
 | 🔬 | Confetti is sharp on Retina screens and runs at the same speed on 60 Hz and 120 Hz displays | Physics is time-based, the canvas matches the screen's pixel density |
-| 🧹 | Every effect has `SparkleThatPage.<name>.destroy()` | Clean up on single-page-app route changes |
+| 🔇 | Sounds are off until the visitor presses the speaker; nothing audio-related loads before that click | Nobody wants a page that beeps uninvited |
+| 🔋 | The trail stops its animation loop when no dust is moving | No battery spent on an empty screen |
+| 🧹 | Every effect has `SparkleThatPage.<name>.start()` and `.destroy()` | Switch effects on and off, and clean up on single-page-app route changes |
+
+```text
+You:    make the "mark as done" button feel good
+Claude: [adds data-stamp="Done!" and click_confetti.js, so a click lands a stamp with a small burst;
+         keeps confetti off every other click, since this is an all-day tool]
+```
 
 <sub>Prior art, if you'd rather not hand-author: [tholman/cursor-effects](https://github.com/tholman/cursor-effects),
 [party.js](https://party.js.org/), [canvas-confetti](https://github.com/catdad/canvas-confetti),
@@ -354,13 +377,15 @@ Claude: [reads the repo, drafts the hero, badge row, one bold promise and a feat
 bash scripts/check-all.sh
 ```
 
-One script runs every check, on every push and pull request (the **tests** badge above). Today it runs 22 checks:
+One script runs every check, on every push and pull request (the **tests** badge above). Today it runs 86 checks:
 
 - **Favicons:** the checker's 17-fixture self-test, then every starter SVG on the four Chrome tab colours (0 fail; the
   3 known blobs it can't measure must stay UNCHECKED).
-- **Sparkle:** a real Chromium clicks around the demo and checks 6 things: no console errors; the demo's confetti
-  fires; by default a plain click draws nothing while a `data-celebrate` click bursts; and with reduced motion a
-  click draws a little and is gone within ~700 ms.
+- **Sparkle:** a real Chromium clicks, types and scrolls around the demo and checks 70 things, among them: confetti
+  only on celebrate buttons by default; the trail's animation loop stops when idle; the stamp lands and follows its
+  button; no sound system exists before the speaker is pressed; the secret word works on the page but not in a text
+  box; the theme is set before the first paint; and reduced motion makes everything calmer. Each check was shown to
+  fail when its feature is broken.
 - **Syntax:** every shipped script parses (JavaScript, Python, bash, zsh).
 - **Wiggle:** the pacing checker passes on the example films, and style C rebuilds byte-for-byte.
 - **Repo:** marketplace versions match each plugin, skill names match, and every link in this README points at a real
