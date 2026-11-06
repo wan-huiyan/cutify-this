@@ -1,12 +1,12 @@
 # cutify-this ✨
 
-> A little **bundle of cute skills** for Claude Code. Cutify the browser **tab** (hand-authored SVG favicons), sparkle up the whole **page** (fairy cursor, sparkle trails, scroll progress, confetti, floaters), pop your repo's **README** (a cute house-style front page), and cutify your **terminal** (Ghostty themes, rounded Nerd Fonts, a Starship prompt — and a glyph check that catches the `?` boxes before you do).
+> A little **bundle of cute skills** for Claude Code. Cutify the browser **tab** (hand-authored SVG favicons), sparkle up the whole **page** (fairy cursor, sparkle trails, scroll progress, confetti, floaters), pop your repo's **README** (a cute house-style front page), cutify your **terminal** (Ghostty themes, rounded Nerd Fonts, a Starship prompt — and a glyph check that catches the `?` boxes before you do), and **hatch a whole app** as a little drawn world.
 
 [![license](https://img.shields.io/github/license/wan-huiyan/cutify-this)](LICENSE)
 [![last commit](https://img.shields.io/github/last-commit/wan-huiyan/cutify-this)](https://github.com/wan-huiyan/cutify-this/commits)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-skills-orange)](https://claude.com/claude-code)
 
-## Four skills in the bundle
+## Five skills in the bundle
 
 | Skill | What it does | Install |
 |---|---|---|
@@ -14,6 +14,7 @@
 | ✨ **sparkle-that-page** | cute zero-dep page effects — fairy cursor, sparkle trail, scroll indicator, tab peekaboo, confetti, floaters, cute-chrome | `/plugin install sparkle-that-page@wan-huiyan-cutify-this` |
 | 🪄 **pop-that-readme** | a cute, high-signal README in the house style — pixel hero, badges, value-prop, emoji feature table, install block, honesty box | `/plugin install pop-that-readme@wan-huiyan-cutify-this` |
 | ⌨️ **cutify-that-terminal** | a cute macOS terminal that provably renders — Ghostty themes, rounded Nerd Fonts, a Starship prompt, and a glyph check that catches the `?` boxes | `/plugin install cutify-that-terminal@wan-huiyan-cutify-this` |
+| 🐛 **hatch-that-world** | a whole app or daily page as a little drawn world — data as a scene, switchable worlds, a mascot with moods, clickable drawings, and checks that can fail | `/plugin install hatch-that-world@wan-huiyan-cutify-this` |
 
 Add the marketplace once, then install any (or all):
 
@@ -21,9 +22,9 @@ Add the marketplace once, then install any (or all):
 /plugin marketplace add wan-huiyan/cutify-this
 ```
 
-> Renamed from `cutify-that-tab` → `cutify-this` (the repo now hosts four skills). Old links redirect automatically.
+> Renamed from `cutify-that-tab` → `cutify-this` (the repo now hosts five skills). Old links redirect automatically.
 >
-> ⚠️ **One of these is not like the others.** The three web skills drop a file into
+> ⚠️ **One of these is not like the others.** The web skills drop a file into
 > your project and revert by deleting it. **`cutify-that-terminal` installs software
 > and edits your `~/.zshrc`** — so it backs the file up first, shows you the diff,
 > appends only, and gives you the undo in the same breath. It is macOS + Homebrew + zsh.
@@ -98,6 +99,25 @@ proves nothing.
 
 Ships a per-terminal prompt split too, so Ghostty keeps its icons while Apple
 Terminal, VS Code and ssh sessions get a prompt that cannot break.
+
+---
+
+## 🐛 hatch-that-world — your app as a little world
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/wan-huiyan/morning-fairy/main/docs/caterpillar-world.png" width="720" alt="A morning brief drawn as a leaf: the caterpillar's body runs from 8 AM to now with a mascot on its back, and meeting signs stand on the leaf's humps"/>
+  <br/><sub>Built with this method: <a href="https://github.com/wan-huiyan/morning-fairy">morning-fairy</a>'s caterpillar world. (Made-up demo data.)</sub>
+</p>
+
+The method behind [morning-fairy](https://github.com/wan-huiyan/morning-fairy), written down so your next cute app starts from it:
+
+- **The scene is the data.** Pick the axis (hours of today, the last 30 days, the stages of a funnel), then map each number to the channel that suits it: a running amount → the ground's height, separate items → objects on it, a 1–5 score → a small accent, the overall state → the mascot's mood. Missing data drawn as missing, never as 0.
+- **A world = colour tokens + one scene drawing + one sound voice.** Adding one touches nothing else: an 8-step checklist and real code in `references/world-anatomy.md`.
+- **Clickable drawings that stay accessible** — an invisible layer of real links placed from the drawing's geometry, keyboard order = time order.
+- **An options page before building**, with live slices of the real data, and a dated plan per change.
+- **Checks that can fail**, each shown to fail on the old version first — three ready Playwright scripts: `copy_identical.cjs` (the copied text didn't change), `pixel_regress.cjs` (the other worlds didn't move a pixel, with a noise floor) and `hit_check.cjs` (each thing in the drawing is clickable and lands on its row).
+
+Needs Node + Playwright and an installed Chrome for the scripts. Pairs with `sparkle-that-page` and `cutify-that-tab`.
 
 ---
 
