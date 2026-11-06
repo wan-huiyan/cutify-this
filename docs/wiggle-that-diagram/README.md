@@ -19,7 +19,7 @@ the live style) is the README picture. The same sources ship inside the skill as
 Rebuild and check, from this folder (`S` is the skill's `scripts` folder):
 
 ```bash
-S=../../plugins/wiggle-that-diagram/skills/wiggle-that-diagram/scripts
+S=$(cd ../../plugins/wiggle-that-diagram/skills/wiggle-that-diagram/scripts && pwd)   # absolute, so it still works after a cd
 python3 $S/common/pace_check.py beats.json
 ```
 
@@ -38,7 +38,7 @@ Styles A and B need a copy of the [huashu-art-motion](https://github.com/alchain
 # A: work folder W holds engine/, meta.json
 cp $S/style-a/way_make.js style-a/pizza.js $W/engine/ways/ && cp style-a/eras_pizza.js $W/engine/ && cp style-a/meta.json $W/
 python3 $S/style-a/beats_js.py beats.json --engine $W/engine --var PZ_BEATS
-(cd $W && VERDICT_pizza=5 sh $S/style-a/make.sh pizza)      # -> $W/final/pizza.html = final/pizza-diagram.html
+(cd $W && SKILL=$S/style-a VERDICT_pizza=5 sh $S/style-a/make.sh pizza)   # SKILL: else make.sh uses ~/.claude/skills; -> $W/final/pizza.html
 # B: engine with render.py patched to channel='chrome' and kit.js in demos/_hb/
 python3 $S/style-b/build_beats.py beats.json --engine $ENG && cp style-b/board.js style-b/eras.js $ENG/demos/pizza/
 uv run --with playwright python $ENG/render.py --film demos/pizza --fps 30 --crf 12 --out work/pizza_master.mp4
