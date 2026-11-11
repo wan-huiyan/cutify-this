@@ -53,7 +53,7 @@ The repo modules don't 1:1 match the prototype's factory API, so the bridge tran
 
 | Prototype | Repo `data-*` | Note |
 |---|---|---|
-| fairy cursor `crystal` | `data-wand=pixel` | no crystal wand ships in the module |
+| fairy cursor `crystal` | `data-wand=crystal` | the module's faceted crystal wand (it uses its first palette, amethyst) |
 | floaters `stars` / `snow` | `data-floaters=dust` / `snowflake` | nearest shipped variants |
 | scroll `cat` | `data-scroll=mascot` | the corner buddy on a rail |
 | tab moods shy/love/sleepy/ghost | `data-peekaboo-msg` + `-favicon` presets | the module takes a message + emoji |

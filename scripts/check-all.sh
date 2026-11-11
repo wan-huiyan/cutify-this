@@ -98,6 +98,9 @@ echo "== sparkle-that-page"
 js_syntax "sparkle: node --check examples/*.js" $SPK/examples/*.js
 js_syntax "sparkle: node --check site/*.js (ES modules)" site/*.js
 browser_suite "sparkle: headless browser smoke test" tests/sparkle_smoke.mjs
+browser_suite "sparkle: wand cursor test" tests/sparkle_wands_smoke.mjs
+browser_suite "sparkle: wand gallery test" tests/sparkle_wands_gallery_smoke.mjs
+browser_suite "sparkle: twinkling dust test" tests/sparkle_dust_smoke.mjs
 
 echo "== cutify-that-terminal"
 check "terminal: bash -n verify-glyphs.sh" bash -n $TERM/scripts/verify-glyphs.sh

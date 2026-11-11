@@ -26,7 +26,7 @@ export const EFFECT_SPECS = {
   confetti: { file: 'click_confetti.js',     win: 'clickConfetti',   attr: 'confetti',
               variants: { confetti: 'confetti', heart: 'heart', star: 'star', petal: 'petal' } },
   cursor:   { file: 'fairy_cursor.js',       win: 'fairyCursor',     attr: 'wand',
-              variants: { star: 'star', heart: 'heart', moon: 'moon', crystal: 'pixel' } },
+              variants: { star: 'star', heart: 'heart', moon: 'moon', crystal: 'crystal' } },
   floaters: { file: 'ambient_floaters.js',   win: 'ambientFloaters', attr: 'floaters',
               variants: { stars: 'dust', sakura: 'sakura', snow: 'snowflake', bubbles: 'bubbles' } },
   scroll:   { file: 'scroll_indicator.js',   win: 'scrollIndicator', attr: 'scroll',

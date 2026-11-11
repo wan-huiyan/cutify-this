@@ -49,6 +49,7 @@
       box-shadow: 0 4px 14px rgba(192,132,252,.4);
     }
     a.demo-link { color: var(--link); font-weight: 600; }
+    .ctl.more { margin: 0 0 7px 22px; font-size: 12px; }
     .spinner-row { display: flex; align-items: center; gap: 18px; margin-top: 14px; }
     aside#panel {
       position: fixed; top: 14px; right: 14px; z-index: 2147483640; width: 232px;
@@ -152,7 +153,7 @@
     document.getElementById("finale-btn").addEventListener("click", function () { window.SparkleThatPage.secretWord.finale(); });
     // Each effect: dataset key it reads, its file, and variant options.
     var EFFECTS = [
-      { key: "fairyCursor",     file: "fairy_cursor.js",       label: "🪄 Fairy cursor",      attr: "wand",     variants: ["star", "heart", "moon", "pixel", "sailormoon"] },
+      { key: "fairyCursor",     file: "fairy_cursor.js",       label: "🪄 Fairy cursor",      attr: "wand",     variants: ["star", "magical", "wizard", "garden", "cosmic", "candy", "crystal", "moon", "ocean", "lollipop", "pixel"] },
       { key: "sparkleTrail",    file: "sparkle_trail.js",      label: "✨ Sparkle trail",     attr: "trail",    variants: ["sparkle", "star", "heart", "pixel", "fairydust"] },
       { key: "scrollIndicator", file: "scroll_indicator.js",   label: "📜 Scroll indicator",  attr: "scroll",   variants: ["ring", "comet", "mascot"] },
       { key: "tabPeekaboo",     file: "tab_title_peekaboo.js", label: "👀 Tab peekaboo",      attr: null,       variants: [] },
@@ -215,6 +216,11 @@
       }
       chk.addEventListener("change", function () { chk.checked ? enable(eff) : disable(eff); });
       box.appendChild(row);
+      if (eff.key === "fairyCursor") {  // gallery of every wand, right under the wand control
+        var more = document.createElement("div"); more.className = "ctl more";
+        var a = document.createElement("a"); a.className = "demo-link"; a.href = "./wands.html"; a.textContent = "See every wand →";
+        more.appendChild(a); box.appendChild(more);
+      }
     });
   </script>
 </body>
