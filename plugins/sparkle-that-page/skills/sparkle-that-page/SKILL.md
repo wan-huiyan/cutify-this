@@ -1,6 +1,6 @@
 ---
 name: sparkle-that-page
-description: Use when a user wants to add cute, playful runtime effects to a web page — a fairy-wand or magic custom cursor (star / heart / moon / pixel / sailor-moon), a sparkle / star / heart / fairy-dust trail following the mouse on move and click, an animated floating scroll-depth / scroll-progress indicator (ring, comet bar, or climbing mascot), tab-title peekaboo ("come back!" when the tab loses focus), click confetti or heart burst, a rubber-stamp "Done!" on a button, ambient floating petals / leaves / snowflakes / bubbles / fairy-dust, cute-chrome touches (pastel ::selection, wobble hover, kawaii loading spinner, pastel scrollbar), opt-in synthesized sounds (chime / tick / twinkle), a typed secret word that sets off a party, and a sun / moon dark-mode switch that never flashes the wrong theme. Pick a color palette (candy / neon / meadow) and a pixel-art style variant on each. Skip for serious / corporate UIs, or when the user wants a full design system or a heavyweight particle framework.
+description: Use when a user wants to add cute, playful runtime effects to a web page — a fairy-wand or magic custom cursor (11 kinds: star / moon / wizard / candy / pixel…), a sparkle / star / heart / fairy-dust trail following the mouse on move and click, an animated floating scroll-depth / scroll-progress indicator (ring, comet bar, or climbing mascot), tab-title peekaboo ("come back!" when the tab loses focus), click confetti or heart burst, a rubber-stamp "Done!" on a button, ambient floating petals / leaves / snowflakes / bubbles / fairy-dust, cute-chrome touches (pastel ::selection, wobble hover, kawaii loading spinner, pastel scrollbar), opt-in synthesized sounds (chime / tick / twinkle), a typed secret word that sets off a party, and a sun / moon dark-mode switch that never flashes the wrong theme. Pick a color palette (candy / neon / meadow) and a pixel-art style variant on each. Skip for serious / corporate UIs, or when the user wants a full design system or a heavyweight particle framework.
 ---
 
 # Sparkle That Page ✨
@@ -52,7 +52,7 @@ CSS with a `<link>`, then set options via `data-*` attributes on `<html>`:
 <script src="/static/sparkle_trail.js"></script>
 <link rel="stylesheet" href="/static/cute_chrome.css">
 <!-- options live on the html tag -->
-<html data-wand="sailormoon" data-trail="fairydust" data-palette="candy">
+<html data-wand="garden" data-wand-palette="daisy" data-trail="fairydust" data-palette="candy">
 ```
 
 **Every effect starts on load** — drop in the script and it runs. Each also registers
@@ -107,27 +107,58 @@ tokens only when `data-palette` is set; otherwise it keeps the per-variant color
 
 ### 1 · Fairy-wand cursor — `fairy_cursor.js`
 
-Replaces the cursor with a wand SVG via `cursor: url(...) hotspot, auto`. Over anything
-clickable — `a[href]`, `button`, `[role=button]`, `label`, `summary`, `select`, checkbox /
-radio / submit / button inputs, `[data-celebrate]`, `[data-stamp]` — it swaps to a **glowing
-copy** of the wand (gold halo + two glints), so the wand tells you what is clickable. The two
-images live in `--stp-wand` and `--stp-wand-link` on `<html>` (the file injects its own
-`<style>`; set those two properties yourself to use your own art). Text inputs keep the I-beam.
+Replaces the cursor with a 40 × 40 wand SVG via `cursor: url(...) 27 11, auto`. The click
+point is the middle of the gem. Over anything clickable (`a[href]`, `button`, `[role=button]`,
+`label`, `summary`, `select`, checkbox / radio / submit / button inputs, `[data-celebrate]`,
+`[data-stamp]`) it swaps to a **brighter twin**: a halo behind the gem and more glints, so the
+wand tells you what is clickable. The two images live in `--stp-wand` and `--stp-wand-link` on
+`<html>`. The file injects its own `<style>`. Text inputs keep the I-beam.
 
-- `data-wand`: `star` (default) · `heart` · `moon` · `pixel` · `sailormoon`
-  (gold crescent + pink heart gem).
+- **Your own art.** Set `--stp-wand` and/or `--stp-wand-link` yourself (`cursor` values, e.g.
+  `url(my-wand.svg) 4 4, auto`): in a stylesheet that applies before the script runs, or inline on
+  `<html>` at any time. A property the page set is never overwritten or removed: the wand keeps
+  painting only the ones that still hold what it last wrote.
+- `data-wand` picks one of 11 families, each a different shape. `data-wand-palette` picks one of
+  its 3 palettes; the first is the default:
+  `star` (gold · pink · ice, the default) · `magical` (crescent cradling a heart gem: lilac · mint
+  · sky) · `wizard` (gnarled staff hooked over an orb: arcane · ember · forest) ·
+  `garden` (wooden rod, flower: rose · daisy · lavender) · `cosmic` (silver rod, north star in a
+  planet ring: violet · aurora · nova) · `candy` (striped cane, glossy heart, bow: strawberry · mint
+  · grape) · `crystal` (faceted gem: amethyst · aqua · rose) · `moon` (sleepy crescent holding a
+  star: gold · silver · rose) · `ocean` (scallop shell, pearl: pearl · lagoon · coral) · `lollipop`
+  (swirl, bow: berry · lemon · sky) · `pixel` (8-bit star on a 2 px grid: gold · rose · mint).
+- **Old names keep working.** `heart` is an alias of `candy` (older aliases: `references/wands.md`).
+  An unknown family falls back to `star`; an unknown palette falls back to the family's first.
+- **Light and dark follow the page**, by the same rule as the glints trail (`sparkle_trail.js`):
+  `<html data-theme="light|dark">` wins; otherwise the measured background of `<body>`, then
+  `<html>`, decides; with neither opaque, the page is white unless its `color-scheme` allows `dark`
+  and the system is dark. So a light-only site keeps the light-page wand for a dark-mode visitor.
+  Light pages get a dark ink outline and dark pages a white one. The wand repaints when
+  `data-theme`, `data-wand`, `data-wand-palette`, the `class` or `style` of `<html>` or `<body>`
+  change, when a background transition on either ends, on `load`, and when the system scheme flips.
+  Palettes are named per family and don't read `--stp-c1…`: a cursor is an image, and each
+  palette is tuned so its outline stays readable.
+- **Gallery API.** `fairyCursor.svg(family, palette, dark, on)` returns the SVG text,
+  `.families` lists the names, `.palettes` maps each family to its palette names, and
+  `.hotspot()` gives `[x, y]` in image pixels — the same for every family. Gradient ids are
+  unique per wand, so many can share one page.
+- **Drawing a new wand:** read [`references/wands.md`](references/wands.md) first. It covers the
+  anatomy, the quality bar, each family's small-size trap, palette rules and sources to study
+  (with licences).
 - **Gotcha — strict Content-Security-Policy.** The base wand is set on `<html>` through the CSSOM
   (`root.style.cursor`), which a CSP such as `style-src 'self'` allows; only the glow rules live in an
   injected `<style>`, which that CSP blocks. So under a strict CSP the wand still shows and you lose only
   the glow over clickables (they fall back to the browser's own pointer). To keep the glow, allow the
   style with a nonce / hash or ship the two rules in your own stylesheet.
-- **Gotcha — hotspot & size.** The hotspot (`26 5` in the file = the wand
-  tip) must sit *inside* the image, and browsers cap custom cursors around
-  128px. The 32×32 SVG is safe.
+- **Gotcha — hotspot & size.** The hotspot (`27 11` = the middle of the gem) is in image
+  pixels and must sit *inside* the image. Firefox and Chromium ignore cursor images over
+  128 × 128 without an error. The 40 × 40 SVG is safe.
 - No-op on touch / coarse pointers and in `forced-colors` mode (keeps the system's
   high-contrast pointer) — `start()` too. Static image, so reduced-motion is unaffected.
-- `fairyCursor.start()` / `.destroy()`; `destroy()` removes the style, the properties and the
-  `stp-wand` class on `<html>`.
+- `fairyCursor.start()` / `.destroy()`; `destroy()` removes the style, its own properties and the
+  `stp-wand` class on `<html>`, gives back the page's own inline cursor, and disconnects the
+  observer and its listeners. `node tests/sparkle_wands_smoke.mjs` checks every family × palette ×
+  light/dark × glow, the light/dark rule, the repaints, the page's own art, and `destroy()`.
 
 ### 2 · Sparkle trail — `sparkle_trail.js`
 
@@ -139,7 +170,33 @@ that keeps a `requestAnimationFrame` loop on, by design: it is a drifting layer 
 The scroll ring's idle bob is an endless transform animation run by the browser, not a frame callback.)
 
 - `data-trail`: `sparkle` (default) · `star` · `heart` · `pixel` · `fairydust`
-  (small glowing dots). Colors come from `data-palette` (multi-color per particle).
+  (small glowing dots) · `glints` (below). Colors come from `data-palette` (multi-color per particle).
+- **`data-trail="glints"` — two-grain fairy dust.** Each spawn drops one tiny round **mote** and one
+  thin four-point **glint** (a small inline SVG star). Glints **twinkle**: scale and opacity swell and
+  dim about every quarter of a second while they drift down slowly, then fade (the grains carry
+  `data-grain="mote"` / `"glint"`). It stays DOM-span based, in the same pool, loop and idle-rest as the
+  other variants (the pool is 36 glints + 44 motes = the same cap of 80), so it keeps the
+  "only `transform`/`opacity` animate" rule and the existing tests; a click bursts ten grains. The
+  palette follows the **page's lightness**: pale gold / pink / lilac with a soft glow on dark pages, deeper
+  gold / pink / violet with **no glow at all** (crisp) on light pages. Precedence, first match wins:
+  1. `--stp-c1…c6` set by the page (e.g. from `cute_chrome.css`): used on both light and dark pages.
+  2. otherwise the built-in light or dark glints palette. `data-palette` is **ignored** by this variant
+     (that name picks a colour set, this variant picks by lightness; set the tokens to brand it).
+
+  How "light or dark" is decided, in this order (every step can answer): `data-theme="dark"` / `"light"`
+  on `<html>` (any other value, e.g. `cupcake`, is skipped); else the computed background of `<body>`,
+  then `<html>`, the first that is at least half opaque (luminance below mid-grey = dark); else, for a
+  page with no background of its own, `prefers-color-scheme: dark` **and** a `color-scheme` that
+  includes `dark`. The system setting alone is not enough: a light page opened on a dark system is
+  still a light page. It is re-read every time the loop wakes from rest, so a theme flip
+  (`sky_switch.js`, a toggle) shows on the next move with no observer to clean up. A background that is
+  only an image or gradient reads as "no background": set `data-theme` there.
+  No shimmer while the pointer rests, so an untouched page still makes zero frame callbacks.
+  **Strict CSP:** glints are safe under `style-src 'self'` (no `'unsafe-inline'`). Every style is set
+  through the CSSOM (`el.style…`), which that policy allows, and the glint's inline SVG carries no
+  `style=""` attribute. A test serves it with that policy and asserts 0 `securitypolicyviolation`
+  events and 0 console errors. (An earlier build put `style="display:block"` inside the SVG markup,
+  and a strict CSP logged 36 "Applying inline style violates…" errors at start.)
 - `data-trail-density`: omit for the sparse default (a spawn every ≥ 24 px of
   pointer travel) · `storm` = dense, a spawn every ~16 ms (the v1.0 rate).
   Click bursts are the same either way.
@@ -362,12 +419,12 @@ cache. In production this is a non-issue — the files don't change between load
 
 ## Examples directory
 
-`examples/` ships eleven files — ten effect files + the live demo. Every `.js` file auto-starts and
+`examples/` ships twelve files — ten effect files, the live demo and the wand gallery. Every `.js` file auto-starts and
 exposes `start()` / `destroy()` on `window.SparkleThatPage.<name>`:
 
 | File | Effect | Key `data-*` |
 |---|---|---|
-| `fairy_cursor.js` | wand cursor + glowing wand over clickables | `data-wand` (star/heart/moon/pixel/sailormoon); `--stp-wand`, `--stp-wand-link` |
+| `fairy_cursor.js` | wand cursor + glowing wand over clickables; light/dark from the page | `data-wand` (star/magical/wizard/garden/cosmic/candy/crystal/moon/ocean/lollipop/pixel), `data-wand-palette`; `--stp-wand`, `--stp-wand-link` |
 | `sparkle_trail.js` | mouse trail | `data-trail` (sparkle/star/heart/pixel/fairydust), `data-trail-density` (storm), `data-palette` |
 | `scroll_indicator.js` | scroll depth; cheers (`is-end`) at the bottom | `data-scroll` (ring/comet/mascot) |
 | `tab_title_peekaboo.js` | tab blur message | `data-peekaboo-msg`, `data-peekaboo-favicon` |
@@ -377,7 +434,9 @@ exposes `start()` / `destroy()` on `window.SparkleThatPage.<name>`:
 | `secret_word.js` | typed secret word → party; `finale()` hook (`SparkleThatPage.secretWord`) | `data-secret` (default `magic`) |
 | `sky_switch.js` | sun / moon theme toggle (`SparkleThatPage.skySwitch`) + the no-flash `<head>` snippet (section 10) | `data-sky-toggle` (your own switch); sets `<html data-theme>`; `localStorage` `stp:theme` |
 | `cute_chrome.css` | selection/wobble/spinner/scrollbar + palette tokens + the sky switch's look | `.stp-wobble`, `.stp-spinner` classes, `--stp-c1…c5` |
+| `references/wands.md` (next to `examples/`) | how to draw a wand cursor: anatomy, quality bar, the 11 families and their small-size traps, palette rules, sources to study with licences | — |
 | `demo.html` | live showcase + verify tool (stamp buttons, a link to hover for the glow, room to scroll to the bottom, the speaker + sun/moon toggles, the secret word; themed from `data-theme`) | — |
+| `wands.html` | the wand gallery: all 11 families × 3 palettes on light, dark and the page's own theme, plain and glowing; hover a card to wear that wand | `data-wand`, `data-wand-palette` (set on hover) |
 
 ## Prior art / see also
 
@@ -404,6 +463,18 @@ Sibling skill: **`cutify-that-tab`** — the cute favicon half of the
 
 ## Changelog
 
+- **v1.3.0** (2026-11-11) — Wands that point the way. The wand cursor is redrawn as
+  11 families with different silhouettes (star, magical, wizard, garden, cosmic, candy,
+  crystal, moon, ocean, lollipop, pixel), 3 palettes each (`data-wand-palette`), 40 px
+  with the click point on the gem and a brighter twin over clickables. The outline
+  follows the page, not the system: `data-theme`, then the page background, then the
+  colour scheme, the same rule as the trail, repainted live. A page's own
+  `--stp-wand` art is never overwritten. Old names still work. New
+  `references/wands.md` teaches an agent the anatomy, the families, the quality bar and
+  where to look (licences checked at the source). New `examples/wands.html` shows all
+  33 wands on light and dark pages; hover one to wear it. New `data-trail="glints"`:
+  two-grain fairy dust (motes + twinkling four-point glints) with light and dark
+  palettes, safe under a strict CSP. Ideas from morning-fairy's per-world wands.
 - **v1.2.0** (2026-11-06) — Ideas back from pomodo, which ships 6 of these effects, plus
   three new effects. Every effect keeps starting on load and gains `start()` next to
   `destroy()` (idempotent; scripts in `<head>` wait for the body). The trail stops its

@@ -34,7 +34,10 @@ jobs:
           cp site/*.html site/*.js "_site/site/"
           # Canonical effect modules + stylesheet + the raw demo, referenced in place
           # (single source of truth — no duplication).
-          cp "$ex"/*.js "$ex"/*.css "$ex/demo.html" "_site/$ex/"
+          cp "$ex"/*.js "$ex"/*.css "$ex"/*.html "_site/$ex/"
+          # The references (wands.md, the guide behind wands.html) are published next to the examples.
+          mkdir -p "_site/$ex/../references"
+          cp "$ex"/../references/*.md "_site/$ex/../references/"
           # wiggle-that-diagram demo films (self-contained HTML, one per film) → /wiggle/<film>.html
           mkdir -p _site/wiggle
           cp docs/wiggle-that-diagram/final/*.html _site/wiggle/
