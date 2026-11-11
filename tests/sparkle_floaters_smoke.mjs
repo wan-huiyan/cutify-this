@@ -394,7 +394,8 @@ try {
   await check('floaters gallery: one card per family (12), each with a light and a dark picture that really has drawn pixels', async () => {
     await page.waitForSelector('.card');
     const r = await page.evaluate(() => [...document.querySelectorAll('.card')].map(c => ({ f: c.dataset.family, px: [...c.querySelectorAll('canvas')].map(cv => { const d = cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i] > 100) n++; return n; }) })));
-    return [r.length === 12 && r.every(c => c.px.length === 2 && c.px.every(n => n > 250)) && page.__errors.length === 0, r.map(c => c.f + ':' + c.px).join(' ') + ' errors ' + page.__errors.join(';')];
+    // a blank picture has 0 solid pixels; the sparse dust picture has about 235 in CI's headless Chromium
+    return [r.length === 12 && r.every(c => c.px.length === 2 && c.px.every(n => n > 120)) && page.__errors.length === 0, r.map(c => c.f + ':' + c.px).join(' ') + ' errors ' + page.__errors.join(';')];
   });
   await check('floaters gallery: cards are not buttons that hold buttons — each card has one real <button> that chooses it (aria-pressed), and no role="button" anywhere', () => page.evaluate(() => {
     const cards = [...document.querySelectorAll('.card')], ok = cards.length === 12 && cards.every(c => !c.hasAttribute('role') && !c.hasAttribute('aria-pressed') && !c.hasAttribute('tabindex') && c.querySelector('button.pick[aria-pressed]'))
