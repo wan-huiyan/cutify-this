@@ -16,7 +16,7 @@
       "name": "sparkle-that-page",
       "source": "./plugins/sparkle-that-page",
       "description": "Cute zero-dep page effects: fairy-wand cursor, sparkle trail, animated scroll-depth indicator, tab-title peekaboo, click confetti, ambient floaters, cute-chrome touches. Pixel-art variant on each.",
-      "version": "1.3.0"
+      "version": "1.4.0"
     },
     {
       "name": "pop-that-readme",
