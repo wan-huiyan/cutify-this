@@ -1,6 +1,6 @@
 ---
 name: sparkle-that-page
-description: Use when a user wants to add cute, playful runtime effects to a web page — a fairy-wand or magic custom cursor (11 kinds: star / moon / wizard / candy / pixel…), a sparkle / star / heart / fairy-dust trail following the mouse on move and click, an animated floating scroll-depth / scroll-progress indicator (ring, comet bar, or climbing mascot), tab-title peekaboo ("come back!" when the tab loses focus), click confetti or heart burst, a rubber-stamp "Done!" on a button, ambient floating petals / leaves / snowflakes / bubbles / fairy-dust, cute-chrome touches (pastel ::selection, wobble hover, kawaii loading spinner, pastel scrollbar), opt-in synthesized sounds (chime / tick / twinkle), a typed secret word that sets off a party, and a sun / moon dark-mode switch that never flashes the wrong theme. Pick a color palette (candy / neon / meadow) and a pixel-art style variant on each. Skip for serious / corporate UIs, or when the user wants a full design system or a heavyweight particle framework.
+description: Use when a user wants to add cute, playful runtime effects to a web page — a fairy-wand or magic custom cursor (11 kinds: star / moon / wizard / candy / pixel…), a sparkle / star / heart / fairy-dust trail following the mouse on move and click, an animated floating scroll-depth / scroll-progress companion (ring, comet bar, or a pixel cat / bunny / bear / frog climber, sprout, rocket, caterpillar, moon or balloon that travels as you read), tab-title peekaboo ("come back!" when the tab loses focus), click confetti or heart burst (13 kinds: paper that flips, ribbons, sprinkles, snow, bubbles that pop…; burst, fountain, rain or pop), a rubber-stamp "Done!" on a button, ambient floating petals / leaves / snowflakes / bubbles / fairy-dust / fireflies / lanterns / clouds, cute-chrome touches (pastel ::selection, wobble hover, kawaii loading spinner, pastel scrollbar), opt-in synthesized sounds (chime / tick / twinkle), a typed secret word that sets off a party, and a sun / moon dark-mode switch that never flashes the wrong theme. Pick a color palette (candy / neon / meadow) and a pixel-art style variant on each. Skip for serious / corporate UIs, or when the user wants a full design system or a heavyweight particle framework.
 ---
 
 # Sparkle That Page ✨
@@ -203,21 +203,32 @@ The scroll ring's idle bob is an endless transform animation run by the browser,
 - No-op on touch and on reduced-motion (load and `start()`).
 - `sparkleTrail.start()` / `.destroy()`; the layer carries class `stp-trail`.
 
-### 3 · Scroll-depth indicator — `scroll_indicator.js`
+### 3 · Scroll-depth companion — `scroll_indicator.js`
 
-Fixed floating element driven by `scrollTop / (scrollHeight − innerHeight)`,
-`passive` listener + rAF.
+A fixed element driven by `scrollTop / (scrollHeight − innerHeight)`, `passive` listener + rAF.
+**Guide:** `references/scroll-mascots.md` (what makes a good scroll companion, the four states,
+how to draw a new one). **Gallery:** `examples/scroll.html` (every look in all four states; click
+one to put it on the page and scroll).
 
-- `data-scroll`: `ring` (default — filling % ring, bottom-right, with an idle
-  bob) · `comet` (top progress bar with a sparkle head; `scaleX`) · `mascot` (a
-  pixel face that climbs a rail on the right; `translateY`).
-- **Cheers at the bottom.** When you reach the end of the page the indicator element gets
-  the class `is-end` (and loses it when you scroll back up); the mascot hops and smiles, the ring
-  and the comet head pop once. Reduced motion: no hop or pop, but `is-end` still flips — so you
-  can style the finish yourself with `[data-stp-scroll].is-end { … }` (the element carries
-  `data-stp-scroll="<variant>"`).
-- Reduced-motion disables the idle bob; the indicator still tracks position.
-- `scrollIndicator.start()` / `.destroy()`.
+- `data-scroll`: `ring` (default — filling % ring, bottom-right, with an idle bob) · `comet` (top
+  progress bar with a drawn star head) · `mascot` (also `climber`: a pixel character that climbs
+  down a rail on the right; pick it with `data-scroll-mascot` = `cat` (default) · `bunny` · `bear`
+  · `frog`) · `sprout` (bottom-right, grows a leaf at each step and flowers at the end) · `rocket`
+  (rises up the right edge and lands on a moon) · `caterpillar` (crawls along the bottom to a leaf)
+  · `moon` (bottom-right, new to full as you read) · `balloon` (rises up the right and bobs).
+- **Four states.** Idle, then the classes `is-moving` while you scroll, `is-holding` on a fast
+  scroll (it clings on, worried, with wind lines; a big jump such as an anchor link counts too),
+  and `is-end` at the very bottom (it cheers once; removed when you scroll back up). The element
+  `[data-stp-scroll="<variant>"]` also carries `data-stp-progress` (0 at the top, 1 at the bottom:
+  position for travellers, growth for the sprout, phase for the moon) and `data-stp-state`, so you
+  can style any state yourself: `[data-stp-scroll].is-end { … }`.
+- Light or dark follows the page (the same rule as the wand) and repaints live.
+- Reduced motion: no sway, shiver, bob, blink or hop; the classes, progress and pictures still track.
+- `scrollIndicator.start()` / `.destroy()`, `.progress()`, `.state()`, and for galleries
+  `.families`, `.mascots`, `.states` and `.svg(family, state, dark, { mascot, progress })`.
+- **Taste:** the travellers use the right edge; on a page with a sticky header, the rocket and
+  climbers pass over its right corner. Clicks go through (`pointer-events: none`), but pick the
+  sprout or moon if that corner matters.
 
 ### 4 · Tab-title peekaboo — `tab_title_peekaboo.js`
 
@@ -235,18 +246,28 @@ cute message, then restores on return. The one effect that ties back to
 
 ### 5 · Click confetti / heart burst — `click_confetti.js`
 
-A `<canvas>` overlay (sharp on Retina); a radial physics burst (velocity +
-gravity, time-based so it matches at 60 and 120 Hz) on click.
+A `<canvas>` overlay (sharp on Retina); a physics burst (velocity + gravity + drag, time-based
+so it matches at 60 and 120 Hz) on click. Every piece is a drawn shape, never a font character.
+**Guide:** `references/confetti.md` (anatomy, the families and their small-size traps, motions,
+palettes, how to add a family). **Gallery:** `examples/confetti.html` (click any card to fire it).
 
-- `data-confetti`: `heart` (default) · `star` · `confetti` · `petal` · `pixel`.
+- `data-confetti`: `heart` (default) · `star` · `confetti` (a mix) · `paper` (strips that flip) ·
+  `ribbon` (curly streamers) · `sprinkles` · `petal` · `leaf` · `snow` · `bubble` (pops into a
+  ring) · `note` · `paw` · `pixel`. `data-confetti-palette` picks one of the family's 3 palettes
+  (the names are in `clickConfetti.palettes`).
+- `data-confetti-motion`: `burst` (default) · `fountain` (shoots up, then falls) · `rain` (from
+  above the top of the screen) · `pop` (a ring and a few pieces, for small buttons).
+- Light or dark follows the page; on a light page every piece gets a thin dark outline, so snow,
+  bubbles and pale petals show on white.
 - `data-confetti-on` — *where* it fires, read at click time (so it can be
   toggled live): omit = only elements matching `[data-celebrate], [data-confetti]`
   (elements opt in) · `*` = every click · any other value = a CSS selector.
   `data-palette` recolors it (and `neon` adds glow).
 - Reduced motion: *fewer and gentler, not zero* — a qualifying click draws one
-  small glyph that fades out in place over ~400 ms (no movement, no physics).
+  small drawn shape that fades out in place over ~400 ms (no movement, no physics).
 - Exposes `SparkleThatPage.clickConfetti.burst(x, y)` to fire programmatically (it does
-  nothing while the effect is destroyed), plus `.start()` / `.destroy()` and `.active()` — true
+  nothing while the effect is destroyed; `burst(x, y, { family, palette, motion })` fires one
+  family once without changing the page's own setting), plus `.start()` / `.destroy()` and `.active()` — true
   while it runs. `destroy()` leaves the registry entry in place, so ask `active()` (as
   `cute_sounds.js` and `secret_word.js` do), not "is the key there". Its canvas has class `stp-confetti`.
 - **Stamp — `data-stamp`.** Any element with `data-stamp="Done!"` gets, on click, a rotated
@@ -260,12 +281,20 @@ gravity, time-based so it matches at 60 and 120 Hz) on click.
 
 ### 6 · Ambient floaters — `ambient_floaters.js`
 
-A slow `position:fixed; pointer-events:none` layer **behind** content.
+A slow layer **behind** content, drawn on one canvas (`.stp-floaters`: fixed, `z-index: 0`,
+`pointer-events: none`). Give your content `position: relative; z-index: 1` to keep it on top.
+**Guide:** `references/floaters.md` (motions, depth, the families, light/dark colours, how to
+add one). **Gallery:** `examples/floaters.html` (click a card to make it the page's floaters).
 
-- `data-floaters`: `sakura` (default) · `leaves` · `snowflake` · `bubbles`
-  (shiny gradient circles) · `dust` · `fairydust` (glowing). `data-floaters-count`
-  (default 18, capped 60). `dust`/`fairydust` take `data-palette` colors.
-- No-op on reduced-motion (load and `start()`). `ambientFloaters.start()` / `.destroy()`.
+- `data-floaters`: `sakura` (default) · `leaves` · `snowflake` (or `snow`) · `bubbles` · `dust` ·
+  `fairydust` (glowing) · `fireflies` (wander and blink) · `dandelion` · `lanterns` (rise and
+  glow) · `stars` (twinkle in place) · `clouds` (drift sideways) · `hearts` (rise like balloons).
+  Three depth layers: small, faint and slow at the back; bigger and clearer in front.
+- `data-floaters-count` (default 18, capped 60). `dust`/`fairydust` take `data-palette` colors
+  (and the `--stp-c` tokens). Changing `data-floaters` while it runs switches it.
+- Light or dark follows the page and repaints live; snow turns blue-grey on white.
+- No-op on reduced-motion (load and `start()`). `ambientFloaters.start()` / `.destroy()`,
+  `.active()`, `.families`, and `.preview(canvas, family, { palette, dark })` for a still picture.
 - Its loop never rests (a drifting layer has no idle); it is the only effect that keeps
   requesting frames while nothing is happening — `destroy()` it where that matters.
 
@@ -361,7 +390,7 @@ is the point:
 
 - **`prefers-reduced-motion: reduce` disables/reduces every motion effect**
   (JS-guarded via `matchMedia` + CSS `@media`). Click confetti is "fewer and
-  gentler, not zero": one glyph fades in place (~400 ms) instead of a burst.
+  gentler, not zero": one drawn shape fades in place (~400 ms) instead of a burst.
 - **Delight budget (Step 0):** confetti fires only on opted-in elements by
   default, the trail is sparse by default, the wobble is near-imperceptible and
   mouse-only. Dense / every-click modes are explicit opt-ins.
@@ -404,7 +433,7 @@ variant dropdowns — it's both the showcase and the verify tool) and check:
 - [ ] Clicks and scrolling are **not** blocked anywhere (overlays are
       `pointer-events:none`).
 - [ ] `prefers-reduced-motion: reduce` → trail / floaters suppress; confetti
-      shows one fading glyph per click; a stamp appears without slam or confetti; the
+      shows one fading shape per click; a stamp appears without slam or confetti; the
       scroll indicator still tracks and still flips `is-end`.
 - [ ] No console errors.
 - [ ] **Eyeball it.** Programmatic checks can't prove "cute" — look at the
@@ -419,24 +448,28 @@ cache. In production this is a non-issue — the files don't change between load
 
 ## Examples directory
 
-`examples/` ships twelve files — ten effect files, the live demo and the wand gallery. Every `.js` file auto-starts and
+`examples/` ships fifteen files — ten effect files, the live demo and four galleries (wands, confetti, floaters, scroll). Every `.js` file auto-starts and
 exposes `start()` / `destroy()` on `window.SparkleThatPage.<name>`:
 
 | File | Effect | Key `data-*` |
 |---|---|---|
 | `fairy_cursor.js` | wand cursor + glowing wand over clickables; light/dark from the page | `data-wand` (star/magical/wizard/garden/cosmic/candy/crystal/moon/ocean/lollipop/pixel), `data-wand-palette`; `--stp-wand`, `--stp-wand-link` |
 | `sparkle_trail.js` | mouse trail | `data-trail` (sparkle/star/heart/pixel/fairydust), `data-trail-density` (storm), `data-palette` |
-| `scroll_indicator.js` | scroll depth; cheers (`is-end`) at the bottom | `data-scroll` (ring/comet/mascot) |
+| `scroll_indicator.js` | scroll depth; cheers (`is-end`) at the bottom | `data-scroll` (ring/comet/mascot/sprout/rocket/caterpillar/moon/balloon), `data-scroll-mascot` (cat/bunny/bear/frog) |
 | `tab_title_peekaboo.js` | tab blur message | `data-peekaboo-msg`, `data-peekaboo-favicon` |
-| `click_confetti.js` | click burst + rubber-stamp | `data-stamp` (label text; default "Done!"), `data-confetti` (heart/star/confetti/petal/pixel), `data-confetti-on` (`*` = every click; default `[data-celebrate], [data-confetti]`), `data-palette` |
-| `ambient_floaters.js` | background layer | `data-floaters` (sakura/leaves/snowflake/bubbles/dust/fairydust), `data-floaters-count`, `data-palette` |
+| `click_confetti.js` | click burst + rubber-stamp | `data-stamp` (label text; default "Done!"), `data-confetti` (13 families), `data-confetti-palette`, `data-confetti-motion` (burst/fountain/rain/pop), `data-confetti-on` (`*` = every click; default `[data-celebrate], [data-confetti]`), `data-palette` |
+| `ambient_floaters.js` | background layer | `data-floaters` (12 families), `data-floaters-count`, `data-palette` |
 | `cute_sounds.js` | opt-in synthesized sounds (`SparkleThatPage.sounds`) | `data-sound-toggle` (your own switch), `data-palette` (the voice); `localStorage` `stp:sound` |
 | `secret_word.js` | typed secret word → party; `finale()` hook (`SparkleThatPage.secretWord`) | `data-secret` (default `magic`) |
 | `sky_switch.js` | sun / moon theme toggle (`SparkleThatPage.skySwitch`) + the no-flash `<head>` snippet (section 10) | `data-sky-toggle` (your own switch); sets `<html data-theme>`; `localStorage` `stp:theme` |
 | `cute_chrome.css` | selection/wobble/spinner/scrollbar + palette tokens + the sky switch's look | `.stp-wobble`, `.stp-spinner` classes, `--stp-c1…c5` |
 | `references/wands.md` (next to `examples/`) | how to draw a wand cursor: anatomy, quality bar, the 11 families and their small-size traps, palette rules, sources to study with licences | — |
+| `references/confetti.md`, `floaters.md`, `scroll-mascots.md` | the same kind of guide for confetti, floaters and scroll companions | — |
 | `demo.html` | live showcase + verify tool (stamp buttons, a link to hover for the glow, room to scroll to the bottom, the speaker + sun/moon toggles, the secret word; themed from `data-theme`) | — |
 | `wands.html` | the wand gallery: all 11 families × 3 palettes on light, dark and the page's own theme, plain and glowing; hover a card to wear that wand | `data-wand`, `data-wand-palette` (set on hover) |
+| `confetti.html` | the confetti gallery: every family × palette, light and dark; click a card to fire it; a motion switch | `burst(x, y, { family, palette, motion })` |
+| `floaters.html` | the floaters gallery: a still picture of each family; click one to make it the page's floaters | `data-floaters` (set on click) |
+| `scroll.html` | the scroll gallery: every look in its four states; click one to put it on the page and scroll | `data-scroll`, `data-scroll-mascot` (set on click) |
 
 ## Prior art / see also
 
@@ -463,6 +496,18 @@ Sibling skill: **`cutify-that-tab`** — the cute favicon half of the
 
 ## Changelog
 
+- **v1.4.0** (2026-11-11) — Confetti, floaters and the scroll companion get the wand
+  treatment: each has a guide in `references/` that tells an agent what makes a good one and
+  where to look (licences checked at the source), a gallery page, and far more to pick from.
+  Every shape is now drawn as a path instead of a font character or emoji, so it looks the same
+  on every system, and every family follows the page's light or dark theme, live. Confetti: 13
+  families (paper that flips, curly ribbons, sprinkles, leaves, snow, bubbles that pop, notes,
+  paws…), 3 palettes each, four motions (`burst`, `fountain`, `rain`, `pop`) and
+  `burst(x, y, { family, palette, motion })`. Floaters: 12 families on one canvas (fireflies,
+  dandelion seeds, lanterns, stars, clouds, hearts join the six), three depth layers, and snow
+  that shows on white. Scroll: nine new companions (a cat, bunny, bear or frog climber, sprout,
+  rocket, caterpillar, moon, balloon) with four states each (`is-moving`, `is-holding`,
+  `is-end`) and `data-stp-progress`. Old names and the API still work.
 - **v1.3.0** (2026-11-11) — Wands that point the way. The wand cursor is redrawn as
   11 families with different silhouettes (star, magical, wizard, garden, cosmic, candy,
   crystal, moon, ocean, lollipop, pixel), 3 palettes each (`data-wand-palette`), 40 px

@@ -153,12 +153,12 @@
     document.getElementById("finale-btn").addEventListener("click", function () { window.SparkleThatPage.secretWord.finale(); });
     // Each effect: dataset key it reads, its file, and variant options.
     var EFFECTS = [
-      { key: "fairyCursor",     file: "fairy_cursor.js",       label: "🪄 Fairy cursor",      attr: "wand",     variants: ["star", "magical", "wizard", "garden", "cosmic", "candy", "crystal", "moon", "ocean", "lollipop", "pixel"] },
+      { key: "fairyCursor",     file: "fairy_cursor.js",       label: "🪄 Fairy cursor",      attr: "wand",     variants: ["star", "magical", "wizard", "garden", "cosmic", "candy", "crystal", "moon", "ocean", "lollipop", "pixel"], gallery: "./wands.html", more: "See every wand →" },
       { key: "sparkleTrail",    file: "sparkle_trail.js",      label: "✨ Sparkle trail",     attr: "trail",    variants: ["sparkle", "star", "heart", "pixel", "fairydust"] },
-      { key: "scrollIndicator", file: "scroll_indicator.js",   label: "📜 Scroll indicator",  attr: "scroll",   variants: ["ring", "comet", "mascot"] },
+      { key: "scrollIndicator", file: "scroll_indicator.js",   label: "📜 Scroll indicator",  attr: "scroll",   variants: ["ring", "comet", "mascot", "bunny", "bear", "frog", "sprout", "rocket", "caterpillar", "moon", "balloon"], gallery: "./scroll.html", more: "See every scroll buddy →" },
       { key: "tabPeekaboo",     file: "tab_title_peekaboo.js", label: "👀 Tab peekaboo",      attr: null,       variants: [] },
-      { key: "clickConfetti",   file: "click_confetti.js",     label: "🎉 Click confetti",    attr: "confetti", variants: ["heart", "star", "confetti", "petal", "pixel"] },
-      { key: "ambientFloaters", file: "ambient_floaters.js",   label: "🌸 Ambient floaters",  attr: "floaters", variants: ["sakura", "leaves", "snowflake", "bubbles", "dust", "fairydust"] }
+      { key: "clickConfetti",   file: "click_confetti.js",     label: "🎉 Click confetti",    attr: "confetti", variants: ["heart", "star", "confetti", "paper", "ribbon", "sprinkles", "petal", "leaf", "snow", "bubble", "note", "paw", "pixel"], gallery: "./confetti.html", more: "See every confetti →" },
+      { key: "ambientFloaters", file: "ambient_floaters.js",   label: "🌸 Ambient floaters",  attr: "floaters", variants: ["sakura", "leaves", "snowflake", "bubbles", "dust", "fairydust", "fireflies", "dandelion", "lanterns", "stars", "clouds", "hearts"], gallery: "./floaters.html", more: "See every floater →" }
     ];
     var injCount = 0;
     var box = document.getElementById("controls");
@@ -168,6 +168,11 @@
     function enable(eff) {
       var sel = document.getElementById("sel-" + eff.key);
       if (eff.attr && sel) document.documentElement.dataset[eff.attr] = sel.value;
+      if (eff.key === "scrollIndicator" && sel) {  // the climbers are data-scroll="mascot" plus data-scroll-mascot
+        var climber = ["bunny", "bear", "frog"].indexOf(sel.value) >= 0;
+        document.documentElement.dataset.scroll = climber ? "mascot" : sel.value;
+        if (climber) document.documentElement.dataset.scrollMascot = sel.value; else delete document.documentElement.dataset.scrollMascot;
+      }
       if (eff.key === "tabPeekaboo") {
         document.documentElement.dataset.peekabooMsg = "come back! 🥺";
         document.documentElement.dataset.peekabooFavicon = "🥺";
@@ -191,9 +196,9 @@
       var row = document.createElement("div"); row.className = "ctl";
       var lab = document.createElement("label"); lab.textContent = "🎨 Palette";
       var sel = document.createElement("select"); sel.id = "sel-palette";
-      ["candy", "neon", "meadow"].forEach(function (v) { var o = document.createElement("option"); o.value = v; o.textContent = v; sel.appendChild(o); });
+      [["candy", "candy"], ["neon", "neon"], ["meadow", "meadow"], ["", "each one's own"]].forEach(function (v) { var o = document.createElement("option"); o.value = v[0]; o.textContent = v[1]; sel.appendChild(o); });
       sel.addEventListener("change", function () {
-        document.documentElement.dataset.palette = sel.value;
+        if (sel.value) document.documentElement.dataset.palette = sel.value; else delete document.documentElement.dataset.palette;
         EFFECTS.forEach(function (eff) {
           var c = document.getElementById("chk-" + eff.key);
           if (c && c.checked) { disable(eff); enable(eff); }
@@ -216,9 +221,9 @@
       }
       chk.addEventListener("change", function () { chk.checked ? enable(eff) : disable(eff); });
       box.appendChild(row);
-      if (eff.key === "fairyCursor") {  // gallery of every wand, right under the wand control
+      if (eff.gallery) {  // the effect's gallery, right under its control
         var more = document.createElement("div"); more.className = "ctl more";
-        var a = document.createElement("a"); a.className = "demo-link"; a.href = "./wands.html"; a.textContent = "See every wand →";
+        var a = document.createElement("a"); a.className = "demo-link"; a.href = eff.gallery; a.textContent = eff.more;
         more.appendChild(a); box.appendChild(more);
       }
     });

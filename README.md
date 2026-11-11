@@ -107,14 +107,19 @@ Ten self-contained, **zero-dependency** effects: one short vanilla file each, no
   <br/><sub>All 11 wand families, as they glow over a link, on a light page and a dark page. Each comes in 3 palettes, and the outline flips to suit the page. <a href="https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/wands.html">Try every wand as your cursor →</a></sub>
 </p>
 
+<p align="center">
+  <a href="https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/confetti.html"><img src="docs/readme/sparkle-confetti-floaters-scroll.png" width="880" alt="Three rows drawn on a white page and again on a dark page: 13 kinds of confetti (hearts, stars, paper, ribbons, sprinkles, petals, leaves, snowflakes, bubbles, music notes, paw prints, pixels), 12 kinds of floaters (blossoms, leaves, snow, bubbles, sparkles, fireflies, dandelion seeds, lanterns, stars, sleepy clouds, heart balloons), and 9 pixel scroll companions (a cat, bunny, bear and frog, a sprout in a pot, a rocket, a caterpillar, a moon and a balloon)"/></a>
+  <br/><sub>Every confetti, floater and scroll companion, drawn by the effects themselves on a light page and a dark page. See them move: <a href="https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/confetti.html">confetti</a> · <a href="https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/floaters.html">floaters</a> · <a href="https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/scroll.html">scroll companions</a></sub>
+</p>
+
 | | Effect | File | Variants (`data-*`) |
 |---|---|---|---|
 | 🪄 | Fairy-wand cursor | `fairy_cursor.js` | `data-wand` = star · magical · wizard · garden · cosmic · candy · crystal · moon · ocean · lollipop · pixel; `data-wand-palette` picks 1 of 3 each; follows light and dark pages ([see all 33](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/wands.html)) |
 | ✨ | Sparkle trail | `sparkle_trail.js` | `data-trail` = sparkle · star · heart · pixel · fairydust · glints (twinkling, light and dark); `data-trail-density="storm"` for the dense version |
-| 📜 | Scroll buddy | `scroll_indicator.js` | `data-scroll` = ring · comet · mascot |
+| 📜 | Scroll buddy | `scroll_indicator.js` | `data-scroll` = ring · comet · mascot (a cat, bunny, bear or frog climber) · sprout · rocket · caterpillar · moon · balloon; each one moves, holds on during a fast scroll and cheers at the bottom ([see them all](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/scroll.html)) |
 | 👀 | Tab-title peekaboo | `tab_title_peekaboo.js` | `data-peekaboo-msg`, `data-peekaboo-favicon` |
-| 🎉 | Click confetti | `click_confetti.js` | `data-confetti` = heart · star · confetti · petal · pixel |
-| 🌸 | Ambient floaters | `ambient_floaters.js` | `data-floaters` = sakura · leaves · snowflake · bubbles · dust · fairydust |
+| 🎉 | Click confetti | `click_confetti.js` | `data-confetti` = heart · star · confetti · paper · ribbon · sprinkles · petal · leaf · snow · bubble · note · paw · pixel; 3 palettes each; `data-confetti-motion` = burst · fountain · rain · pop ([see them all](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/confetti.html)) |
+| 🌸 | Ambient floaters | `ambient_floaters.js` | `data-floaters` = sakura · leaves · snowflake · bubbles · dust · fairydust · fireflies · dandelion · lanterns · stars · clouds · hearts, in three depth layers ([see them all](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/floaters.html)) |
 | 🎀 | Cute chrome | `cute_chrome.css` | `.stp-wobble`, `.stp-spinner`, pastel selection and scrollbar |
 | ✅ | Stamp | `click_confetti.js` | `data-stamp="Done!"` on any button; the attribute's value is the stamp text |
 | 🔔 | Cute sounds | `cute_sounds.js` | a speaker toggle (or your own `data-sound-toggle`); one voice per palette: candy soft square, neon sine, meadow triangle |
@@ -426,7 +431,7 @@ Claude: [reads the repo, drafts the hero, badge row, one bold promise and a feat
 bash scripts/check-all.sh
 ```
 
-One script runs every check, on every push and pull request (the **tests** badge above). Today it runs 290 checks:
+One script runs every check, on every push and pull request (the **tests** badge above). Today it runs 547 checks:
 
 - **Favicons:** the checker's 17-fixture self-test, then every starter SVG on the four Chrome tab colours (0 fail; the
   3 known blobs it can't measure must stay UNCHECKED).
@@ -442,6 +447,10 @@ One script runs every check, on every push and pull request (the **tests** badge
 - **Wands and dust:** all 33 wands render with the click point on the gem; the outline follows the page (a white site
   in dark mode still gets dark ink); a page's own wand art is never overwritten; the twinkling dust stays quiet
   under a strict Content-Security-Policy.
+- **Confetti, floaters and scroll companions (257 checks):** every family and palette is drawn as a shape, never a font
+  character, and stays visible on a white page and a dark one; each follows the page's theme live; the four confetti
+  motions and the floaters' depth layers move the way they say; the scroll companions track progress and hold on
+  during a fast scroll; and the old names still work. Each check was shown to fail when its feature is broken.
 - **Syntax:** every shipped script parses (JavaScript, Python, bash, zsh).
 - **Wiggle:** the pacing checker passes on the example films, and style C rebuilds byte-for-byte.
 - **Repo:** marketplace versions match each plugin, skill names match, and every link in this README points at a real

@@ -101,6 +101,9 @@ browser_suite "sparkle: headless browser smoke test" tests/sparkle_smoke.mjs
 browser_suite "sparkle: wand cursor test" tests/sparkle_wands_smoke.mjs
 browser_suite "sparkle: wand gallery test" tests/sparkle_wands_gallery_smoke.mjs
 browser_suite "sparkle: twinkling dust test" tests/sparkle_dust_smoke.mjs
+browser_suite "sparkle: confetti test" tests/sparkle_confetti_smoke.mjs
+browser_suite "sparkle: floaters test" tests/sparkle_floaters_smoke.mjs
+browser_suite "sparkle: scroll companion test" tests/sparkle_scroll_smoke.mjs
 
 echo "== cutify-that-terminal"
 check "terminal: bash -n verify-glyphs.sh" bash -n $TERM/scripts/verify-glyphs.sh
