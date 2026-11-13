@@ -67,6 +67,11 @@ const SPY = `(() => { const s = window.__spy = { raf: 0, cancel: 0, observe: 0, 
   const P = MediaQueryList.prototype, add = P.addEventListener, rem = P.removeEventListener;
   P.addEventListener = function (t, f, o) { if (t === 'change') s.add++; return add.call(this, t, f, o); };
   P.removeEventListener = function (t, f, o) { if (t === 'change') s.remove++; return rem.call(this, t, f, o); }; })();`;
+// the family motion checks read 40 items with random starts over real time, so each number was partly luck: on
+// Math.random and the wall clock, fireflies failed its median-dx or blink check now and then (issue #28). Seed 6 gives
+// fireflies numbers in the middle of what 20 seeds gave (the PR that closed #28 lists them).
+const SEEDED = `(() => { let s = 6; Math.random = () => { s = (s * 1664525 + 1013904223) | 0; return ((s >>> 8) & 0xffffff) / 16777216; }; })();`;
+const T0 = Date.UTC(2026, 0, 1);
 
 const TYPES = { '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.svg': 'image/svg+xml', '.json': 'application/json', '.png': 'image/png', '.md': 'text/markdown' };
 const server = http.createServer((req, res) => {
@@ -102,8 +107,11 @@ const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 try {
-  const open = async (file, opts = {}, wait = true) => {
+  // fixed = true: a paused clock and a seeded Math.random, so the page only moves when the test runs the clock on and the
+  // same items start in the same places every run (the clock goes in before SPY, so SPY wraps the fake frame timer)
+  const open = async (file, opts = {}, wait = true, fixed = false) => {
     const ctx = await browser.newContext({ viewport: { width: 800, height: 600 }, ...opts });
+    if (fixed) { await ctx.clock.install({ time: T0 }); await ctx.clock.pauseAt(T0 + 1000); await ctx.addInitScript(SEEDED); }
     await ctx.addInitScript(SPY);
     const page = await ctx.newPage();
     page.__errors = []; page.__console = [];
@@ -144,14 +152,18 @@ try {
 
   // ---- 2. every family: draws, and moves the way it says ----
   for (const f of FAMILIES) {
-    page = await open(`f-${f}.html`);
+    page = await open(`f-${f}.html`, {}, true, true);
+    if (f === FAMILIES[0]) await check('floaters: the family motion checks run on a paused clock and a seeded Math.random (nothing moves in 300 ms of real time; the clock moves it)', async () => {
+      const a = JSON.stringify(await state(page)); await sleep(300); const b = JSON.stringify(await state(page)); await page.clock.runFor(100); const c = JSON.stringify(await state(page));
+      return [a === b && b !== c, `still while paused ${a === b}, moved when run ${b !== c}`];
+    });
     await check(`floaters: ${f} draws on the canvas (pixels appear), count is 40, no page errors`, async () => {
-      await frames(page, 5);
+      await page.clock.runFor(100);
       const p = await px(page), s = await state(page);
       return [p && p.n > 150 && s.count === 40 && s.family === f && page.__errors.length === 0, `pixels ${p && p.n}, count ${s.count}, family ${s.family}, errors ${page.__errors[0] || 'none'}`];
     });
     await check(`floaters: ${f} moves as ${MOTION[f]}`, async () => {
-      const a = await state(page), pa = await px(page); await sleep(1100); const b = await state(page);
+      const a = await state(page), pa = await px(page); await page.clock.runFor(1100); const b = await state(page);
       const dx = [], dy = [];
       a.items.forEach((it, i) => { const ddx = b.items[i].x - it.x, ddy = b.items[i].y - it.y; if (Math.abs(ddx) < 250 && Math.abs(ddy) < 250) { dx.push(ddx); dy.push(ddy); } });
       const med = v => { const s = [...v].sort((x, y) => x - y); return s[s.length >> 1] || 0; }, mean = v => v.reduce((x, y) => x + y, 0) / (v.length || 1);
@@ -161,12 +173,13 @@ try {
       else if (MOTION[f] === 'rise') ok = mean(dy) < -1;
       else if (MOTION[f] === 'drift') ok = med(dx) > 0.5 && Math.abs(med(dy)) < 3 + (f === 'dandelion' ? 5 : 0);
       else if (MOTION[f] === 'stay') {  // twinkle in place: nobody leaves its spot, but the picture changes over time
-        const alphas = []; for (let i = 0; i < 8; i++) { alphas.push((await px(page)).alpha); await sleep(250); }
+        const alphas = []; for (let i = 0; i < 8; i++) { alphas.push((await px(page)).alpha); await page.clock.runFor(250); }
         const lo = Math.min(...alphas), hi = Math.max(...alphas); ok = maxMove < 9 && (hi - lo) / hi > 0.03; detail += `, brightness range ${(100 * (hi - lo) / hi).toFixed(1)}%`;
       } else {  // wander: moves in every direction, and blinks
-        const alphas = []; for (let i = 0; i < 12; i++) { alphas.push((await px(page)).alpha); await sleep(260); }
+        const alphas = []; for (let i = 0; i < 12; i++) { alphas.push((await px(page)).alpha); await page.clock.runFor(260); }
         const lo = Math.min(...alphas), hi = Math.max(...alphas);
-        ok = mean(dx.map(Math.abs)) > 1.5 && Math.abs(med(dx)) < 6 && (hi - lo) / hi > 0.05; detail += `, blink range ${(100 * (hi - lo) / hi).toFixed(1)}%`;
+        const why = [mean(dx.map(Math.abs)) > 1.5 || 'mean |dx| not over 1.5', Math.abs(med(dx)) < 6 || '|median dx| not under 6', (hi - lo) / hi > 0.05 || 'blink range not over 5%'].filter(w => w !== true);
+        ok = !why.length; detail += `, mean |dx| ${mean(dx.map(Math.abs)).toFixed(1)}, blink range ${(100 * (hi - lo) / hi).toFixed(1)}%${why.length ? '; failed: ' + why.join(', ') : ''}`;
       }
       return [ok, detail];
     });
