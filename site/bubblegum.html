@@ -125,6 +125,24 @@
   .bg-feat:hover{transform:translateY(-6px) rotate(0deg)!important}
   .bg-install-btn:hover{transform:translateY(-2px)}
   @media (prefers-reduced-motion:reduce){.bg-reveal{opacity:1;transform:none}*{animation:none!important}}
+  /* ——— the collection (shelves) ——— */
+  .bg-shelf{background:#fff;border-radius:28px;padding:clamp(18px,3vw,28px);border:1.5px solid rgba(192,38,163,.14);box-shadow:0 18px 40px -24px rgba(157,23,134,.5);min-width:0}
+  .bg-shelf-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 14px;margin:0 0 16px}
+  .bg-shelf-head h3{margin:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(1.15rem,2.4vw,1.45rem);color:#3a1338;letter-spacing:-.01em}
+  .bg-shelf-head h3 span{display:inline-block;margin-left:8px;padding:2px 11px;border-radius:99px;background:linear-gradient(135deg,#ec4899,#a855f7);color:#fff;font-size:.78em;vertical-align:2px}
+  .bg-shelf-head a{font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;color:#c026a3;text-decoration:none;border-radius:8px;padding:2px 4px}
+  .bg-shelf-head a:hover{text-decoration:underline}
+  #bgShelves{align-items:start}
+  .bg-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px}
+  .bg-item{appearance:none;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;min-width:0;padding:10px 6px 8px;border-radius:18px;background:#fff7fc;border:2px solid rgba(192,38,163,.12);color:#3a1338;transition:transform .2s cubic-bezier(.2,.8,.2,1),border-color .15s,box-shadow .15s}
+  .bg-item:hover{transform:translateY(-3px) rotate(-1deg);border-color:rgba(192,38,163,.4)}
+  .bg-item:focus-visible{outline:3px solid #3b82f6;outline-offset:2px}
+  .bg-item[aria-pressed="true"]{border-color:#ec4899;box-shadow:0 0 0 3px rgba(236,72,153,.25);background:#ffeaf5}
+  .bg-item .pic{display:flex;align-items:center;justify-content:center;width:100%;height:64px;overflow:hidden}
+  .bg-item .pic svg{display:block;max-width:100%;max-height:100%;width:auto;height:auto}
+  .bg-item .pic canvas{display:block;width:100%;height:64px}
+  .bg-item .nm{font-family:'Fredoka',sans-serif;font-weight:600;font-size:12.5px;line-height:1.15;text-transform:capitalize;text-align:center;overflow-wrap:anywhere}
+  @media (prefers-reduced-motion:reduce){.bg-item,.bg-item:hover{transition:none;transform:none}}
 </style>
 </head>
 <body>
@@ -256,6 +274,21 @@
     <div id="bgFeatures" class="bg-reveal" style="max-width:1080px;margin:clamp(38px,5vw,60px) auto 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px"></div>
   </section>
 
+  <!-- THE COLLECTION -->
+  <section id="bgCollection" style="position:relative;background:linear-gradient(180deg,#fff1f8 0%,#f6e6ff 100%);padding:0 clamp(18px,5vw,40px) clamp(64px,10vw,120px)">
+    <div class="bg-reveal" style="max-width:1080px;margin:0 auto;text-align:center">
+      <p style="font-family:'Fredoka',sans-serif;font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:13px;color:#c026a3;margin:0 0 14px">the whole collection</p>
+      <h2 style="margin:0;font-family:'Anton',sans-serif;font-weight:400;font-size:clamp(2.4rem,8vw,5rem);text-transform:uppercase;letter-spacing:-.01em;line-height:.95;color:#3a1338">Pick your sparkle.<br>Wear it right now.</h2>
+      <p style="margin:16px auto 0;max-width:44ch;font-size:1.05rem;font-weight:600;color:#9b6a8e">Tap any picture and it lands on this very page. Wands, confetti, floaters and scroll friends, all drawn by the real thing.</p>
+    </div>
+    <div id="bgShelves" class="bg-reveal" style="max-width:1080px;margin:clamp(34px,5vw,56px) auto 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:20px">
+      <div class="bg-shelf" data-shelf="wands"></div>
+      <div class="bg-shelf" data-shelf="confetti"></div>
+      <div class="bg-shelf" data-shelf="floaters"></div>
+      <div class="bg-shelf" data-shelf="scroll"></div>
+    </div>
+  </section>
+
   <!-- INSTALL BAND -->
   <section style="position:relative;background:linear-gradient(135deg,#ec4899,#a855f7 52%,#3b82f6);padding:clamp(60px,9vw,110px) clamp(18px,5vw,40px);text-align:center;overflow:hidden">
     <div class="bg-reveal" style="max-width:680px;margin:0 auto;position:relative;z-index:2">
@@ -276,7 +309,7 @@
 </div>
 
 <script type="module">
-import { startFx, magnetic } from './sparkle-bridge.js';
+import { startFx, stopFx, magnetic, loadArt, liveFx } from './sparkle-bridge.js';
 import { icon } from './icons.js';
 
 // the modules' trail / confetti read their colors from data-palette (Bubblegum ≈ candy).
@@ -298,13 +331,12 @@ initPins();
 initMascot();
 
 // live effects across the whole page — driven by the REAL repo modules
-startFx('trail', 'sparkle');
-startFx('confetti', 'confetti');
-startFx('scroll', 'cat');
-startFx('tab', 'love');
+const started = Promise.all([startFx('trail', 'sparkle'), startFx('confetti', 'confetti'), startFx('scroll', 'cat'), startFx('tab', 'love')]);
 
 // features
 buildFeatures();
+// the collection: drawn once the load-time effects are up, so the drawing code is not loaded twice
+started.then(buildCollection);
 
 // reveal + switcher visibility on scroll
 const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.1 });
@@ -362,6 +394,113 @@ function buildFeatures() {
       <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:#3a1338;margin-top:14px;letter-spacing:-.01em">${f[1]}</div>
       <p style="margin:7px 0 0;font-size:14.5px;line-height:1.5;color:#9b6a8e">${f[2]}</p>
     </div>`).join('');
+}
+
+/* the collection — every picture is drawn by the real module (loadArt); a click puts that design on this page */
+const GALLERY = '../plugins/sparkle-that-page/skills/sparkle-that-page/examples/';
+const COMPANIONS = [['cat', 'mascot', 'cat'], ['bunny', 'mascot', 'bunny'], ['bear', 'mascot', 'bear'], ['frog', 'mascot', 'frog'],
+  ['sprout', 'sprout'], ['rocket', 'rocket'], ['caterpillar', 'caterpillar'], ['moon', 'moon'], ['balloon', 'balloon'], ['ring', 'ring'], ['comet', 'comet']];
+
+async function buildCollection() {
+  const [cursor, confetti, floaters, scroll] = await Promise.all([loadArt('cursor'), loadArt('confetti'), loadArt('floaters'), loadArt('scroll')]);
+  const shelf = (k) => document.querySelector('[data-shelf="' + k + '"]');
+  const ds = document.documentElement.dataset;
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const head = (box, title, n, file, what) => {
+    box.innerHTML = '<div class="bg-shelf-head"><h3>' + title + '<span>' + n + '</span></h3><a href="' + GALLERY + file + '">see all ' + n + ' ' + what + ' \u2192</a></div><div class="bg-items" role="group" aria-label="' + title + '"></div>';
+    return box.querySelector('.bg-items');
+  };
+  // one button per design; `pressed` marks the current one on its shelf
+  // `onPick` may return false when the effect declined to run (reduced motion, touch screen); `off` stops it when the pressed item is tapped again
+  const item = (list, name, label, onPick, off) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'bg-item';
+    b.setAttribute('aria-pressed', 'false');
+    b.setAttribute('aria-label', label);
+    b.innerHTML = '<span class="pic"></span><span class="nm"></span>';
+    b.querySelector('.nm').textContent = name;
+    b.addEventListener('click', async (e) => {
+      const mark = (on) => list.querySelectorAll('.bg-item').forEach((x) => x.setAttribute('aria-pressed', x === b && on ? 'true' : 'false'));
+      if (off && b.getAttribute('aria-pressed') === 'true') { off(); mark(false); return; }
+      const ok = await onPick(e, b);
+      mark(ok !== false);
+    });
+    list.appendChild(b);
+    return b;
+  };
+  const where = (e, b) => {
+    if (e.clientX || e.clientY) return [e.clientX, e.clientY];
+    const r = b.getBoundingClientRect();
+    return [r.left + r.width / 2, r.top + r.height / 2];
+  };
+
+  if (cursor) {
+    const list = head(shelf('wands'), 'Wands', cursor.families.length, 'wands.html', 'wands');
+    cursor.families.forEach((f) => {
+      const p = cursor.palettes[f][0];
+      const b = item(list, f, 'Wand: ' + f + ', ' + p, async () => {
+        ds.wandPalette = p; await startFx('cursor', f);
+        return document.documentElement.classList.contains('stp-wand');  // fairy_cursor needs a mouse
+      }, () => stopFx('cursor'));
+      b.querySelector('.pic').innerHTML = cursor.svg(f, p, false, false);
+      b.querySelector('.pic svg').style.width = '52px';
+    });
+  }
+  if (confetti) {
+    const list = head(shelf('confetti'), 'Confetti', confetti.families.length, 'confetti.html', 'confetti');
+    // the page's theme is candy, and the theme outranks a family's own palette, so the pictures are drawn in candy too
+    confetti.families.forEach((f) => {
+      const b = item(list, f, 'Confetti: ' + f, async (e, btn) => {
+        const [x, y] = where(e, btn);
+        await startFx('confetti', f);
+        const api = liveFx('confetti');
+        if (api && api.burst) api.burst(x, y, { family: f, palette: 'candy' });
+      });
+      b.dataset.family = f;
+      if (f === 'confetti') b.setAttribute('aria-pressed', 'true');  // what the page started with
+      b.querySelector('.pic').appendChild(document.createElement('canvas'));
+    });
+  }
+  if (floaters) {
+    const list = head(shelf('floaters'), 'Floaters', floaters.families.length, 'floaters.html', 'floaters');
+    floaters.families.forEach((f) => {
+      const b = item(list, f, 'Floaters: ' + f, async () => {
+        await startFx('floaters', f);
+        const api = liveFx('floaters');
+        return !!(api && api.active && api.active());  // reduced motion declines to start
+      }, () => stopFx('floaters'));
+      b.dataset.family = f;
+      b.querySelector('.pic').appendChild(document.createElement('canvas'));
+    });
+  }
+  if (scroll) {
+    const list = head(shelf('scroll'), 'Scroll friends', COMPANIONS.length, 'scroll.html', 'friends');
+    COMPANIONS.forEach(([name, fam, mascot]) => {
+      const b = item(list, name, 'Scroll friend: ' + name, () => startFx('scroll', name));
+      if (name === 'cat') b.setAttribute('aria-pressed', 'true');  // what the page started with
+      const opts = { cell: fam === 'ring' ? 1 : 2, progress: 0.6 };
+      if (mascot) opts.mascot = mascot;
+      b.querySelector('.pic').innerHTML = scroll.svg(fam, 'idle', false, opts);
+    });
+  }
+  // canvases need a laid-out size, so they are drawn after the shelves are in the page, and again when the width changes
+  const paint = () => {
+    document.querySelectorAll('[data-shelf="confetti"] .bg-item').forEach((b) => {
+      const cv = b.querySelector('canvas');
+      const w = cv.clientWidth || 80, h = 64;
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+      const g = cv.getContext('2d');
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      for (let i = 0; i < 4; i++) confetti.draw(g, b.dataset.family, 'candy', false, w * (i + 0.5) / 4, h / 2 - 2, 11, i);
+    });
+    document.querySelectorAll('[data-shelf="floaters"] .bg-item').forEach((b) => {
+      floaters.preview(b.querySelector('canvas'), b.dataset.family, { palette: 'candy', dark: false });
+    });
+  };
+  paint();
+  let rz = 0;
+  addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(paint, 150); });
 }
 
 function initPins() {

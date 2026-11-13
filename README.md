@@ -431,7 +431,7 @@ Claude: [reads the repo, drafts the hero, badge row, one bold promise and a feat
 bash scripts/check-all.sh
 ```
 
-One script runs every check, on every push and pull request (the **tests** badge above). Today it runs 547 checks:
+One script runs every check, on every push and pull request (the **tests** badge above). Today it runs 602 checks:
 
 - **Favicons:** the checker's 17-fixture self-test, then every starter SVG on the four Chrome tab colours (0 fail; the
   3 known blobs it can't measure must stay UNCHECKED).
@@ -451,6 +451,9 @@ One script runs every check, on every push and pull request (the **tests** badge
   character, and stays visible on a white page and a dark one; each follows the page's theme live; the four confetti
   motions and the floaters' depth layers move the way they say; the scroll companions track progress and hold on
   during a fast scroll; and the old names still work. Each check was shown to fail when its feature is broken.
+- **Landing pages (55 checks):** both landing pages offer every family and draw the whole collection with the real
+  effects; a tap puts that design on the page; the shelves really appear when scrolled to; a double-click or five
+  quick taps leave one copy of each effect running, not several; and nothing scrolls sideways on a phone.
 - **Syntax:** every shipped script parses (JavaScript, Python, bash, zsh).
 - **Wiggle:** the pacing checker passes on the example films, and style C rebuilds byte-for-byte.
 - **Repo:** marketplace versions match each plugin, skill names match, and every link in this README points at a real
