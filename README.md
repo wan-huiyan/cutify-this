@@ -69,6 +69,47 @@ done
 </tr>
 </table>
 
+## 🎨 Everything it can draw
+
+Every picture here was drawn by the skills' own code, not mocked up. Click one to play with it live.
+
+<table>
+<tr>
+<td width="50%"><a href="https://wan-huiyan.github.io/cutify-this/site/aurora.html"><img src="docs/readme/site-aurora-collection.png" alt="The Aurora landing page's collection on a dark page, under the heading Pick a look, wear it now: eleven wand cursors (star, magical, wizard, garden, cosmic, candy, crystal, moon, ocean, lollipop, pixel) and thirteen kinds of confetti (shapes, hearts, stars, paper, ribbon, sprinkles, petals, leaves, snowflakes, bubbles, music notes, paw prints, pixels), each on its own tile"/></a></td>
+<td width="50%"><a href="https://wan-huiyan.github.io/cutify-this/site/bubblegum.html"><img src="docs/readme/site-bubblegum-collection.png" alt="The Bubblegum landing page's collection on a light pink page, under the heading Pick your sparkle. Wear it right now.: a Wands card with eleven wands and a Confetti card with thirteen kinds of confetti, each with a count badge and a see-all link"/></a></td>
+</tr>
+<tr>
+<td><sub><b>Aurora</b>, the dark landing page: all 47 designs on four shelves (wands, confetti, floaters, scroll companions). Tap one and it takes over the page.</sub></td>
+<td><sub><b>Bubblegum</b>, the bright one: the same 47, drawn for a light page.</sub></td>
+</tr>
+<tr>
+<td><a href="https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/confetti.html"><img src="docs/readme/sparkle-confetti-motions.gif" alt="On a plain cream page, hearts, stars, leaves, paw prints, music notes and ribbons burst out in rings, shoot up in fountains, rain down from the top and pop in small clusters, then the page clears"/></a></td>
+<td><a href="https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/floaters.html"><img src="docs/readme/sparkle-floaters.gif" alt="On a dark page, glowing paper lanterns drift up, then blinking fireflies wander, then sakura blossoms and petals tumble down, then heart balloons rise on their strings"/></a></td>
+</tr>
+<tr>
+<td><sub><b>Confetti</b> in its four motions: burst, fountain, rain and pop, with six of the 13 kinds.</sub></td>
+<td><sub><b>Floaters</b> on a dark page: lanterns, fireflies, sakura and heart balloons, four of the 12.</sub></td>
+</tr>
+<tr>
+<td><a href="https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/scroll.html"><img src="docs/readme/sparkle-scroll-companion.gif" alt="A pixel frog on a dotted rail at the right edge of the scroll gallery climbs down its rail as the page scrolls slowly, clings on during a fast flick, cheers at the very bottom, then returns to the top"/></a></td>
+<td><a href="https://wan-huiyan.github.io/cutify-this/site/bubblegum.html"><img src="docs/readme/site-bubblegum-hero.png" alt="The top of the Bubblegum landing page: a giant white SPARKLE headline on hot pink, three glassy cards for sparkle trail, ambient floaters and click confetti, pixel flowers along the bottom, and a pixel cat on the scroll rail top right"/></a></td>
+</tr>
+<tr>
+<td><sub>A <b>scroll companion</b>: the frog climbs down its rail as you read, holds on when you flick fast, and cheers at the bottom.</sub></td>
+<td><sub>The top of <b>Bubblegum</b>: a carousel of the effects, with the cat scroll buddy already on its rail.</sub></td>
+</tr>
+<tr>
+<td><a href="https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/moods/moods.html"><img src="docs/readme/tab-moods.png" alt="The mochi cat favicon awake and asleep, in tab chips and 64 px enlargements on the four Chrome tab colours; asleep has closed eyes and a small z"/></a></td>
+<td><a href="https://wan-huiyan.github.io/cutify-this/wiggle/"><img src="docs/wiggle-that-diagram/pizza.gif" alt="A pizza order explained step by step: a phone with the pizza app, a kitchen with ticket #42 and an oven, a driver on a scooter heading to a house at 12 Elm St, with the caption The app follows the driver on a map and a five-step rail underneath"/></a></td>
+</tr>
+<tr>
+<td><sub><b>cutify-that-tab</b>: a tab icon that closes its eyes after 6 pm and whenever you are on another tab.</sub></td>
+<td><sub><b>wiggle-that-diagram</b>: a pizza order from app to door, in the live style (made-up example).</sub></td>
+</tr>
+</table>
+
+**Every gallery:** [11 wands](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/wands.html) · [13 confetti](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/confetti.html) · [12 floaters](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/floaters.html) · [11 scroll companions](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/scroll.html) · [7 favicon styles](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/styles.html) · [the favicon builder](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/builder.html) · [10 mood favicons](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/moods/moods.html) · [3 explainer styles](https://wan-huiyan.github.io/cutify-this/wiggle/)
+
 ## 🌱 Used in the wild
 
 <table>
