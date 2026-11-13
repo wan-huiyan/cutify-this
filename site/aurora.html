@@ -50,6 +50,22 @@
   .au-install:hover{transform:translateY(-2px)}
   .au-tile:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.28)!important}
   .au-vp:hover{border-color:rgba(255,255,255,.4)!important}
+  .au-vp:focus-visible,.au-item:focus-visible,.au-more:focus-visible,.au-switch:focus-visible,.au-seeall:focus-visible{outline:2px solid #fde047;outline-offset:2px}
+  .au-pf:not(.open) .au-extra{display:none}
+  .au-more{cursor:pointer;font-family:'DM Mono',monospace;font-size:11.5px;padding:5px 11px;border-radius:999px;border:1px dashed rgba(255,255,255,.28);background:transparent;color:#8fb6ff}
+  .au-more:hover{border-color:#8fb6ff}
+  .au-gal{font-family:'DM Mono',monospace;font-size:11.5px;color:#8fb6ff;text-decoration:none;align-self:flex-start}
+  .au-gal:hover{color:#fff;text-decoration:underline}
+  .au-shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+  .au-item{cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:8px;padding:12px 6px 9px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#cbbff0;font-family:'DM Mono',monospace;font-size:11.5px;transition:transform .18s,border-color .18s,background .18s}
+  .au-item:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.34);background:rgba(255,255,255,.08)}
+  .au-item[aria-pressed="true"]{border-color:#f0abfc;background:rgba(240,171,252,.14);color:#fff}
+  .au-pic{display:grid;place-items:center;width:100%;height:64px;pointer-events:none}
+  .au-pic svg{max-width:100%;height:auto;max-height:64px}
+  .au-pic canvas{width:100%;height:56px;display:block}
+  .au-note{margin:0;font-family:'DM Mono',monospace;font-size:11.5px;line-height:1.45;color:#fde047}
+  .au-note:empty{display:none}
+  @media (prefers-reduced-motion:reduce){.au-item{transition:none}.au-item:hover{transform:none}}
   /* ——— kitty-fairy mascot (eyes follow the cursor) ——— */
   .mascot{--p1:#c3b1f2;--p2:#dccdff;--p3:#fde047;--p4:#efe7ff;--p5:#fb7185;--ink:#3a2a58;position:relative;width:164px;height:198px;cursor:pointer;will-change:transform}
   .mascot.twirl{animation:m-twirl 1.15s cubic-bezier(.42,.04,.32,1)}
@@ -277,6 +293,16 @@
     </div>
   </section>
 
+  <!-- THE COLLECTION -->
+  <section id="collection" aria-labelledby="auColHead" style="position:relative;z-index:2;padding:clamp(30px,5vw,60px) 22px clamp(50px,8vw,96px);max-width:1000px;margin:0 auto">
+    <div class="au-reveal" style="text-align:center;margin-bottom:clamp(26px,4vw,44px)">
+      <p style="font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#8fb6ff;margin:0 0 14px">// the collection</p>
+      <h2 id="auColHead" style="margin:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(2rem,6vw,3.6rem);letter-spacing:-.02em;color:#fff;line-height:1.04">Pick a look, wear it&nbsp;now</h2>
+      <p style="margin:14px auto 0;max-width:46ch;font-size:1.05rem;color:#cfc4ee;font-weight:600">Every picture below is drawn by the real effect. Tap one and it takes over this page.</p>
+    </div>
+    <div id="auShelves" style="display:flex;flex-direction:column;gap:18px"></div>
+  </section>
+
   <!-- STICKY STACKING CARDS -->
   <section id="inside" style="position:relative;z-index:2;padding:clamp(40px,7vw,80px) 22px clamp(60px,9vw,120px);max-width:1080px;margin:0 auto">
     <div class="au-reveal" style="text-align:center;margin-bottom:clamp(30px,5vw,54px)">
@@ -315,7 +341,7 @@
 </div>
 
 <script type="module">
-import { startFx, stopFx, magnetic } from './sparkle-bridge.js';
+import { startFx, stopFx, magnetic, loadArt, liveFx } from './sparkle-bridge.js';
 import { icon } from './icons.js';
 
 // the modules' trail / confetti / floaters read their colors from data-palette.
@@ -326,11 +352,18 @@ const fxState = {
   trail:    { on: true,  variant: 'sparkle' },
   confetti: { on: true,  variant: 'confetti' },
   cursor:   { on: false, variant: 'star' },
-  floaters: { on: true,  variant: 'stars' },
+  floaters: { on: true,  variant: 'dust' },
   scroll:   { on: true,  variant: 'cat' },
   tab:      { on: true,  variant: 'shy' },
 };
 
+const GAL = '../plugins/sparkle-that-page/skills/sparkle-that-page/examples/';
+const WANDS = ['star', 'magical', 'wizard', 'garden', 'cosmic', 'candy', 'crystal', 'moon', 'ocean', 'lollipop', 'pixel'];
+const CONFETTI = ['confetti', 'heart', 'star', 'paper', 'ribbon', 'sprinkles', 'petal', 'leaf', 'snow', 'bubble', 'note', 'paw', 'pixel'];
+const FLOATERS = ['dust', 'sakura', 'snowflake', 'bubbles', 'leaves', 'fairydust', 'fireflies', 'dandelion', 'lanterns', 'stars', 'clouds', 'hearts'];
+const COMPANIONS = ['cat', 'bunny', 'bear', 'frog', 'sprout', 'rocket', 'caterpillar', 'moon', 'balloon', 'ring', 'comet'];
+const SHOW = 5;  // pills shown before a card's "more" button
+const pgCards = {};
 const root = document.getElementById('auroraRoot');
 
 initMascot();
@@ -341,11 +374,14 @@ buildPlayground();
 buildStack();
 buildStats();
 buildCta();
-revealOnScroll();
+const reveal = revealOnScroll();  // returns its observer, so cards built later (the shelves) are watched too
 stickyScale();
 
 // fire the default-on effects through the REAL repo modules
-Object.keys(fxState).forEach((k) => { if (fxState[k].on) startFx(k, fxState[k].variant); });
+const boot = Promise.all(Object.keys(fxState).filter((k) => fxState[k].on).map((k) => startFx(k, fxState[k].variant)))
+  .then(() => Object.keys(fxState).forEach(declineIfOff));
+// the shelves wait for those starts, so a module is never loaded twice at once
+buildShelves();
 
 // ——— marquee tiles (crafted icons) ———
 function buildMarquee() {
@@ -368,43 +404,155 @@ function buildMarquee() {
 // ——— interactive playground (drives the real modules) ———
 function buildPlayground() {
   const defs = [
-    { key: 'trail', icon: 'sparkle', name: 'Sparkle trail', sub: 'stardust follows your mouse', variants: ['sparkle', 'star', 'heart'] },
-    { key: 'confetti', icon: 'confetti', name: 'Click confetti', sub: 'every click bursts open', variants: ['confetti', 'heart', 'star', 'petal'] },
-    { key: 'cursor', icon: 'wand', name: 'Fairy cursor', sub: 'your pointer becomes a wand', variants: ['star', 'heart', 'moon', 'crystal'] },
-    { key: 'floaters', icon: 'bloom', name: 'Ambient floaters', sub: 'a gentle weather behind it all', variants: ['stars', 'sakura', 'snow', 'bubbles'] },
-    { key: 'scroll', icon: 'cat', name: 'Scroll meter', sub: 'a buddy rides along as you scroll', variants: ['cat', 'comet'] },
+    { key: 'trail', icon: 'sparkle', name: 'Sparkle trail', sub: 'stardust follows your mouse', variants: ['sparkle', 'star', 'heart', 'pixel', 'fairydust', 'glints'] },
+    { key: 'confetti', icon: 'confetti', name: 'Click confetti', sub: 'every click bursts open', variants: CONFETTI, gal: 'confetti.html' },
+    { key: 'cursor', icon: 'wand', name: 'Fairy cursor', sub: 'your pointer becomes a wand', variants: WANDS, gal: 'wands.html' },
+    { key: 'floaters', icon: 'bloom', name: 'Ambient floaters', sub: 'a gentle weather behind it all', variants: FLOATERS, gal: 'floaters.html' },
+    { key: 'scroll', icon: 'cat', name: 'Scroll meter', sub: 'a buddy rides along as you scroll', variants: COMPANIONS, gal: 'scroll.html' },
     { key: 'tab', icon: 'peek', name: 'Tab peekaboo', sub: 'it pleads when you switch tabs', variants: ['shy', 'love', 'sleepy', 'ghost'] },
   ];
   const wrap = document.getElementById('auPlay');
   wrap.innerHTML = defs.map((d) => {
     const st = fxState[d.key];
-    const pills = d.variants.map((v) => `<button class="au-vp" data-key="${d.key}" data-v="${v}" style="${pillStyle(v === st.variant)}">${v}</button>`).join('');
-    return `<div class="au-pf" style="border-radius:20px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);backdrop-filter:blur(10px);padding:18px;display:flex;flex-direction:column;gap:14px">
+    const many = d.variants.length > SHOW + 1;
+    const pills = d.variants.map((v, i) => `<button type="button" class="au-vp${many && i >= SHOW ? ' au-extra' : ''}" data-key="${d.key}" data-v="${v}" aria-label="${d.name}: ${v}" aria-pressed="${v === st.variant}" style="${pillStyle(v === st.variant)}">${v}</button>`).join('');
+    const more = many ? `<button type="button" class="au-more" aria-expanded="false" aria-label="Show all ${d.variants.length} ${d.name} looks">+${d.variants.length - SHOW} more</button>` : '';
+    const gal = d.gal ? `<a class="au-gal" href="${GAL}${d.gal}">see all ${d.variants.length} in the gallery &rarr;</a>` : '';
+    return `<div class="au-pf" data-key="${d.key}" style="border-radius:20px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);backdrop-filter:blur(10px);padding:18px;display:flex;flex-direction:column;gap:14px">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
         <div style="display:flex;align-items:center;gap:12px;min-width:0">
           ${icon(d.icon, 40)}
           <div style="min-width:0"><div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:#fff;line-height:1.1">${d.name}</div><div style="font-size:12.5px;color:#bcb0e0;margin-top:2px">${d.sub}</div></div>
         </div>
-        <button class="au-switch" data-key="${d.key}" aria-pressed="${st.on}" style="${switchStyle(st.on)}"><span style="${knobStyle(st.on)}"></span></button>
+        <button type="button" class="au-switch" data-key="${d.key}" aria-label="${d.name} on or off" aria-pressed="${st.on}" style="${switchStyle(st.on)}"><span style="${knobStyle(st.on)}"></span></button>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:7px">${pills}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">${pills}${more}</div>
+      <p class="au-note" data-key="${d.key}" role="status"></p>
+      ${gal}
     </div>`;
   }).join('');
+  wrap.querySelectorAll('.au-pf').forEach((c) => { pgCards[c.dataset.key] = c; });
 
-  wrap.querySelectorAll('.au-switch').forEach((b) => b.addEventListener('click', () => {
-    const k = b.dataset.key, st = fxState[k];
-    st.on = !st.on;
-    b.setAttribute('aria-pressed', st.on);
-    b.style.cssText = switchStyle(st.on);
-    b.firstElementChild.style.cssText = knobStyle(st.on);
-    if (st.on) startFx(k, st.variant); else stopFx(k);
+  wrap.querySelectorAll('.au-switch').forEach((b) => b.addEventListener('click', () => setFx(b.dataset.key, null, !fxState[b.dataset.key].on)));
+  wrap.querySelectorAll('.au-vp').forEach((b) => b.addEventListener('click', () => setFx(b.dataset.key, b.dataset.v, null)));
+  wrap.querySelectorAll('.au-more').forEach((b) => b.addEventListener('click', () => {
+    const open = b.closest('.au-pf').classList.toggle('open');
+    b.setAttribute('aria-expanded', open);
+    b.textContent = open ? 'fewer' : '+' + (b.closest('.au-pf').querySelectorAll('.au-extra').length) + ' more';
   }));
-  wrap.querySelectorAll('.au-vp').forEach((b) => b.addEventListener('click', () => {
-    const k = b.dataset.key, v = b.dataset.v;
-    fxState[k].variant = v;
-    wrap.querySelectorAll(`.au-vp[data-key="${k}"]`).forEach((x) => { x.style.cssText = pillStyle(x.dataset.v === v); });
-    if (fxState[k].on) startFx(k, v);
-  }));
+}
+// the one way to change an effect, used by the playground and the collection shelves:
+// variant (or null = keep) and on (or null = keep; picking a look turns it on when asked via on=true)
+async function setFx(key, variant, on) {
+  const st = fxState[key];
+  if (variant != null) st.variant = variant;
+  if (on != null) st.on = on;
+  showFx(key, '');
+  if (!st.on) { stopFx(key); return; }
+  await startFx(key, st.variant);
+  declineIfOff(key);
+}
+// Some effects sit out on some devices (the wand needs a mouse; floaters stay still when the device asks for
+// less motion). Then the controls must not say "on": turn the switch back off and say why, in plain words.
+const WHY = { cursor: 'Wands need a mouse, so the pointer stays as it is here.', floaters: 'Floaters stay still when your device asks for less motion.' };
+function running(key) {
+  if (key === 'cursor') return document.documentElement.classList.contains('stp-wand');
+  if (key === 'floaters' || key === 'confetti') { const l = liveFx(key); return !!(l && l.active && l.active()); }
+  return true;
+}
+function declineIfOff(key) {
+  const st = fxState[key];
+  if (!st.on || running(key)) return;
+  st.on = false; stopFx(key); showFx(key, WHY[key] || 'This one cannot run here.');
+}
+// paint every control for one effect: its playground pills and switch, its shelf items, its notes
+function showFx(key, note) {
+  const st = fxState[key], card = pgCards[key];
+  if (card) {
+    card.querySelectorAll('.au-vp').forEach((x) => {
+      const a = x.dataset.v === st.variant;
+      x.style.cssText = pillStyle(a); x.setAttribute('aria-pressed', a);
+      if (a && x.classList.contains('au-extra') && !card.classList.contains('open')) {
+        card.classList.add('open');
+        const m = card.querySelector('.au-more'); if (m) { m.setAttribute('aria-expanded', 'true'); m.textContent = 'fewer'; }
+      }
+    });
+    const sw = card.querySelector('.au-switch');
+    sw.setAttribute('aria-pressed', st.on);
+    sw.style.cssText = switchStyle(st.on);
+    sw.firstElementChild.style.cssText = knobStyle(st.on);
+  }
+  document.querySelectorAll('.au-item[data-key="' + key + '"]').forEach((x) => x.setAttribute('aria-pressed', st.on && x.dataset.v === st.variant));
+  document.querySelectorAll('.au-note[data-key="' + key + '"]').forEach((n) => { n.textContent = note; });
+}
+
+// ——— the collection: four shelves drawn by the real modules ———
+async function buildShelves() {
+  const host = document.getElementById('auShelves');
+  await boot;
+  const shelves = [
+    { key: 'cursor', art: 'cursor', title: 'wands', list: WANDS, gal: 'wands.html', what: 'wand' },
+    { key: 'confetti', art: 'confetti', title: 'confetti', list: CONFETTI, gal: 'confetti.html', what: 'confetti' },
+    { key: 'floaters', art: 'floaters', title: 'floaters', list: FLOATERS, gal: 'floaters.html', what: 'floaters' },
+    { key: 'scroll', art: 'scroll', title: 'scroll companions', list: COMPANIONS, gal: 'scroll.html', what: 'companion' },
+  ];
+  host.innerHTML = shelves.map((sh) => `<div class="au-reveal" data-shelf="${sh.key}" style="border-radius:24px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);backdrop-filter:blur(10px);padding:clamp(16px,2.4vw,24px)">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px 16px;flex-wrap:wrap;margin-bottom:14px">
+        <h3 style="margin:0;font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(1.15rem,2vw,1.4rem);color:#fff;letter-spacing:-.01em">${sh.list.length} ${sh.title}</h3>
+        <a class="au-gal au-seeall" href="${GAL}${sh.gal}">see all ${sh.title} &rarr;</a>
+      </div>
+      <p class="au-note" data-key="${sh.key}" role="status" style="margin-bottom:12px"></p>
+      <div class="au-shelf" role="group" aria-label="${sh.title}"></div>
+    </div>`).join('');
+  host.querySelectorAll('.au-reveal').forEach((el) => reveal.observe(el));  // built after revealOnScroll ran
+  const redraws = [];
+  const arts = await Promise.all(shelves.map((sh) => loadArt(sh.art)));
+  shelves.forEach((sh, si) => {
+    const art = arts[si], grid = host.querySelector(`[data-shelf="${sh.key}"] .au-shelf`);
+    if (!art) { grid.innerHTML = '<p style="color:#bcb0e0;font-size:14px;margin:0">These pictures could not load.</p>'; return; }
+    sh.list.forEach((v) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'au-item'; b.dataset.key = sh.key; b.dataset.v = v;
+      b.setAttribute('aria-label', `Use the ${v} ${sh.what} on this page`);
+      b.setAttribute('aria-pressed', String(fxState[sh.key].on && fxState[sh.key].variant === v));
+      const pic = document.createElement('span'); pic.className = 'au-pic';
+      const lab = document.createElement('span'); lab.textContent = v;
+      b.append(pic, lab); grid.append(b);
+      if (sh.key === 'cursor') {
+        pic.innerHTML = art.svg(v, (art.palettes[v] || [])[0], true, true);
+      } else if (sh.key === 'scroll') {
+        const climber = ['cat', 'bunny', 'bear', 'frog'].includes(v);
+        pic.innerHTML = art.svg(climber ? 'mascot' : v, 'end', true, { mascot: climber ? v : undefined, cell: v === 'ring' ? 1 : 2 });
+      } else {
+        const cv = document.createElement('canvas'); cv.setAttribute('aria-hidden', 'true'); pic.append(cv);
+        if (sh.key === 'confetti') {
+          // the page sets data-palette, and the live confetti takes its colours from it, so draw in those colours
+          const pal = document.documentElement.dataset.palette || (art.palettes[v] || [])[0];
+          redraws.push(() => {
+            const w = cv.clientWidth || 84, h = cv.clientHeight || 56, r = Math.min(devicePixelRatio || 1, 2);
+            cv.width = Math.round(w * r); cv.height = Math.round(h * r);
+            const g = cv.getContext('2d'); g.setTransform(r, 0, 0, r, 0, 0);
+            for (let i = 0; i < 4; i++) art.draw(g, v, pal, true, w * (i + 0.5) / 4, h / 2, 11, i);
+          });
+        } else {
+          redraws.push(() => art.preview(cv, v, { dark: true }));
+        }
+      }
+      b.addEventListener('click', async (e) => {
+        const r = b.getBoundingClientRect();
+        const x = e.clientX || r.left + r.width / 2, y = e.clientY || r.top + r.height / 2;
+        await setFx(sh.key, v, true);
+        if (sh.key === 'confetti') {
+          const live = liveFx('confetti');
+          if (live && live.burst) live.burst(x, y, { family: v });
+        }
+      });
+    });
+  });
+  const paint = () => redraws.forEach((f) => { try { f(); } catch (e) {} });
+  paint();
+  let t = 0;
+  addEventListener('resize', () => { clearTimeout(t); t = setTimeout(paint, 150); });
 }
 function switchStyle(on) { return `position:relative;cursor:pointer;border:none;width:48px;height:27px;border-radius:999px;flex:none;transition:background .2s;background:${on ? 'linear-gradient(123deg,#a78bfa,#22d3ee)' : 'rgba(255,255,255,.14)'}`; }
 function knobStyle(on) { return `position:absolute;top:3px;left:${on ? '24px' : '3px'};width:21px;height:21px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 2px 5px rgba(0,0,0,.4)`; }
@@ -471,6 +619,7 @@ function buildCta() {
 function revealOnScroll() {
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
   root.querySelectorAll('.au-reveal').forEach((el) => io.observe(el));
+  return io;
 }
 
 // ——— sticky stacking scale ———
