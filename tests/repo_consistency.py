@@ -2,6 +2,7 @@
 """Repo-consistency checks for scripts/check-all.sh. Standard library only.
 
   repo_consistency.py versions       marketplace.json is valid; each plugin's version matches plugin.json and SKILL.md
+                                     (an entry whose source is another repo is checked for a version and description only)
   repo_consistency.py skills         every plugin has one SKILL.md whose frontmatter name matches its folder
   repo_consistency.py readme-links   every relative link / image in the README points at a file that exists
 
@@ -27,9 +28,22 @@ def load_marketplace():
         problems.append(f'{MARKETPLACE}: cannot read plugin list ({e})')
         return []
 
+def external(p):
+    """An entry whose source is another repo (github, or git-subdir for a folder in it): its files live there, not here."""
+    src = p.get('source')
+    if isinstance(src, str): return False
+    ok = isinstance(src, dict) and (
+        (src.get('source') == 'github' and re.fullmatch(r'[\w.-]+/[\w.-]+', src.get('repo') or '')) or
+        (src.get('source') == 'git-subdir' and src.get('url') and src.get('path')))
+    if not ok: problems.append(f'{p.get("name")}: source {src!r} is not a relative path, a github source with repo, or a git-subdir source with url and path')
+    return True
+
 def versions():
     for p in load_marketplace():
         name, ver = p.get('name'), p.get('version')
+        if external(p):
+            if not ver or not p.get('description'): problems.append(f'{name}: an external entry needs its own version and description')
+            continue
         src = ROOT / p.get('source', '')
         if not src.is_dir():
             problems.append(f'{name}: source {p.get("source")} is not a directory'); continue
@@ -44,7 +58,7 @@ def versions():
             if m and m.group(1) != ver: problems.append(f'{name}: marketplace {ver} != {skill.relative_to(ROOT)} {m.group(1)}')
 
 def skills():
-    plugins = load_marketplace()
+    plugins = [p for p in load_marketplace() if not external(p)]
     for p in plugins:
         src = ROOT / p.get('source', '')
         found = sorted((src / 'skills').glob('*/SKILL.md'))

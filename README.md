@@ -4,19 +4,19 @@
 </p>
 
 <h1 align="center">cutify-this ✨</h1>
-<p align="center"><em>Six Claude Code skills that make the things you build cute, and check that the cute actually works.</em></p>
+<p align="center"><em>Five Claude Code skills that make the things you build cute, and check that the cute actually works.</em></p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/github/license/wan-huiyan/cutify-this" alt="license"/></a>
   <a href="https://github.com/wan-huiyan/cutify-this/actions/workflows/test.yml"><img src="https://github.com/wan-huiyan/cutify-this/actions/workflows/test.yml/badge.svg" alt="tests"/></a>
   <a href="https://github.com/wan-huiyan/cutify-this/commits"><img src="https://img.shields.io/github/last-commit/wan-huiyan/cutify-this" alt="last commit"/></a>
-  <a href="https://claude.com/claude-code"><img src="https://img.shields.io/badge/Claude_Code-6_skills-orange" alt="Claude Code: 6 skills"/></a>
+  <a href="https://claude.com/claude-code"><img src="https://img.shields.io/badge/Claude_Code-5_skills-orange" alt="Claude Code: 5 skills"/></a>
   <img src="https://img.shields.io/badge/style-kawaii_but_tested-f472b6" alt="style: kawaii but tested"/>
 </p>
 
 > **Ask Claude to "make it cute" and get a favicon that doesn't vanish in a grey tab, page effects that switch off for people who
-> asked for less motion, a terminal whose icons provably render, and a README, an app or an explainer animation with the same
-> care. Every skill ships with checks that can fail.**
+> asked for less motion, a terminal whose icons provably render, and a README or a whole app with the same care. Every
+> skill ships with checks that can fail.**
 
 ## 🚀 Install
 
@@ -24,7 +24,7 @@
 /plugin marketplace add wan-huiyan/cutify-this
 ```
 
-Then install the ones you want (or all six):
+Then install the ones you want (or all five):
 
 ```bash
 /plugin install cutify-that-tab@wan-huiyan-cutify-this
@@ -32,29 +32,31 @@ Then install the ones you want (or all six):
 /plugin install pop-that-readme@wan-huiyan-cutify-this
 /plugin install cutify-that-terminal@wan-huiyan-cutify-this
 /plugin install hatch-that-world@wan-huiyan-cutify-this
-/plugin install wiggle-that-diagram@wan-huiyan-cutify-this
 ```
 
-<details><summary>From a terminal instead, all six in one go</summary>
+<details><summary>From a terminal instead, all five in one go</summary>
 
 ```bash
 claude plugin marketplace add wan-huiyan/cutify-this
-for p in cutify-that-tab sparkle-that-page pop-that-readme cutify-that-terminal hatch-that-world wiggle-that-diagram; do
+for p in cutify-that-tab sparkle-that-page pop-that-readme cutify-that-terminal hatch-that-world; do
   claude plugin install "$p@wan-huiyan-cutify-this"
 done
 ```
 </details>
 
-## 🧺 Six skills at a glance
+## 🧺 Five skills at a glance
 
 | | Skill | Say this to Claude | You get | Try it |
 |---|---|---|---|---|
 | ✨ | [**sparkle-that-page**](#-sparkle-that-page--cute-page-effects) | "make this page more magical" | 10 drop-in effects (cursor, trail, confetti, stamp, sounds, secret word, sky switch…), 3 palettes, zero dependencies | [live demo](https://wan-huiyan.github.io/cutify-this/site/aurora.html) |
 | 🎀 | [**cutify-that-tab**](#-cutify-that-tab--a-cute-favicon-that-survives-the-tab) | "put something cute in the browser tab" | 1 SVG favicon from 78 starters in 7 styles, checked against 4 Chrome tab colours; a builder; icons that sleep at night | [builder](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/builder.html) · [style gallery](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/styles.html) |
 | 🐛 | [**hatch-that-world**](#-hatch-that-world--your-app-as-a-little-world) | "make this dashboard cute, like the morning brief" | your data drawn as a scene, switchable worlds, a mascot with moods | [morning-fairy](https://github.com/wan-huiyan/morning-fairy) |
-| 🪱 | [**wiggle-that-diagram**](#-wiggle-that-diagram--make-a-diagram-explain-itself) | "animate this how-it-works diagram" | a captioned, looping explainer in 3 styles, paced so people can read it | [3 styles](https://wan-huiyan.github.io/cutify-this/wiggle/) |
 | ⌨️ | [**cutify-that-terminal**](#️-cutify-that-terminal--a-cute-terminal-that-provably-renders) | "make my terminal prettier" | a theme, a rounded Nerd Font, a Starship prompt, and a check for `?` boxes | macOS + zsh |
 | 🪄 | [**pop-that-readme**](#-pop-that-readme--a-readme-that-pops) | "give my README a glow-up" | an 11-section front page in this house style, with a fill-in template | this page |
+
+🪱 **wiggle-that-diagram** (captioned explainer animations for slide decks and reports) now lives in its own repo,
+[wan-huiyan/wiggle-that-diagram](https://github.com/wan-huiyan/wiggle-that-diagram).
+`/plugin install wiggle-that-diagram@wan-huiyan-cutify-this` still installs it.
 
 <table>
 <tr>
@@ -63,7 +65,7 @@ done
 <td width="33%" align="center"><a href="#-hatch-that-world--your-app-as-a-little-world"><img src="https://raw.githubusercontent.com/wan-huiyan/morning-fairy/main/docs/three-worlds.png" alt="The same morning brief drawn in three worlds: a storybook garden, a cosmic orbit and candy pop"/></a><br/><sub><b>hatch-that-world</b>: one app, three switchable worlds (morning-fairy)</sub></td>
 </tr>
 <tr>
-<td align="center"><a href="#-wiggle-that-diagram--make-a-diagram-explain-itself"><img src="docs/wiggle-that-diagram/expenses.gif" alt="A whiteboard animation explaining how an expense claim gets checked, from receipts to payment"/></a><br/><sub><b>wiggle-that-diagram</b>: a diagram that explains itself, step by step</sub></td>
+<td align="center"><a href="https://github.com/wan-huiyan/wiggle-that-diagram"><img src="https://raw.githubusercontent.com/wan-huiyan/wiggle-that-diagram/main/demos/expenses.gif" alt="A whiteboard animation explaining how an expense claim gets checked, from receipts to payment"/></a><br/><sub><b>wiggle-that-diagram</b> (its own repo now): a diagram that explains itself, step by step</sub></td>
 <td align="center"><a href="#️-cutify-that-terminal--a-cute-terminal-that-provably-renders">⌨️<br/><b>No screenshot yet</b></a><br/><sub><b>cutify-that-terminal</b>: a cute prompt, and a check that the icons really render</sub></td>
 <td align="center"><a href="#-pop-that-readme--a-readme-that-pops"><img src="plugins/pop-that-readme/skills/pop-that-readme/examples/badges/robot-vouched.svg" height="24" alt="Robot vouched badge"/> <img src="plugins/pop-that-readme/skills/pop-that-readme/examples/badges/human-peeked.svg" height="24" alt="A human peeked badge"/></a><br/><sub><b>pop-that-readme</b>: this page, hand-drawn badges included</sub></td>
 </tr>
@@ -100,15 +102,15 @@ Every picture here was drawn by the skills' own code, not mocked up. Click one t
 </tr>
 <tr>
 <td><a href="https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/moods/moods.html"><img src="docs/readme/tab-moods.png" alt="The mochi cat favicon awake and asleep, in tab chips and 64 px enlargements on the four Chrome tab colours; asleep has closed eyes and a small z"/></a></td>
-<td><a href="https://wan-huiyan.github.io/cutify-this/wiggle/"><img src="docs/wiggle-that-diagram/pizza.gif" alt="A pizza order explained step by step: a phone with the pizza app, a kitchen with ticket #42 and an oven, a driver on a scooter heading to a house at 12 Elm St, with the caption The app follows the driver on a map and a five-step rail underneath"/></a></td>
+<td><a href="https://wan-huiyan.github.io/wiggle-that-diagram/"><img src="https://raw.githubusercontent.com/wan-huiyan/wiggle-that-diagram/main/demos/pizza.gif" alt="A pizza order explained step by step: a phone with the pizza app, a kitchen with ticket #42 and an oven, a driver on a scooter heading to a house at 12 Elm St, with the caption The app follows the driver on a map and a five-step rail underneath"/></a></td>
 </tr>
 <tr>
 <td><sub><b>cutify-that-tab</b>: a tab icon that closes its eyes after 6 pm and whenever you are on another tab.</sub></td>
-<td><sub><b>wiggle-that-diagram</b>: a pizza order from app to door, in the live style (made-up example).</sub></td>
+<td><sub><b>wiggle-that-diagram</b> (its own repo now): a pizza order from app to door, in the live style (made-up example).</sub></td>
 </tr>
 </table>
 
-**Every gallery:** [11 wands](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/wands.html) · [13 confetti](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/confetti.html) · [12 floaters](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/floaters.html) · [11 scroll companions](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/scroll.html) · [7 favicon styles](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/styles.html) · [the favicon builder](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/builder.html) · [10 mood favicons](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/moods/moods.html) · [3 explainer styles](https://wan-huiyan.github.io/cutify-this/wiggle/)
+**Every gallery:** [11 wands](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/wands.html) · [13 confetti](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/confetti.html) · [12 floaters](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/floaters.html) · [11 scroll companions](https://wan-huiyan.github.io/cutify-this/plugins/sparkle-that-page/skills/sparkle-that-page/examples/scroll.html) · [7 favicon styles](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/styles.html) · [the favicon builder](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/builder.html) · [10 mood favicons](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/moods/moods.html) · [3 explainer styles](https://wan-huiyan.github.io/wiggle-that-diagram/)
 
 ## 🌱 Used in the wild
 
@@ -379,34 +381,13 @@ Needs Node, Playwright and Chrome for the scripts. Pairs with sparkle-that-page 
 ## 🪱 wiggle-that-diagram — make a diagram explain itself
 
 <p align="center">
-  <img src="docs/wiggle-that-diagram/expenses.gif" width="720" alt="The whiteboard style at double speed: a pen draws a phone and three receipt cards (hotel $180, dinner $95, taxi $40), an expense policy box wired to each card, a coloured reason for each (under the limit, over the $60 meal limit, no photo), a manager's Approved note, an expense report with a total of $275, and a Paid tick on the phone."/>
-  <br/><sub>The whiteboard style at 2× speed: how an expense claim gets checked, from receipts to payment (made-up example). <a href="https://wan-huiyan.github.io/cutify-this/wiggle/">Watch it with captions, in all three styles →</a></sub>
+  <a href="https://wan-huiyan.github.io/wiggle-that-diagram/"><img src="https://raw.githubusercontent.com/wan-huiyan/wiggle-that-diagram/main/demos/expenses.gif" width="560" alt="The whiteboard style at double speed: a pen draws a phone and three receipt cards, an expense policy box wired to each card, a coloured reason for each, a manager's Approved note, an expense report with a total of $275, and a Paid tick on the phone."/></a>
 </p>
 
-Turn one static "how it works" picture into a short, **captioned, looping animation** for an HTML slide deck or
-report, offered in three styles so people can pick:
-
-| Style | Looks like | Made with |
-|---|---|---|
-| **Diagram clip** | a clean, 3Blue1Brown-style diagram; labels stay sharp | huashu-art-motion engine → text-free video + HTML labels |
-| **Whiteboard** | someone explaining at a whiteboard, hand-lettered | huashu-art-motion's whiteboard grammar → square video |
-| **Live** | a polished product animation, about 30 KB | inline SVG + GSAP with a virtual camera |
-
-| | What makes it different | The specifics |
-|---|---|---|
-| 📖 | **Readable, not flashy** | Captions are written first; each step holds for at least `max(4.5 s, words/3 + 1.5 s)`, and `pace_check.py` fails any step shorter than its reading time |
-| 🔁 | **One story, three ways** | One caption script feeds all three styles, so a switcher compares styles, not content |
-| 🎞️ | **Behaves inside a deck** | One self-contained file per film in an `iframe srcdoc`: step rail, play/pause, reduced motion, and one gesture still moves one slide |
-| ✅ | **Checks that can fail** | A pacing gate, contract tests in real Chrome, edge-clipping checks, size budgets, and reviewers who check every word in the picture against the source |
-
-```text
-You:    animate slide 4, the "how a claim gets approved" diagram, it's too much to take in at once
-Claude: [writes the captions first, builds the film in all three styles with a switcher, checks every step
-         is on screen long enough to read, and drops it into the slide as one file]
-```
-
-Needs `uv`, Google Chrome, ffmpeg (video styles) and the
-[huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion) skill for the two video styles.
+This one has moved to its own repo: **[wan-huiyan/wiggle-that-diagram](https://github.com/wan-huiyan/wiggle-that-diagram)**. It turns a "how it works"
+diagram into a captioned, looping explainer for a slide deck or report, in three styles, paced so people can read it.
+It makes explainers for decks and reports rather than cute things, so it lives on its own. The install command here still works, and the
+[live films](https://wan-huiyan.github.io/wiggle-that-diagram/) are there too.
 
 ---
 
@@ -472,7 +453,7 @@ Claude: [reads the repo, drafts the hero, badge row, one bold promise and a feat
 bash scripts/check-all.sh
 ```
 
-One script runs every check, on every push and pull request (the **tests** badge above). Today it runs 602 checks:
+One script runs every check, on every push and pull request (the **tests** badge above). Today it runs 596 checks:
 
 - **Favicons:** the checker's 17-fixture self-test, then every starter SVG on the four Chrome tab colours (0 fail; the
   3 known blobs it can't measure must stay UNCHECKED).
@@ -496,7 +477,6 @@ One script runs every check, on every push and pull request (the **tests** badge
   effects; a tap puts that design on the page; the shelves really appear when scrolled to; a double-click or five
   quick taps leave one copy of each effect running, not several; and nothing scrolls sideways on a phone.
 - **Syntax:** every shipped script parses (JavaScript, Python, bash, zsh).
-- **Wiggle:** the pacing checker passes on the example films, and style C rebuilds byte-for-byte.
 - **Repo:** marketplace versions match each plugin, skill names match, and every link in this README points at a real
   file.
 
@@ -511,31 +491,26 @@ The terminal glyph check is skipped on machines without Ghostty, so CI does not 
 - **The favicon checker is an early warning, not proof.** Its pass mark is calibrated on 5 field cases, and it can't
   measure outlines or tile-less blobs (3 starters come back UNCHECKED). Look at the real tab before you ship.
 - **The terminal skill is macOS + Homebrew + zsh.** The ideas port to Linux; the commands don't.
-- **hatch-that-world and wiggle-that-diagram need tools:** Node, Playwright and Chrome; wiggle's video styles also need
-  ffmpeg and the huashu-art-motion skill.
+- **hatch-that-world needs tools:** Node, Playwright and Chrome.
 - **"Cute" is still judged by eye.** Every check here proves something that can fail (contrast, pacing, glyphs, clicks),
   never that it's charming. Look at it.
 
 ## 💛 Credits
 
-- **[huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion)** and **[huashu-design](https://github.com/alchaincyf/huashu-design)**
-  by 花叔 (alchaincyf, MIT): the direction method and rendering engine under wiggle's video styles, and the "add
-  options, not bans" idea behind cutify-that-tab's style exploration.
+- **[huashu-design](https://github.com/alchaincyf/huashu-design)** by 花叔 (alchaincyf, MIT): the "add options, not
+  bans" idea behind cutify-that-tab's style exploration.
 - **[animate](https://github.com/emilkowalski/skills)** by Emil Kowalski: the "should it animate at all" frequency
   gate behind sparkle-that-page's delight budget.
 - **[tholman/cursor-effects](https://github.com/tholman/cursor-effects)**: the effect vocabulary (fairy dust,
   snowflake, bubble) sparkle-that-page names its variants after.
 - **[Lospec](https://lospec.com/palette-list/dmg-nso)**: the Game Boy greens.
-- Wiggle's live style uses [GSAP](https://gsap.com) and the fonts [Outfit](https://fonts.google.com/specimen/Outfit)
-  and [Kalam](https://fonts.google.com/specimen/Kalam) (OFL); see its
-  [`THIRD_PARTY_NOTICES.md`](plugins/wiggle-that-diagram/skills/wiggle-that-diagram/THIRD_PARTY_NOTICES.md).
 
 Made by Huiyan Wan with **Claude** (Anthropic) in Claude Code. Version history:
 [cutify-that-tab](plugins/cutify-that-tab/skills/cutify-that-tab/CHANGELOG.md), and the `## Changelog` section at the
 end of the `SKILL.md` for [sparkle-that-page](plugins/sparkle-that-page/skills/sparkle-that-page/SKILL.md#changelog),
 [cutify-that-terminal](plugins/cutify-that-terminal/skills/cutify-that-terminal/SKILL.md#changelog) and
-[pop-that-readme](plugins/pop-that-readme/skills/pop-that-readme/SKILL.md#changelog). For hatch-that-world and
-wiggle-that-diagram, see the [commit history](https://github.com/wan-huiyan/cutify-this/commits/main).
+[pop-that-readme](plugins/pop-that-readme/skills/pop-that-readme/SKILL.md#changelog). For hatch-that-world, see the
+[commit history](https://github.com/wan-huiyan/cutify-this/commits/main); wiggle-that-diagram's history moved with it.
 
 ## License
 
