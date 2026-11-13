@@ -102,11 +102,11 @@ Every picture here was drawn by the skills' own code, not mocked up. Click one t
 </tr>
 <tr>
 <td><a href="https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/moods/moods.html"><img src="docs/readme/tab-moods.png" alt="The mochi cat favicon awake and asleep, in tab chips and 64 px enlargements on the four Chrome tab colours; asleep has closed eyes and a small z"/></a></td>
-<td><a href="https://wan-huiyan.github.io/wiggle-that-diagram/"><img src="https://raw.githubusercontent.com/wan-huiyan/wiggle-that-diagram/main/demos/pizza.gif" alt="A pizza order explained step by step: a phone with the pizza app, a kitchen with ticket #42 and an oven, a driver on a scooter heading to a house at 12 Elm St, with the caption The app follows the driver on a map and a five-step rail underneath"/></a></td>
+<td><a href="https://wan-huiyan.github.io/wiggle-that-diagram/expenses.html"><img src="https://raw.githubusercontent.com/wan-huiyan/wiggle-that-diagram/main/demos/expenses-live.gif" alt="The live style, step 3 of 6: three receipt cards, Hotel $180, Dinner $95 and Taxi $40, get a coloured dot and a reason one after another: green Under the limit, amber Over the $60 meal limit, red No photo. The caption reads Each receipt gets a colour and a reason. Same receipt, same answer, above a six-step rail"/></a></td>
 </tr>
 <tr>
 <td><sub><b>cutify-that-tab</b>: a tab icon that closes its eyes after 6 pm and whenever you are on another tab.</sub></td>
-<td><sub><b>wiggle-that-diagram</b> (its own repo now): a pizza order from app to door, in the live style (made-up example).</sub></td>
+<td><sub><b>wiggle-that-diagram</b> (its own repo now): how an expense claim gets checked, in the live style; each receipt gets a colour and a reason (made-up example).</sub></td>
 </tr>
 </table>
 
