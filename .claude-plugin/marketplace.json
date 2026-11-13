@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "wan-huiyan-cutify-this",
-  "description": "cutify-this — a bundle of cute skills. Cutify the browser tab (hand-authored SVG favicons), sparkle up the whole page (fairy cursor, sparkle trails, scroll progress, confetti, floaters), pop your repo's README (cute house-style front page), cutify your terminal (Ghostty themes, rounded Nerd Fonts, a Starship prompt, and a glyph check that catches the \"?\" boxes), and hatch a whole app as a little drawn world (scenes, worlds, a mascot with moods, and checks that can fail), and wiggle a diagram into a captioned explainer animation (three styles, paced to be readable).",
+  "description": "cutify-this — a bundle of cute skills. Cutify the browser tab (hand-authored SVG favicons), sparkle up the whole page (fairy cursor, sparkle trails, scroll progress, confetti, floaters), pop your repo's README (cute house-style front page), cutify your terminal (Ghostty themes, rounded Nerd Fonts, a Starship prompt, and a glyph check that catches the \"?\" boxes), and hatch a whole app as a little drawn world (scenes, worlds, a mascot with moods, and checks that can fail).",
   "owner": {
     "name": "Huiyan Wan"
   },
@@ -38,9 +38,13 @@
     },
     {
       "name": "wiggle-that-diagram",
-      "source": "./plugins/wiggle-that-diagram",
-      "description": "Make a \"how it works\" diagram move: a captioned, looping explainer animation for an HTML deck or report, in three styles (diagram clip, whiteboard, live SVG), paced to be readable, with a deck switcher that fits it on one screen. Built on huashu-art-motion.",
-      "version": "1.3.0"
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/wan-huiyan/wiggle-that-diagram.git",
+        "path": "plugins/wiggle-that-diagram"
+      },
+      "description": "Make a \"how it works\" diagram move: a captioned, looping explainer animation for an HTML deck or report, in three styles (diagram clip, whiteboard, live SVG), paced to be readable, with a deck switcher that fits it on one screen. Built on huashu-art-motion. Lives in its own repo, wan-huiyan/wiggle-that-diagram.",
+      "version": "1.3.1"
     }
   ]
 }

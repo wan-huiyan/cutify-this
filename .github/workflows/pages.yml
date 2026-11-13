@@ -5,7 +5,6 @@ on:
     paths:
       - "site/**"
       - "plugins/sparkle-that-page/skills/sparkle-that-page/examples/**"
-      - "docs/wiggle-that-diagram/final/**"
       - "plugins/cutify-that-tab/skills/cutify-that-tab/examples/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
@@ -38,9 +37,13 @@ jobs:
           # The references (wands.md, the guide behind wands.html) are published next to the examples.
           mkdir -p "_site/$ex/../references"
           cp "$ex"/../references/*.md "_site/$ex/../references/"
-          # wiggle-that-diagram demo films (self-contained HTML, one per film) → /wiggle/<film>.html
+          # wiggle-that-diagram moved to its own repo; its films live at wan-huiyan.github.io/wiggle-that-diagram/.
+          # Old links (/wiggle/ and /wiggle/<film>.html) get a redirect page to the same film there.
           mkdir -p _site/wiggle
-          cp docs/wiggle-that-diagram/final/*.html _site/wiggle/
+          for f in index pizza pizza-diagram pizza-whiteboard expenses expenses-diagram expenses-whiteboard; do
+            to="https://wan-huiyan.github.io/wiggle-that-diagram/$f.html"; [ "$f" = index ] && to="https://wan-huiyan.github.io/wiggle-that-diagram/"
+            printf '<!doctype html><meta charset="utf-8"><title>wiggle-that-diagram has moved</title><link rel="canonical" href="%s"><meta http-equiv="refresh" content="0; url=%s"><p>Moved to <a href="%s">%s</a>.</p>\n' "$to" "$to" "$to" "$to" > "_site/wiggle/$f.html"
+          done
           # cutify-that-tab: the style gallery, the builder, the tab preview, every example SVG and the
           # moods/ subfolder (moods.html loads ../pixel_*.svg), paths preserved. styles.html links
           # ../references/styles.md, so the references ride along.

@@ -55,7 +55,6 @@ TAB=plugins/cutify-that-tab/skills/cutify-that-tab
 SPK=plugins/sparkle-that-page/skills/sparkle-that-page
 TERM=plugins/cutify-that-terminal/skills/cutify-that-terminal
 HATCH=plugins/hatch-that-world/skills/hatch-that-world
-WIG=plugins/wiggle-that-diagram/skills/wiggle-that-diagram
 
 echo "== cutify-that-tab"
 check "tab: check-favicon.py --self-test (17 fixtures, every FAIL/WARN/UNCHECKED path fires)" "$PY" $TAB/scripts/check-favicon.py --self-test
@@ -121,23 +120,6 @@ esac
 
 echo "== hatch-that-world"
 js_syntax "hatch: node --check scripts/*.cjs" $HATCH/scripts/*.cjs
-
-echo "== wiggle-that-diagram"
-PYFILES=$(find $WIG/scripts -name '*.py'; echo $WIG/scripts/common/ffprobe-shim/ffprobe)
-js_syntax "wiggle: node --check scripts + pizza example JS (style C head/tail are fragments, left out)" \
-  $(find $WIG/scripts $WIG/examples -name '*.js' ! -name head.js ! -name tail.js)
-# shellcheck disable=SC2086
-check "wiggle: every Python script compiles" "$PY" -c 'import sys; [compile(open(f).read(), f, "exec") for f in sys.argv[1:]]' $PYFILES
-check "wiggle: bash -n style-a/make.sh" bash -n $WIG/scripts/style-a/make.sh
-check "wiggle: pace_check.py on beats.example.json" "$PY" $WIG/scripts/common/pace_check.py $WIG/scripts/common/beats.example.json
-check "wiggle: pace_check.py on the pizza demo beats" "$PY" $WIG/scripts/common/pace_check.py $WIG/examples/pizza/beats.json
-style_c_rebuild() {
-  local E=$WIG/examples/pizza out
-  out=$("$PY" $WIG/scripts/style-c/build.py $E/beats.json --src $E/style-c --out "$TMP/c" --css $E/style-c/theme.css 2>&1) || { fail "wiggle: style C rebuild of pizza" "$(printf '%s\n' "$out" | tail -6)"; return; }
-  if cmp -s "$TMP/c/pizza.html" docs/wiggle-that-diagram/final/pizza.html; then pass "wiggle: style C build.py rebuilds docs/.../final/pizza.html byte for byte"
-  else fail "wiggle: style C rebuild differs from docs/wiggle-that-diagram/final/pizza.html (rebuild the demo or fix the builder)"; fi
-}
-style_c_rebuild
 
 echo "== repo consistency"
 check "repo: marketplace.json valid; versions match plugin.json and SKILL.md" "$PY" tests/repo_consistency.py versions
