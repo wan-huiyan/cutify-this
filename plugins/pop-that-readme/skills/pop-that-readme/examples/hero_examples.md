@@ -19,7 +19,7 @@ box ≤ ~60 chars wide so it doesn't wrap on mobile.
 ║                                                  ║
 ║       one-line tagline that says the thing       ║
 ║                                                  ║
-║     ✨ feature  ·  🎀 feature  ·  ⚡ feature       ║
+║        feature  ·  feature  ·  feature           ║
 ║                                                  ║
 ╚══════════════════════════════════════════════════╝
 ```
