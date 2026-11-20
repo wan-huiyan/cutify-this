@@ -429,7 +429,8 @@ The skill behind *this* page. It gives Claude a recipe and a fill-in template fo
 | 🧱 | **An 11-section recipe** | hero → badges → one bold promise → captioned demo → why → feature table → install → usage → contributors → limitations → footer |
 | 🖼️ | **Ready-made heroes** | an ASCII box hero that works anywhere, and a copy-paste pixel-SVG hero |
 | ✍️ | **Voice rules** | the promise is one bold sentence; every claim earns a number; emoji as signposts, not decoration; a real limitations section |
-| ☑️ | **A pre-ship checklist** | first screen has the hero, 3+ badges and the promise; no 404 badges; renders cleanly on GitHub; badges are honest |
+| ☑️ | **A pre-ship checklist** | first screen has the hero, 3+ badges and the promise; a visual project's first screen moves; every GIF links live and fits the budget; no 404 badges; badges are honest |
+| 🎞️ | **Show it moving** | a visual project's first screen is a GIF of it moving, linked to a live page; several styles get a gallery, one GIF tile each; `record_gif.py` records it at or under 4 MB a GIF |
 | 🤖 | **Hand-drawn status badges** | drawn pills for claims no service can measure, never a fake live metric; sized to sit in a shields.io row, readable on GitHub light and dark; 3 examples to copy |
 
 <p align="center">

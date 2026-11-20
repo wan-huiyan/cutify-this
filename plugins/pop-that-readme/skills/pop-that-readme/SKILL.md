@@ -1,6 +1,6 @@
 ---
 name: pop-that-readme
-description: Use when writing or upgrading a GitHub/open-source project's README so it actually pops — a cute, high-signal front page instead of a wall of text. Triggers on "write a README", "make my README pretty/cute/pop/stylish", "polish/redo my repo's README", "README template", "repo front page", "add badges / a hero banner / a feature table / an install section / a demo GIF", "open-source my project's readme", "give my repo a glow-up". Produces a centered pixel/arcade hero, a shields.io badge row, a bold one-line value-prop blockquote, a captioned demo image, a why-it-exists section, an emoji feature/ingredient table, a copy-paste install block, a contributors shoutout, and an honest limitations section. Ships a fill-in template + baked-in hero recipes (ASCII box + pixel SVG). Skip for terse internal-only repos, strict corporate brand templates, or non-README docs (API refs, tutorials).
+description: Use when writing or upgrading a GitHub/open-source project's README so it actually pops — a cute, high-signal front page instead of a wall of text. Triggers on "write a README", "make my README pretty/cute/pop/stylish", "polish/redo my repo's README", "README template", "repo front page", "add badges / a hero banner / a feature table / an install section / a demo GIF", "animated demo", "GIF gallery", "showcase styles", "open-source my project's readme", "give my repo a glow-up". Produces a hero that shows the thing moving (a GIF linked to a live page; a pixel hero only when there is nothing to show), a shields.io badge row, a bold one-line value prop, a GIF gallery for variants, a why-it-exists section, an emoji feature/ingredient table, a copy-paste install block, a contributors shoutout, and an honest limitations section. Ships a fill-in template, a GIF recorder, and fallback heroes (ASCII box + pixel SVG). Skip for terse internal repos, strict brand templates, or non-README docs (API refs).
 ---
 
 # Pop That README ✨
@@ -39,10 +39,10 @@ sections that don't apply, never reorder the top three.
 
 | # | Section | Why it's there |
 |---|---|---|
-| 1 | **Hero** (centered image/ASCII + title + emoji) | First impression; shows the thing in 1 second. Baked-in recipe below. |
+| 1 | **Hero** (a GIF of the thing moving, linked to a live page; + title + emoji) | First impression; shows the thing in 1 second. See **Show it moving** below; the static heroes further down are the fallback. |
 | 2 | **Badge row** | Signals it's alive + legit (license, last-commit, version, "Claude Code skill"). |
 | 3 | **Value-prop blockquote** (one bold sentence) | The single most important line. What it does + for whom, concretely. |
-| 4 | **Demo image/GIF + `<sub>` caption** | Show, don't tell. Caption explains what the reader is looking at. |
+| 4 | **Demo GIF or GIF gallery + `<sub>` caption** | Show, don't tell. One tile per style or variant, each linked live (**Show it moving** below). Caption explains what the reader is looking at. |
 | 5 | **What it does / Why it exists** | The concrete problem + the honest payoff (1–2 short paras). |
 | 6 | **Emoji feature/ingredient table** | The proven recipe — skimmable, one emoji + claim + why per row. |
 | 7 | **Quick start / Install** (copy-paste block) | The command, reachable without scrolling far. `<details>` for variants. |
@@ -50,6 +50,73 @@ sections that don't apply, never reorder the top three.
 | 9 | **Contributors** ("Built with love") | `contrib.rocks` image when others helped. |
 | 10 | **Limitations / honesty box** | What it's NOT, and where it's weak. Builds trust; separates it from marketing. |
 | 11 | License + links | Short footer. |
+
+## Show it moving
+
+A README for something visual pops when the first screen **shows the thing working**.
+A still pixel hero and a diagram describe it; a GIF proves it. The
+[cutify-this README](https://github.com/wan-huiyan/cutify-this) is the worked example:
+its hero is a GIF of a landing page with the wand cursor, sparkle trail and confetti
+running, and it links to that page live on GitHub Pages.
+
+**1. Decide what the first screen shows.** If the project has anything visual or
+animated (a web page, a slide deck, a CLI, a widget, a game), the hero is a **GIF of it
+moving, linked to a live page** you can click into. A static hero SVG or the ASCII box
+(below) is the fallback, only for projects with nothing to show (a library, a parser).
+
+```html
+<p align="center">
+  <a href="https://OWNER.github.io/REPO/demo.html"><img src="docs/readme/hero.gif" width="720"
+     alt="What moves, in one sentence: the deck flips to slide 2 and the mascot waves"/></a>
+  <br/><sub>What you are watching. <a href="https://OWNER.github.io/REPO/demo.html">Try it live →</a></sub>
+</p>
+```
+
+Turn GitHub Pages on so the link is live: repo **Settings → Pages → Deploy from a
+branch → main / root**, or
+`gh api -X POST repos/OWNER/REPO/pages -f 'source[branch]=main' -f 'source[path]=/'`.
+Open the URL yourself once the Pages build finishes, before you put it in the README.
+
+**2. Several styles or variants: a gallery, one tile per style.** Three themes, three
+decks, three cursor sets: give each its own tile with the GIF, a `<sub>` caption that
+names it, and an **open live** link. Size each image by `width`, never `height`, so the
+tiles keep their shape as the column narrows, and keep it to three tiles a row.
+
+```html
+<table>
+<tr>
+<td width="33%" align="center"><a href="https://OWNER.github.io/REPO/garden.html"><img src="docs/readme/garden.gif" width="100%" alt="Garden style: flowers sprout as the slides advance"/></a><br/><sub><b>Garden</b>: flowers sprout on every slide · <a href="https://OWNER.github.io/REPO/garden.html">open live</a></sub></td>
+<td width="33%" align="center"><!-- same shape: style 2 --></td>
+<td width="33%" align="center"><!-- same shape: style 3 --></td>
+</tr>
+</table>
+```
+
+**3. Record it with `examples/record_gif.py`.** It opens the page in headless
+Chromium, plays a key/click script at real speed, and encodes a looping GIF:
+
+```bash
+uv run --with playwright python examples/record_gif.py deck.html docs/readme/garden.gif \
+  --size 1280x720 --width 720 --lead 2 --keys "ArrowRight*14:1.9" --tail 1.5 --poster docs/readme/garden.png
+# first run only: uv run --with playwright playwright install chromium   (ffmpeg must be on PATH)
+```
+
+- **Size budget:** each GIF at or under **4 MB** (the script's default `--max-mb`; it
+  steps down frame rate, then colours, then width until it fits), and the GIFs on one
+  page under about **10 MB** in total. Every visitor downloads every GIF. Three tiles of
+  about 3 MB is the ceiling; with more, autoplay one and show the rest as their
+  `--poster` PNG, each linking to its GIF.
+- **Look before you ship.** Pull six evenly spaced frames and look at every one:
+  `ffmpeg -i out.gif -vf "select='not(mod(n\,N))',scale=360:-2,tile=3x2" -frames:v 1 sheet.png`
+  with N = frame count / 6. You are checking for blank or half-loaded frames, text cut
+  off, and that the motion is actually visible. Jumping straight into a section that
+  fades in on scroll films empty frames, so give each step time to settle.
+
+**4. Private content never goes public.** If the real thing holds client names,
+people, figures or internal wording, do not record it. Build a **fictional demo copy**
+first (made-up names, made-up numbers, the same styles), record that, and leak-scan the
+copy and the GIF's source page before either is committed (grep for every client,
+person and project name you know of, plus any real figures).
 
 ## Voice & copy rules
 
@@ -67,7 +134,9 @@ sections that don't apply, never reorder the top three.
 
 ## Baked-in hero recipe
 
-Two zero-dependency heroes you can drop in. (For richer banners — animated pixel
+The **fallback** for projects with nothing visual to show (a library, a parser, a
+CLI with no interesting output): two zero-dependency heroes you can drop in. Anything
+that moves gets a GIF hero instead (**Show it moving** above). (For richer banners — animated pixel
 scenes — hand off to the `pixel-art` and `css-animated-svg-scenes` skills; see
 `examples/hero_examples.md` for both heroes in full.)
 
@@ -169,7 +238,8 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
    The value prop and feature table must be *true*; pull real numbers/specifics.
 2. Copy `examples/README.template.md`, fill every `<PLACEHOLDER>`, delete unused
    sections. Don't ship a placeholder.
-3. Author the hero (recipe above) into `docs/`.
+3. Make the hero: a GIF of the thing moving, linked live (**Show it moving**), or the
+   static fallback hero if there is nothing to show. Commit it to `docs/readme/`.
 4. **Preserve** anything the old README had that's still accurate (install handles,
    troubleshooting links, contributor credits) — additive, not a wipe.
 5. Run the **quality checklist** below.
@@ -180,7 +250,11 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
 - [ ] Value prop is **one bold sentence**, concrete, names the audience.
 - [ ] Every feature-table claim has a number or a specific (no "fast / powerful / easy").
 - [ ] Install command is copy-paste correct and appears above the fold-ish.
-- [ ] A demo image/GIF exists (or a clear `docs/…` placeholder + TODO).
+- [ ] If the project is visual or animated, the first screen **moves**: a GIF hero or a
+      GIF gallery, one tile per style. A static hero only when there is nothing to show.
+- [ ] Every GIF links to something live (GitHub Pages or a demo URL you opened), is at or
+      under 4 MB, the page's GIFs total under about 10 MB, and six sampled frames were
+      looked at (none blank, no text cut off).
 - [ ] A real **Limitations** section exists (not omitted).
 - [ ] Badge/owner/repo slugs resolve (no 404 shields).
 - [ ] Renders cleanly on GitHub (preview it) — tables aligned, code fences closed,
@@ -193,7 +267,8 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
 ## Examples directory
 
 - `README.template.md` — the full fill-in template (every section, `<PLACEHOLDER>`s).
-- `hero_examples.md` — the ASCII box hero + a worked pixel-SVG hero, copy-and-edit.
+- `hero_examples.md` — the ASCII box hero + a worked pixel-SVG hero (the fallback), copy-and-edit.
+- `record_gif.py` — records a page or deck as a looping README GIF under a size budget, with a poster PNG.
 - `badges/` — three hand-drawn status-badge SVGs (robot, girl peeking over a wall, teacup) + how-to.
 
 ## See also
@@ -205,6 +280,14 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
 
 ## Changelog
 
+- **v1.2.0** (2026-11-20) — Show it moving: a new recipe section right after the
+  section order. A visual project's first screen is a GIF of it moving, linked to a live
+  GitHub Pages page; several styles get a gallery table, one GIF tile each with a caption
+  and an "open live" link; `examples/record_gif.py` records the GIF under a 4 MB budget
+  and you look at six frames before shipping; private content is recorded only from a
+  fictional demo copy. The static pixel/ASCII heroes are now the fallback. Two new
+  checklist items. Prompted by a README built with this skill that showed three animated
+  decks as a still SVG and a diagram.
 - **v1.1.0** (2026-11-06) — Hand-drawn status badges: a recipe for drawn pill badges
   that carry claims no service can measure ("Robot vouched", "A human peeked"), never
   a fake live metric; size, dark/light, system-font and alt-text rules; three example

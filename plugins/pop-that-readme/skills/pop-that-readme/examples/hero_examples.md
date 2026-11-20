@@ -1,7 +1,9 @@
 # Hero recipes — copy, edit, drop in
 
 Two zero-dependency heroes. Pick A for instant + universal, B for a rendered banner.
-For a fancier *animated* hero, hand off to `pixel-art` / `css-animated-svg-scenes`.
+These are the **fallback** heroes, for projects with nothing visual to show. If the project has a page, deck, CLI or
+widget that moves, the hero is a GIF of it linked to a live page instead: see "Show it moving" in `SKILL.md`
+and record it with `record_gif.py`. For a fancier *animated* drawn hero, hand off to `pixel-art` / `css-animated-svg-scenes`.
 
 ---
 
