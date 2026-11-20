@@ -1,6 +1,6 @@
 ---
 name: hatch-that-world
-description: Build a cute, playful single-page app or daily page in the "little world" style of the morning brief — the day or the data drawn as a scene (hills, a draggable sun, a mascot with moods), several switchable worlds (garden, cosmic, candy, caterpillar…) each light and dark with its own sounds, a build-your-own mascot picker, and clickable things in the drawing. Use whenever someone wants to make an app, dashboard, brief, tracker or personal page "cute", "fun", "like the morning brief" or morning-fairy, "with a mascot", "with themes/worlds", "drawn as a little world", or wants to add a new world/theme, mascot, scene element or clickable drawing to such a page — even if they don't name this skill. Also covers the build process that kept it safe: an options page before building, one agent per change on a shared file, and checks that can fail (copy text unchanged, pixel-identical other worlds, geometry and click tests).
+description: Build a cute, playful single-page app or daily page in the "little world" style of the morning brief — the day or the data drawn as a scene (hills, a draggable sun, a mascot with moods), several switchable worlds (garden, cosmic, candy, caterpillar, paper-cut, ink wash, lantern night…) each light and dark with its own sounds, a build-your-own mascot picker, and clickable things in the drawing. Use whenever someone wants to make an app, dashboard, brief, tracker or personal page "cute", "fun", "like the morning brief" or morning-fairy, "with a mascot", "with themes/worlds", "drawn as a little world", or wants to add a new world/theme, mascot, scene element or clickable drawing to such a page — even if they don't name this skill. Also covers the build process that kept it safe: three real sketches to pick from before building (then stop and wait), one agent per change on a shared file, and checks that can fail (copy text unchanged, pixel-identical other worlds, geometry and click tests).
 ---
 
 # Hatch that world 🐛→🦋
@@ -23,6 +23,8 @@ Read `references/world-anatomy.md` before writing code. The short version:
   dark), a `SCENE.x()` that draws the ground, sky, sun/moon, signposts and mascot spot as SVG, and an oscillator
   voice in the sound table. Adding a world touches only those three places plus the world picker and the
   whitelist that reads the saved choice. If you find yourself editing content or copy to add a world, stop.
+  Three starter worlds to offer besides the brief's own four (paper-cut, ink wash, lantern night) are written as
+  cards in `references/world-anatomy.md` section 9.
 - **The scene is the data.** Meetings lift the ground into hills by weight; the sun rides the clock and can be
   dragged; "now" is where the mascot stands. Make the drawing carry a real quantity, never decoration only.
 - **A mascot with moods** derived from the data (sweat when something is overdue, starry when nothing waits,
@@ -60,12 +62,39 @@ Read `references/world-anatomy.md` before writing code. The short version:
   Playwright plus installed Chrome (`PWC` = the Playwright folder). The brief's builder is Python; match whatever
   the new project uses.
 
+## Pick one of three, before the full build
+
+Before building anything big, draw **three different worlds** for the app's hero scene and let the owner choose.
+This replaces guessing: a pick made from pictures of the real thing is worth more than one made from words.
+
+1. **Write what each direction is made of.** Three worlds that differ in *material* (cut paper, wet ink, glowing
+   lanterns) and *motion* (stepped, drifting, swaying), not just colour. The cards in `world-anatomy.md` section 9
+   are a start; pick the three least alike. Two worlds that share a layout and differ only in paint are one world.
+2. **Sketch each as one small HTML file of the hero scene**, with the app's **real title and real numbers** (or a
+   made-up set of the same shape), the mascot, and its motion. A sketch is a screen, not the app: no picker, no
+   sounds, no clickable layer.
+3. **Put them on one board and look at it:**
+   `PWC=<playwright folder> node scripts/sketch_board.cjs a.html b.html c.html --labels 'A Paper-cut,B Ink wash,C Lantern night' --out world-sketches/board`
+   It screenshots each at the same size and writes `board.png` and `board.html` with three labelled tiles. It exits 1
+   with a message when a sketch is blank (one flat colour) or two sketches are clones (same outlines, or a colour
+   swap), and exits 2 when a file is missing. Fix and re-run; do not show a board that failed.
+4. **Show the board and stop.** Give the owner the board and ask which one. Do not start the build, and do not pick
+   for them. A mix counts ("A's mascot with C's sky"): take it as written.
+5. **Write the pick down** in `world-picked.md` at the project root: the date, the chosen world (or mix), the owner's
+   own words, and the board's path. Later sessions read this file first and do not ask again.
+
+**Skip it** when the owner says skip, when they are iterating inside a world already recorded in `world-picked.md`,
+or when the job is a pure fix (a bug, a copy change, a new row in an existing world). A request for a *new* world in
+an existing app starts the step again, with the new world's cards against the current one.
+
 ## The build process (this is what kept a 6,000-line single file from breaking)
 
-1. **Brainstorm, then an options page before any build.** Load `design-an-interface` and make one HTML page that
+1. **Brainstorm, then the three-world pick (above) and an options page before any build.** For the other choices
+   (scene shape, mascot) load `design-an-interface` and make one HTML page that
    shows 3–4 radically different directions as **live phone-width slices of the real page with real data**, not
    mockups of nothing. Add a picks copy-back (`promptback`) so the owner ticks choices and pastes them back.
-   Every look in the brief — the worlds, the mascot, the caterpillar — was chosen this way.
+   Every look in the brief — the worlds, the mascot, the caterpillar — was chosen this way. If `world-picked.md`
+   exists, the world is already chosen: do not offer it again.
 2. **A dated plan file per change** (`YYYY-MM-DD-plan-<thing>.md`) with the owner's words, what it is, the rules,
    and the checks. Owner feedback goes into the plan as a rule *with a check that would fail on the old version*
    (example: "the head looks detached" became "head-to-neck distance < 0.75 × radii at every 10 minutes").
@@ -127,6 +156,12 @@ replacements (each private string must be found exactly the expected number of t
 the port instead of leaking). Then `skill-anonymizer`'s leak scan, a README via `pop-that-readme` with pictures made
 from made-up demo data, version bumped in every manifest, CI on all runners, merge, release. Confirm the PR reads
 `merged: true` before deleting its branch.
+
+## Prior art
+
+The "three real sketches, then stop and wait for a pick" step and the East Asian starter worlds were inspired by
+[huashu-design](https://github.com/alchaincyf/huashu-design) (MIT), whose three-directions gate drafts three
+different directions before any design is built. The text, the script and the worlds here are written fresh.
 
 ## Companion skills — load the one the moment calls for (if installed)
 

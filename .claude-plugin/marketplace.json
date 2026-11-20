@@ -33,8 +33,8 @@
     {
       "name": "hatch-that-world",
       "source": "./plugins/hatch-that-world",
-      "description": "Build a cute app or daily page as a little drawn world: data drawn as a scene, switchable light/dark worlds with their own sounds, a mascot with moods, clickable drawings, and checks that can fail (copy, pixel, geometry, click) with three Playwright scripts.",
-      "version": "1.0.0"
+      "description": "Build a cute app or daily page as a little drawn world: data drawn as a scene, switchable light/dark worlds with their own sounds, a mascot with moods, three real sketches to pick from before building, clickable drawings, and checks that can fail (copy, pixel, geometry, click, sketch board) with four Playwright scripts.",
+      "version": "1.1.0"
     },
     {
       "name": "wiggle-that-diagram",
