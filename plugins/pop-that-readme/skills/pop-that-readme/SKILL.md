@@ -135,6 +135,62 @@ person and project name you know of, plus any real figures).
   commit, `git config user.email <id>+<login>@users.noreply.github.com` (local to that
   repo). A work email in a public commit takes a history rewrite to remove.
 
+**5. Demo the real thing, and keep it real after every change.** The
+[after-the-call README](https://github.com/wan-huiyan/after-the-call) is the worked
+example: three animated decks, each the skill's own output on an invented call, each
+tile linking to the working deck on GitHub Pages.
+
+- **The demo is real output.** Run the project on an invented input and publish what it
+  produced (for a skill: what the skill made), under `docs/demo/` so each **open live**
+  link opens the working thing, not a mock-up drawn for the README.
+- **Film the moments that show the feature.** Script the recording through them, not just
+  a scroll: arrow through every slide, and click the thing that animates
+  (`--keys "ArrowRight*9:1.75,click=button.xp-btn:1.0,ArrowRight*5:1.75"` fills a quest
+  deck's XP bar on camera).
+- **Every live demo page gets its own tab icon**, drawn from that page's mascot (see
+  `cutify-that-tab`). A page without one shows the browser's grey globe, and the tab is the
+  first thing a visitor sees.
+- **Say it is made up** in a small label on the page and in one `<sub>` line under the
+  gallery.
+- **Check the story by its beats, not only its phrases.** Have an agent that did not write
+  the demo compare it with the real source beat by beat: the shape of the finding, its
+  time windows, the kinds of lists, who said what. Two invented stories passed a shared-
+  phrase check and still retold the real call with the names swapped.
+- **Any text change means re-recording** every GIF that shows it. Then pull the frame where
+  the changed text appears (`ffmpeg -ss <second> -i out.gif -frames:v 1 f.png`) and look.
+- **After the push, check what visitors get:** a fresh clone; the Pages build is `built` at
+  your commit (`gh api repos/OWNER/REPO/pages/builds/latest --jq '.status+" "+.commit'`);
+  `curl` each live demo for a sentence you changed; a screenshot of the live README's first
+  screen.
+
+## Pictures are drawn, never emoji
+
+Inside any **picture** (a diagram SVG, the hero, a badge, a social card, a demo page you
+film), every icon is **hand-drawn as SVG paths**. Never put an emoji in one. An emoji is
+drawn by each reader's system font, so it looks different on a Mac, on Windows and on
+Linux; it cannot take your palette or line weight; and next to drawn shapes it reads as
+clip-art. A row of eight emoji in coloured circles is the typical slip: redraw them as a
+set.
+
+- **One line style for the whole set:** round caps and joins, one stroke width (about 2.5
+  at a 40 px icon), curves a little uneven so it looks drawn, the stroke a darker shade of
+  that item's colour, at most one soft tint fill per icon.
+- **Same meaning, drawn:** compass, five-petal flower, microphone, wrench and screwdriver,
+  alarm clock, footprints, a noodle bowl with steam. Keep each to a few strokes so it reads
+  at 1x.
+- **Look at it twice, and hand over both renders.** One local HTML page, opened in
+  headless Chromium (not a cropped preview), holding (1) the picture at 1x on `#ffffff`
+  and on `#0d1117`, and (2) the same SVG at 4x, so every icon is big enough to judge the
+  drawing. Screenshot it once and look at both halves. That is one render, a few seconds:
+  "the user wanted it quick" is not a reason to skip it, because a hurried icon is the one
+  that comes out unreadable. The picture is not done until you can name that render file
+  and say what you saw in it.
+- **Check with a character scan, not an emoji regex.** List every non-ASCII character in
+  the SVG (`python3 -c "import sys;print(sorted({hex(ord(c)) for c in open(sys.argv[1]).read() if ord(c)>127}))" pic.svg`).
+  Common emoji ranges miss some symbols: the alarm clock is U+23F0.
+- Emoji as **text** wayfinding (a section heading, a feature-table row, a gallery caption)
+  is still fine: that is type, not a picture.
+
 ## Voice & copy rules
 
 - **Value prop = one bold sentence in a blockquote.** Concrete verbs + the audience.
@@ -143,7 +199,7 @@ person and project name you know of, plus any real figures).
 - **Every claim earns a number or a specific.** "fast" → "renders in <50ms"; "lots of
   options" → "78 starter SVGs".
 - **Emoji as wayfinding, not decoration.** One per feature-row / section header, used
-  consistently. Don't sprinkle.
+  consistently. Don't sprinkle. Never inside a picture (**Pictures are drawn, never emoji** above).
 - **Honesty is a feature.** A real "Limitations" section (small sample, what's not
   covered) reads as confidence, not weakness.
 - **Cute, not childish.** Playful copy + a real type/spacing discipline. "The cutest
@@ -280,6 +336,16 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
       against the real source for shared phrases.
 - [ ] On a personal public repo, every commit's author email is the GitHub no-reply
       address (`git log --format='%ae'`), set before the first commit.
+- [ ] No picture contains an emoji: every SVG's non-ASCII characters were listed and none
+      is an emoji or symbol glyph; each drawn icon was looked at alone at 4x and in place at
+      1x on white and `#0d1117`.
+- [ ] The demo is the project's real output on an invented input, hosted live; the recording
+      clicks through the moments that show the feature; every live demo page has its own
+      tab icon; the story was checked beat by beat against the real source by an agent that
+      did not write it.
+- [ ] After any demo text change, every GIF showing it was re-recorded and the frame with
+      the change was looked at; after the push, the Pages build is `built` at your commit and
+      the live README's first screen was looked at.
 - [ ] A real **Limitations** section exists (not omitted).
 - [ ] Badge/owner/repo slugs resolve (no 404 shields).
 - [ ] Renders cleanly on GitHub (preview it) — tables aligned, code fences closed,
@@ -305,6 +371,15 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
 
 ## Changelog
 
+- **v1.3.0** (2026-11-20) — Pictures are drawn, never emoji: a new section with a line-style
+  recipe for hand-drawn icon sets, a two-scale look (each icon at 4x, the picture at 1x on
+  white and `#0d1117`) and a non-ASCII character scan instead of an emoji regex (U+23F0
+  slips past the usual ranges). Show it moving gains step 5, demo the real thing: real
+  output on an invented input, a recording that clicks through the feature, a tab icon on
+  every live demo page, a beat-by-beat fiction check, re-record after any text change, and
+  checks on the live result after the push. Three new checklist items. Prompted by a README
+  built with v1.2.1 whose diagram put eight emoji in coloured circles, and whose demo
+  needed three rounds to stop retelling the real call.
 - **v1.2.1** (2026-11-20) — Show it moving, made explicit: with several styles the GIF
   gallery may stand in for the hero and goes right under the title and tagline, above
   badges and value prop; gallery cells `width="33%"` with images `width="100%"`; GitHub
