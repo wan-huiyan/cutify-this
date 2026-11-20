@@ -1,8 +1,12 @@
 <!-- pop-that-readme — fill-in template. Replace every <PLACEHOLDER>, delete unused
      sections, then run the quality checklist in SKILL.md. -->
 
+<!-- Hero: if the project has anything visual or animated, show it MOVING — a GIF linked to a
+     live page (see "Show it moving" in SKILL.md; record it with examples/record_gif.py).
+     Only a project with nothing to show uses the static fallback: <img src="docs/hero.svg" width="520" alt="..."/> -->
 <p align="center">
-  <img src="docs/hero.svg" width="520" alt="<PROJECT> — <ONE-LINE>" />
+  <a href="<LIVE-DEMO-URL>"><img src="docs/readme/hero.gif" width="720" alt="<WHAT MOVES, IN ONE SENTENCE>" /></a>
+  <br/><sub><WHAT THE READER IS WATCHING.> <a href="<LIVE-DEMO-URL>">Try it live →</a></sub>
 </p>
 
 <h1 align="center"><PROJECT-NAME> <EMOJI></h1>
@@ -16,6 +20,8 @@
 
 > **<ONE BOLD SENTENCE: what it does + for whom, concretely — verbs + a specific.>**
 
+<!-- Several styles or variants? Use a gallery table instead: one GIF tile per style, a <sub> caption
+     and an "open live" link each (see "Show it moving" in SKILL.md). -->
 ![<demo alt text>](docs/demo.png)
 
 <sub>☝️ <One line: what the reader is looking at in the demo above.></sub>
