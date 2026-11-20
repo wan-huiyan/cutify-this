@@ -39,7 +39,7 @@ sections that don't apply, never reorder the top three.
 
 | # | Section | Why it's there |
 |---|---|---|
-| 1 | **Hero** (a GIF of the thing moving, linked to a live page; + title + emoji) | First impression; shows the thing in 1 second. See **Show it moving** below; the static heroes further down are the fallback. |
+| 1 | **Hero** (a GIF of the thing moving, linked to a live page, or the GIF gallery when there are several styles; + title + emoji) | First impression; shows the thing in 1 second. See **Show it moving** below; the static heroes further down are the fallback. |
 | 2 | **Badge row** | Signals it's alive + legit (license, last-commit, version, "Claude Code skill"). |
 | 3 | **Value-prop blockquote** (one bold sentence) | The single most important line. What it does + for whom, concretely. |
 | 4 | **Demo GIF or GIF gallery + `<sub>` caption** | Show, don't tell. One tile per style or variant, each linked live (**Show it moving** below). Caption explains what the reader is looking at. |
@@ -82,6 +82,16 @@ decks, three cursor sets: give each its own tile with the GIF, a `<sub>` caption
 names it, and an **open live** link. Size each image by `width`, never `height`, so the
 tiles keep their shape as the column narrows, and keep it to three tiles a row.
 
+- **The gallery may stand in for the hero, and it goes on the first screen.** When there
+  are several styles or variants, put the gallery right under the title and tagline,
+  above the badges and the value prop. A static hero image above a gallery pushes the
+  moving thing below the fold.
+- **Equal tiles:** each gallery cell `width="33%"` and each `img` `width="100%"`, so the
+  tiles come out the same size.
+- **Phones:** GitHub does not stack a table on a phone, so three tiles in a row are about
+  70–100 px wide at a 390 px screen. If the phone view matters, use one big GIF hero
+  linked live with the gallery below it, or one tile per row.
+
 ```html
 <table>
 <tr>
@@ -117,6 +127,13 @@ people, figures or internal wording, do not record it. Build a **fictional demo 
 first (made-up names, made-up numbers, the same styles), record that, and leak-scan the
 copy and the GIF's source page before either is committed (grep for every client,
 person and project name you know of, plus any real figures).
+
+- **Invent the demo, do not lightly rename it:** new names, new quotes, new numbers, a new
+  setting. Before publishing, check the demo against the real source for shared phrases
+  (a sentence carried over with only the names swapped still identifies it).
+- **Commit with the GitHub no-reply email on a personal public repo.** Before the first
+  commit, `git config user.email <id>+<login>@users.noreply.github.com` (local to that
+  repo). A work email in a public commit takes a history rewrite to remove.
 
 ## Voice & copy rules
 
@@ -255,6 +272,14 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
 - [ ] Every GIF links to something live (GitHub Pages or a demo URL you opened), is at or
       under 4 MB, the page's GIFs total under about 10 MB, and six sampled frames were
       looked at (none blank, no text cut off).
+- [ ] With several styles, the GIF gallery sits right under the title and tagline, above
+      the badges and value prop, with no static hero image above it.
+- [ ] Gallery cells are `width="33%"` and their images `width="100%"` (equal tiles); if
+      the phone view matters, there is one big GIF hero or one tile per row.
+- [ ] A fictional demo is invented (new names, quotes, numbers, setting), and was checked
+      against the real source for shared phrases.
+- [ ] On a personal public repo, every commit's author email is the GitHub no-reply
+      address (`git log --format='%ae'`), set before the first commit.
 - [ ] A real **Limitations** section exists (not omitted).
 - [ ] Badge/owner/repo slugs resolve (no 404 shields).
 - [ ] Renders cleanly on GitHub (preview it) — tables aligned, code fences closed,
@@ -280,6 +305,14 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
 
 ## Changelog
 
+- **v1.2.1** (2026-11-20) — Show it moving, made explicit: with several styles the GIF
+  gallery may stand in for the hero and goes right under the title and tagline, above
+  badges and value prop; gallery cells `width="33%"` with images `width="100%"`; GitHub
+  does not stack a table on phones (three tiles are about 70–100 px wide at 390 px), so
+  use one big GIF hero or one tile per row when the phone view matters; a fictional demo
+  is invented, not lightly renamed, and checked against the real source for shared
+  phrases; commit with the GitHub no-reply email on personal public repos. Four new
+  checklist items.
 - **v1.2.0** (2026-11-20) — Show it moving: a new recipe section right after the
   section order. A visual project's first screen is a GIF of it moving, linked to a live
   GitHub Pages page; several styles get a gallery table, one GIF tile each with a caption
