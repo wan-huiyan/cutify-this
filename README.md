@@ -504,6 +504,8 @@ The terminal glyph check is skipped on machines without Ghostty, so CI does not 
   gate behind sparkle-that-page's delight budget.
 - **[tholman/cursor-effects](https://github.com/tholman/cursor-effects)**: the effect vocabulary (fairy dust,
   snowflake, bubble) sparkle-that-page names its variants after.
+- **[huashu-design](https://github.com/alchaincyf/huashu-design)** by 花叔 (MIT), again: the arc path, settling
+  hand-wobble and two-ring click ripple behind pop-that-readme's drawn pointer in `record_gif.py`.
 - **[Lospec](https://lospec.com/palette-list/dmg-nso)**: the Game Boy greens.
 
 Made by Huiyan Wan with **Claude** (Anthropic) in Claude Code. Version history:
