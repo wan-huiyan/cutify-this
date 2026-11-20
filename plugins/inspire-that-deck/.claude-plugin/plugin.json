@@ -1,0 +1,9 @@
+{
+  "name": "inspire-that-deck",
+  "description": "Ideas, not a template, for cute HTML slide decks: principles for picking an element from the slide's own content, plus a live gallery of 12 single elements (scrapbook tape, polaroids, sticky notes, stamps, stickers, a tick-live checklist; cozy-quest pixel mascot, dialogue box, XP bar, inventory slots, loot reveal), each with when it fits, when to skip it and what it must keep.",
+  "version": "1.0.0",
+  "author": { "name": "Huiyan Wan" },
+  "repository": "https://github.com/wan-huiyan/cutify-this",
+  "license": "MIT",
+  "keywords": ["claude-code", "claude-code-skill", "cute", "slides", "deck", "design", "inspiration", "scrapbook", "pixel-art"]
+}

@@ -4,13 +4,13 @@
 </p>
 
 <h1 align="center">cutify-this ✨</h1>
-<p align="center"><em>Five Claude Code skills that make the things you build cute, and check that the cute actually works.</em></p>
+<p align="center"><em>Six Claude Code skills that make the things you build cute, and check that the cute actually works.</em></p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/github/license/wan-huiyan/cutify-this" alt="license"/></a>
   <a href="https://github.com/wan-huiyan/cutify-this/actions/workflows/test.yml"><img src="https://github.com/wan-huiyan/cutify-this/actions/workflows/test.yml/badge.svg" alt="tests"/></a>
   <a href="https://github.com/wan-huiyan/cutify-this/commits"><img src="https://img.shields.io/github/last-commit/wan-huiyan/cutify-this" alt="last commit"/></a>
-  <a href="https://claude.com/claude-code"><img src="https://img.shields.io/badge/Claude_Code-5_skills-orange" alt="Claude Code: 5 skills"/></a>
+  <a href="https://claude.com/claude-code"><img src="https://img.shields.io/badge/Claude_Code-6_skills-orange" alt="Claude Code: 6 skills"/></a>
   <img src="https://img.shields.io/badge/style-kawaii_but_tested-f472b6" alt="style: kawaii but tested"/>
 </p>
 
@@ -24,7 +24,7 @@
 /plugin marketplace add wan-huiyan/cutify-this
 ```
 
-Then install the ones you want (or all five):
+Then install the ones you want (or all six):
 
 ```bash
 /plugin install cutify-that-tab@wan-huiyan-cutify-this
@@ -32,25 +32,27 @@ Then install the ones you want (or all five):
 /plugin install pop-that-readme@wan-huiyan-cutify-this
 /plugin install cutify-that-terminal@wan-huiyan-cutify-this
 /plugin install hatch-that-world@wan-huiyan-cutify-this
+/plugin install inspire-that-deck@wan-huiyan-cutify-this
 ```
 
-<details><summary>From a terminal instead, all five in one go</summary>
+<details><summary>From a terminal instead, all six in one go</summary>
 
 ```bash
 claude plugin marketplace add wan-huiyan/cutify-this
-for p in cutify-that-tab sparkle-that-page pop-that-readme cutify-that-terminal hatch-that-world; do
+for p in cutify-that-tab sparkle-that-page pop-that-readme cutify-that-terminal hatch-that-world inspire-that-deck; do
   claude plugin install "$p@wan-huiyan-cutify-this"
 done
 ```
 </details>
 
-## 🧺 Five skills at a glance
+## 🧺 Six skills at a glance
 
 | | Skill | Say this to Claude | You get | Try it |
 |---|---|---|---|---|
 | ✨ | [**sparkle-that-page**](#-sparkle-that-page--cute-page-effects) | "make this page more magical" | 10 drop-in effects (cursor, trail, confetti, stamp, sounds, secret word, sky switch…), 3 palettes, zero dependencies | [live demo](https://wan-huiyan.github.io/cutify-this/site/aurora.html) |
 | 🎀 | [**cutify-that-tab**](#-cutify-that-tab--a-cute-favicon-that-survives-the-tab) | "put something cute in the browser tab" | 1 SVG favicon from 78 starters in 7 styles, checked against 4 Chrome tab colours; a builder; icons that sleep at night | [builder](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/builder.html) · [style gallery](https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/styles.html) |
 | 🐛 | [**hatch-that-world**](#-hatch-that-world--your-app-as-a-little-world) | "make this dashboard cute, like the morning brief" | your data drawn as a scene, switchable worlds, a mascot with moods | [morning-fairy](https://github.com/wan-huiyan/morning-fairy) |
+| 🎟️ | [**inspire-that-deck**](#️-inspire-that-deck--ideas-for-a-cute-deck-not-a-template) | "make my slides cute" | principles plus 12 deck elements shown working (tape, polaroids, a stamp, a pixel mascot, an XP bar…), each with when it fits and when to skip it | [gallery](https://wan-huiyan.github.io/cutify-this/plugins/inspire-that-deck/skills/inspire-that-deck/examples/gallery.html) |
 | ⌨️ | [**cutify-that-terminal**](#️-cutify-that-terminal--a-cute-terminal-that-provably-renders) | "make my terminal prettier" | a theme, a rounded Nerd Font, a Starship prompt, and a check for `?` boxes | macOS + zsh |
 | 🪄 | [**pop-that-readme**](#-pop-that-readme--a-readme-that-pops) | "give my README a glow-up" | an 11-section front page in this house style, with a fill-in template | this page |
 
@@ -378,6 +380,33 @@ Needs Node, Playwright and Chrome for the scripts. Pairs with sparkle-that-page 
 
 ---
 
+## 🎟️ inspire-that-deck — ideas for a cute deck, not a template
+
+<p align="center">
+  <a href="https://wan-huiyan.github.io/cutify-this/plugins/inspire-that-deck/skills/inspire-that-deck/examples/gallery.html"><img src="docs/readme/deck-gallery.png" width="760" alt="Six deck elements: a card held by washi tape, a pinned polaroid of a cake, an Agreed stamp on a decision card, a pixel dialogue box, a pixel XP bar at 3 of 5 takeaways, and an open treasure chest revealing a scroll"/></a>
+  <br/><sub>Six of the twelve pieces. Every word is made up (a weekend bake sale). <a href="https://wan-huiyan.github.io/cutify-this/plugins/inspire-that-deck/skills/inspire-that-deck/examples/gallery.html">Open the gallery →</a></sub>
+</p>
+
+A mood board for your AI, not a deck to fill in. It gives the principles for choosing a cute element, and a live
+gallery of single pieces from two styles, each shown working on its own. Your agent builds the deck from **your**
+content, then borrows a piece only where a slide has a moment it fits.
+
+| | Feature | The specifics |
+|---|---|---|
+| 🧭 | **Start from the point** | 8 principles: one star element per slide, hard news stays plain, motion is a bonus, drawn SVG never emoji, real buttons for anything you click |
+| 📌 | **Scrapbook pieces** | washi tape, a pinned polaroid, a sticky note that slaps on, torn paper for a quote, white-edged stickers, a stamp on a decision, a checklist you tick live |
+| 🎮 | **Cozy quest pieces** | a bobbing pixel mascot, a dialogue box that types itself, an XP bar you fill by clicking, inventory slots, a loot reveal |
+| 📝 | **Three notes on every piece** | the moment it **fits**, when to **skip it**, and what it must **keep** (a reduced-motion version, contrast, a text count beside a bar) |
+| ✅ | **Checks that can fail** | a browser test (17 checks): every piece has its notes, the clickable ones answer a keyboard, nothing moves with reduced motion on, no emoji inside a picture |
+
+```text
+You:    make my team retro deck cute
+Claude: [writes each slide's point first, then picks three pieces from the gallery: a stamp on the one decision,
+         torn paper for a customer's quote, a sticky note for next time; rebuilds them in your deck's colours]
+```
+
+---
+
 ## 🪱 wiggle-that-diagram — make a diagram explain itself
 
 <p align="center">
@@ -454,7 +483,7 @@ Claude: [reads the repo, drafts the hero, badge row, one bold promise and a feat
 bash scripts/check-all.sh
 ```
 
-One script runs every check, on every push and pull request (the **tests** badge above). Today it runs 596 checks:
+One script runs every check, on every push and pull request (the **tests** badge above). Today it runs 616 checks:
 
 - **Favicons:** the checker's 17-fixture self-test, then every starter SVG on the four Chrome tab colours (0 fail; the
   3 known blobs it can't measure must stay UNCHECKED).
@@ -477,6 +506,8 @@ One script runs every check, on every push and pull request (the **tests** badge
 - **Landing pages (55 checks):** both landing pages offer every family and draw the whole collection with the real
   effects; a tap puts that design on the page; the shelves really appear when scrolled to; a double-click or five
   quick taps leave one copy of each effect running, not several; and nothing scrolls sideways on a phone.
+- **Deck gallery (17 checks):** all 12 pieces carry their three notes; the XP bar, checklist and chest answer a click
+  and a keyboard; nothing animates with reduced motion on; no emoji inside a picture; no sideways scroll on a phone.
 - **Syntax:** every shipped script parses (JavaScript, Python, bash, zsh).
 - **Repo:** marketplace versions match each plugin, skill names match, and every link in this README points at a real
   file.

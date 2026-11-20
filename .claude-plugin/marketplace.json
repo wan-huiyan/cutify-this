@@ -22,7 +22,7 @@
       "name": "pop-that-readme",
       "source": "./plugins/pop-that-readme",
       "description": "Author a cute, high-signal GitHub README in a polished house style: pixel/arcade hero, badge row, bold value-prop, emoji feature table, copy-paste install block, contributors shoutout, honest limitations. Ships a fill-in template + baked-in hero recipes.",
-      "version": "1.4.0"
+      "version": "1.5.0"
     },
     {
       "name": "cutify-that-terminal",
@@ -45,6 +45,12 @@
       },
       "description": "Make a \"how it works\" diagram move: a captioned, looping explainer animation for an HTML deck or report, in three styles (diagram clip, whiteboard, live SVG), paced to be readable, with a deck switcher that fits it on one screen. Built on huashu-art-motion. Lives in its own repo, wan-huiyan/wiggle-that-diagram.",
       "version": "1.3.1"
+    },
+    {
+      "name": "inspire-that-deck",
+      "source": "./plugins/inspire-that-deck",
+      "description": "Ideas, not a template, for cute HTML slide decks: principles plus a live gallery of 12 single elements (scrapbook and cozy-quest), each with when it fits, when to skip it and what it must keep.",
+      "version": "1.0.0"
     }
   ]
 }

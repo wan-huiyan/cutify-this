@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deck element gallery</title>
+<meta name="description" content="Cute slide-deck elements, each shown working on its own, with when it fits, when to skip it, and what it must keep. Ideas to adapt, not a template.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='6' y='5' width='20' height='24' rx='2' fill='%23fffaf2' stroke='%233b2a38' stroke-width='2'/%3E%3Cpath d='M9 3h14v6H9z' fill='%23f7b9cc' opacity='.9'/%3E%3Cpath d='M11 16h10M11 21h7' stroke='%23ee8fa6' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Caveat:wght@600;700&family=Nunito:wght@600;800&family=Silkscreen&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6ece6; --ink:#3b2a38; --muted:#6b5867; --card:#fffaf5; --rule:#ead8d0;
+  --paper:#fffdf8; --pink:#f7b9cc; --pink-d:#ee8fa6; --peach:#f8cdb0; --mint:#c5e7d4; --butter:#fbe3a0; --lilac:#d9cdf3;
+  --shadow:0 2px 0 rgba(59,42,56,.06),0 10px 24px rgba(59,42,56,.12);
+  --q-bg:#2b2440; --q-panel:#fff8e7; --q-ink:#2b2440; --q-gold:#f5c542; --q-green:#7ccf8a; --q-line:#2b2440;
+  --hand:'Caveat',cursive; --sans:'Atkinson Hyperlegible',system-ui,sans-serif; --pixel:'Silkscreen',monospace; --round:'Nunito',system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1720;--ink:#f3e9ef;--muted:#c4b3bf;--card:#2a2230;--rule:#41354a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1d1720;--ink:#f3e9ef;--muted:#c4b3bf;--card:#2a2230;--rule:#41354a;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 var(--sans)}
+.wrap{max-width:1160px;margin:0 auto;padding:40px 16px 72px}
+header h1{font:700 clamp(40px,7vw,64px)/1 var(--hand);margin:0 0 10px}
+header p{max-width:680px;margin:0 0 8px;color:var(--muted)}
+.made-up{display:inline-block;margin-top:6px;padding:3px 12px;border:1.5px dashed var(--pink-d);border-radius:999px;font-size:14px;color:var(--muted)}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:28px 0 8px;padding:0;list-style:none}
+.rules li{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:14px 16px;font-size:15.5px}
+.rules b{display:block;font-size:16.5px;margin-bottom:2px}
+h2{font:700 40px/1.1 var(--hand);margin:48px 0 4px}
+h2+p{margin:0 0 18px;color:var(--muted);max-width:680px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:20px}
+.spec{background:var(--card);border:1px solid var(--rule);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.stage{position:relative;height:250px;overflow:hidden;display:grid;place-items:center;background:#f3e4dc}
+.stage.paper{background:repeating-linear-gradient(#fdf6ee 0 27px,#efdcd3 27px 28px)}
+.stage.dots{background:radial-gradient(#e7cfc4 1.4px,transparent 1.8px) 0 0/18px 18px,#f7ebe4}
+.stage.night{background:radial-gradient(circle at 30% 20%,#3d3460,#2b2440 70%)}
+.stage.grass{background:linear-gradient(#bfe3f5 0 62%,#9fd49a 62%)}
+.replay{position:absolute;right:10px;bottom:10px;z-index:9;font:700 13px var(--sans);padding:5px 11px;border-radius:999px;border:1.5px solid #3b2a38;background:#fff;color:#3b2a38;cursor:pointer}
+.replay:focus-visible,.spec button:focus-visible{outline:3px solid #7c5cd6;outline-offset:2px}
+.body{padding:16px 18px 18px}
+.body h3{margin:0 0 8px;font-size:19px}
+.notes{margin:0;display:grid;gap:7px;font-size:15px}
+.notes div{display:grid;grid-template-columns:92px 1fr;gap:8px}
+.notes dt{font-weight:700;color:var(--muted)}
+.notes dd{margin:0}
+.see{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+.see a{color:inherit}
+footer{margin-top:56px;color:var(--muted);font-size:15px}
+footer a{color:inherit}
+
+/* ---------- scrapbook pieces ---------- */
+.hand{font-family:var(--hand);font-weight:700}
+.card{position:relative;background:var(--paper);box-shadow:var(--shadow);color:#3b2a38}
+.tape{position:absolute;width:96px;height:26px;z-index:3;
+  background:repeating-linear-gradient(45deg,rgba(247,185,204,.92) 0 8px,rgba(255,240,245,.8) 8px 16px);
+  clip-path:polygon(2% 0,98% 0,100% 20%,97% 40%,100% 60%,97% 80%,99% 100%,1% 100%,3% 80%,0 60%,3% 40%,0 20%)}
+.tape.mint{background:repeating-linear-gradient(-45deg,rgba(197,231,212,.95) 0 8px,rgba(232,246,238,.85) 8px 16px)}
+.tape.dot{background:radial-gradient(#fff6d6 2.4px,transparent 2.8px) 0 0/12px 12px,rgba(251,227,160,.95)}
+#s-tape .card{width:240px;padding:26px 22px 22px;rotate:-1.5deg;font-size:16px}
+#s-tape .card .hand{font-size:30px;line-height:1;display:block;margin-bottom:6px}
+#s-tape .t1{top:-12px;left:-26px;rotate:-28deg} #s-tape .t2{bottom:-10px;right:-24px;rotate:-24deg}
+.polaroid{width:176px;padding:10px 10px 0;background:#fff;box-shadow:var(--shadow);color:#3b2a38}
+.polaroid .ph{height:124px;display:grid;place-items:center;background:radial-gradient(rgba(255,255,255,.6) 2px,transparent 2.6px) 0 0/16px 16px,var(--peach)}
+.polaroid p{margin:0;padding:8px 2px 12px;font:700 22px/1.05 var(--hand);text-align:center}
+.pin{position:absolute;top:-12px;left:50%;margin-left:-11px;width:22px;height:22px;z-index:2}
+.note{width:190px;min-height:170px;padding:22px 18px;background:var(--butter);color:#3b2a38;box-shadow:0 12px 20px rgba(59,42,56,.18);
+  font:700 30px/1.05 var(--hand);rotate:2deg;position:relative}
+.note::after{content:"";position:absolute;right:0;bottom:0;width:26px;height:26px;background:linear-gradient(135deg,#f0d283 50%,var(--bg) 50%);background:linear-gradient(135deg,#efd17f 50%,#f3e4dc 50%)}
+.scrap{width:270px;padding:30px 24px 22px;background:var(--paper);box-shadow:var(--shadow);color:#3b2a38;font-size:19px;line-height:1.4;
+  clip-path:polygon(0 6%,7% 0,15% 4%,26% 1%,37% 5%,49% 0,61% 4%,73% 1%,86% 5%,100% 0,100% 100%,0 100%)}
+.scrap small{display:block;margin-top:8px;font-size:14px;color:#6b5867}
+.stk{display:block;overflow:visible;filter:drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff) drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff) drop-shadow(0 6px 6px rgba(59,42,56,.2))}
+#s-sticker .row{display:flex;gap:22px;align-items:center}
+.stamp-card{width:250px;padding:22px;font-size:16px}
+.stamp-card b{display:block;font-size:18px;margin-bottom:4px}
+.stamp{position:absolute;right:-22px;bottom:-30px;padding:6px 14px;border:3.5px solid #d4536f;border-radius:10px;color:#d4536f;
+  font:700 30px/1 var(--hand);letter-spacing:.5px;rotate:-12deg;background:rgba(255,250,245,.7);mix-blend-mode:multiply}
+.checklist{width:270px;padding:20px 22px;list-style:none;margin:0;font-size:17px}
+.checklist li{display:flex;gap:10px;align-items:center;padding:5px 0}
+.checklist button{all:unset;cursor:pointer;display:flex;gap:10px;align-items:center;width:100%}
+.box{flex:none;width:24px;height:24px;border:2.5px solid #3b2a38;border-radius:6px;display:grid;place-items:center;background:#fff}
+.box svg{opacity:0;transform:scale(.4);transition:opacity .15s ease,transform .3s cubic-bezier(.34,1.56,.64,1)}
+[aria-pressed="true"] .box svg{opacity:1;transform:none}
+[aria-pressed="true"] .lbl{color:#6b5867}
+
+/* ---------- cozy quest pieces ---------- */
+.px{image-rendering:pixelated;shape-rendering:crispEdges;display:block}
+.pixel-panel{background:var(--q-panel);color:var(--q-ink);border:4px solid var(--q-line);
+  box-shadow:inset -4px -4px 0 #e9dcc0,0 4px 0 var(--q-line);font-family:var(--round)}
+#s-mascot .ground{position:absolute;bottom:58px;width:70px;height:10px;border-radius:50%;background:rgba(43,36,64,.2)}
+.dlg{width:300px;padding:16px 18px 22px;position:relative;font-weight:600;font-size:17px;line-height:1.4;min-height:104px}
+.dlg .who{position:absolute;top:-16px;left:12px;padding:2px 10px;background:var(--q-gold);border:3px solid var(--q-line);font:13px var(--pixel)}
+.caret{position:absolute;right:14px;bottom:8px;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:9px solid var(--q-ink)}
+.xp{width:290px;padding:16px 18px}
+.xp-top{display:flex;justify-content:space-between;font:13px var(--pixel);margin-bottom:8px}
+.xp-bar{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;padding:4px;border:3px solid var(--q-line);background:#3b3355}
+.xp-bar i{height:16px;background:#56507a}
+.xp-bar i.on{background:var(--q-green);box-shadow:inset 0 -4px 0 #4fa65f}
+.qbtn{margin-top:12px;font:13px var(--pixel);padding:7px 12px;border:3px solid var(--q-line);background:var(--q-gold);color:var(--q-ink);cursor:pointer;box-shadow:0 3px 0 var(--q-line)}
+.qbtn:active{translate:0 3px;box-shadow:none}
+.bag{padding:14px}
+.bag h4{margin:0 0 8px;font:13px var(--pixel)}
+.slots{display:grid;grid-template-columns:repeat(4,52px);gap:6px}
+.slot{width:52px;height:52px;border:3px solid var(--q-line);background:#efe3c8;display:grid;place-items:center}
+.chest-btn{all:unset;cursor:pointer;position:relative;top:46px}.chest-btn:focus-visible{outline:3px solid #f5c542;outline-offset:4px}
+.rays{position:absolute;width:300px;height:300px;opacity:0;background:repeating-conic-gradient(rgba(245,197,66,.35) 0 10deg,transparent 10deg 20deg);border-radius:50%;
+  -webkit-mask:radial-gradient(#000 20%,transparent 68%);mask:radial-gradient(#000 20%,transparent 68%)}
+.loot-item{position:absolute;opacity:0;display:grid;justify-items:center;gap:6px}
+.loot-item span{font:12px var(--pixel);color:#fff8e7;background:var(--q-ink);padding:3px 8px;border:2px solid var(--q-gold)}
+
+/* ---------- motion (only when the reader has not asked for less) ---------- */
+@media (prefers-reduced-motion:no-preference){
+  .play .a-drop{animation:a-drop .7s cubic-bezier(.22,1.3,.36,1) both}
+  .play .a-tape{animation:a-tape .35s cubic-bezier(.23,1,.32,1) both}
+  .play .t1{animation-delay:.55s} .play .t2{animation-delay:.7s}
+  .play .a-pin{animation:a-pop .35s cubic-bezier(.34,1.56,.64,1) .6s both}
+  .play .a-slap{animation:a-slap .45s cubic-bezier(.2,1.4,.4,1) both}
+  .play .a-rise{animation:a-rise .8s cubic-bezier(.23,1,.32,1) both}
+  .play .a-stamp{animation:a-stamp .32s cubic-bezier(.23,1,.32,1) .6s both}
+  .stk:hover{animation:wobble .4s cubic-bezier(.23,1,.32,1)}
+  .bob{animation:bob 1.2s steps(2,jump-none) infinite}
+  .play .a-pop{animation:a-pop .4s cubic-bezier(.34,1.56,.64,1) both}
+  .caret{animation:caret 1s steps(2,jump-none) infinite}
+  .open .rays{animation:rays-in .4s ease-out forwards,spin 9s linear infinite}
+  .open .loot-item{animation:loot .7s cubic-bezier(.22,1.3,.36,1) .15s forwards}
+}
+@media (prefers-reduced-motion:reduce){ .open .rays{opacity:1} .open .loot-item{opacity:1;transform:translateY(-44px)} }
+@keyframes a-drop{from{transform:translateY(-140px) rotate(-10deg);opacity:0}to{transform:none;opacity:1}}
+@keyframes a-tape{from{transform:scaleX(.3);opacity:0}to{transform:none;opacity:1}}
+@keyframes a-pop{from{transform:scale(.2);opacity:0}to{transform:none;opacity:1}}
+@keyframes a-slap{0%{transform:scale(1.5) rotate(-8deg);opacity:0}60%{transform:scale(.96) rotate(1deg);opacity:1}100%{transform:none}}
+@keyframes a-rise{from{transform:translateY(26px);opacity:0}to{transform:none;opacity:1}}
+@keyframes a-stamp{from{transform:scale(2.3) rotate(-18deg);opacity:0}to{transform:none;opacity:1}}
+@keyframes wobble{0%,100%{rotate:0deg}30%{rotate:-7deg}65%{rotate:5deg}}
+@keyframes bob{0%{transform:translateY(0)}100%{transform:translateY(-6px)}}
+@keyframes caret{0%{opacity:1}100%{opacity:0}}
+@keyframes rays-in{to{opacity:1}}
+@keyframes spin{to{rotate:360deg}}
+@keyframes loot{from{opacity:0;transform:translateY(10px) scale(.5)}to{opacity:1;transform:translateY(-44px)}}
+@media (max-width:420px){.grid{grid-template-columns:1fr}.notes div{grid-template-columns:80px 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Deck element gallery</h1>
+  <p>Twelve small pieces from two cute deck styles, each shown working on its own. They are ideas to borrow, not a deck to fill in. Every piece says the moment it fits, when to leave it out, and what it must keep.</p>
+  <p>Point your AI here, then let it build from <em>your</em> content: one slide's real point first, then the one piece that helps say it.</p>
+  <span class="made-up">All the example words are made up (a weekend bake sale).</span>
+  <ul class="rules">
+    <li><b>Start from the point, not the piece.</b>Pick an element because the slide has a moment it fits, like a decision, a quote or progress.</li>
+    <li><b>One star per slide.</b>Tape, a stamp and a sprite on one slide fight each other. Choose one; let the rest stay plain.</li>
+    <li><b>Hard news stays plain.</b>A worrying number, a loss or an apology gets clean type and no bounce.</li>
+    <li><b>Motion is a bonus, never the message.</b>Each piece reads fully when the reader has asked for less motion.</li>
+  </ul>
+</header>
+
+<h2>Scrapbook</h2>
+<p>Paper, tape and handwriting. Warm and personal; good for a retro, a team update or a story told in moments.</p>
+<div class="grid">
+
+<article class="spec" id="s-tape">
+  <div class="stage paper"><div class="card a-drop"><span class="tape t1 a-tape"></span><span class="tape mint t2 a-tape"></span><span class="hand">Sold out by 11</span>The lemon bars went first, then everything with sprinkles.</div><button class="replay" type="button">Replay</button></div>
+  <div class="body"><h3>Washi tape holding a card</h3><dl class="notes">
+    <div><dt>Fits</dt><dd>One headline fact you want to feel pinned down and real.</dd></div>
+    <div><dt>Skip it when</dt><dd>The slide is a dense table: tape on every cell turns into noise.</dd></div>
+    <div><dt>Keep</dt><dd>The tape over a corner, never over words. Torn ends come from a clip-path, so no image is needed.</dd></div></dl></div>
+</article>
+
+<article class="spec" id="s-polaroid">
+  <div class="stage dots"><div style="position:relative;rotate:-3deg" class="a-drop"><svg class="pin a-pin" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="9" r="7" fill="#ee8fa6" stroke="#3b2a38" stroke-width="2"/><circle cx="8.6" cy="6.8" r="2" fill="#fff" opacity=".8"/></svg>
+    <div class="polaroid"><div class="ph"><svg width="96" height="84" viewBox="0 0 96 84" aria-hidden="true"><path d="M14 46h68l-6 30H20z" fill="#fff6d6" stroke="#3b2a38" stroke-width="2.5" stroke-linejoin="round"/><path d="M12 46c4-16 18-24 36-24s32 8 36 24" fill="#fbe3a0" stroke="#3b2a38" stroke-width="2.5" stroke-linejoin="round"/><path d="M30 34c3 3 6 3 9 0M51 30c3 3 6 3 9 0" stroke="#ee8fa6" stroke-width="2.5" stroke-linecap="round" fill="none"/><circle cx="48" cy="16" r="6" fill="#ee8fa6" stroke="#3b2a38" stroke-width="2.5"/><path d="M48 10c1-4 4-6 7-6" stroke="#3b2a38" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg></div><p>the cake that went first</p></div></div><button class="replay" type="button">Replay</button></div>
+  <div class="body"><h3>Polaroid with a pin</h3><dl class="notes">
+    <div><dt>Fits</dt><dd>Moments: "what happened", one finding per photo, three or four in a row.</dd></div>
+    <div><dt>Skip it when</dt><dd>There is no picture to draw. An empty polaroid looks broken.</dd></div>
+    <div><dt>Keep</dt><dd>A short caption (one line, two at most) in the hand font, at a size people can read.</dd></div></dl></div>
+</article>
+
+<article class="spec" id="s-note">
+  <div class="stage paper"><div class="note a-slap">Order twice the lemons next time</div><button class="replay" type="button">Replay</button></div>
+  <div class="body"><h3>Sticky note that slaps on</h3><dl class="notes">
+    <div><dt>Fits</dt><dd>A to-do or a "next time" that should feel like a reminder you would actually stick up.</dd></div>
+    <div><dt>Skip it when</dt><dd>You have more than one per slide: a wall of notes reads as clutter.</dd></div>
+    <div><dt>Keep</dt><dd>Six words or so. The slap is quick (under half a second) and happens once.</dd></div></dl></div>
+</article>
+
+<article class="spec" id="s-scrap">
+  <div class="stage dots"><div class="scrap a-rise">"We'd come back every week if you did this."<small>A visitor, at the cake table</small></div><button class="replay" type="button">Replay</button></div>
+  <div class="body"><h3>Torn paper for a quote</h3><dl class="notes">
+    <div><dt>Fits</dt><dd>Someone's own words. The torn edge says "cut from the real thing".</dd></div>
+    <div><dt>Skip it when</dt><dd>The words are yours, not theirs. Then it is a claim, so set it plainly.</dd></div>
+    <div><dt>Keep</dt><dd>Who said it, under the quote. Quote exactly or not at all.</dd></div></dl></div>
+</article>
+
+<article class="spec" id="s-sticker">
+  <div class="stage paper"><div class="row">
+    <svg class="stk" width="78" height="78" viewBox="0 0 78 78" role="img" aria-label="A smiling star sticker"><path d="M39 6l9 20 22 2-17 15 5 22-19-12-19 12 5-22L8 28l22-2z" fill="#fbe3a0" stroke="#3b2a38" stroke-width="3" stroke-linejoin="round"/><circle cx="32" cy="38" r="2.6" fill="#3b2a38"/><circle cx="46" cy="38" r="2.6" fill="#3b2a38"/><path d="M34 45c3 3 7 3 10 0" stroke="#3b2a38" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>
+    <svg class="stk" width="70" height="70" viewBox="0 0 70 70" role="img" aria-label="A heart sticker"><path d="M35 60C14 46 8 36 8 25c0-9 7-15 15-15 6 0 10 3 12 8 2-5 6-8 12-8 8 0 15 6 15 15 0 11-6 21-27 35z" fill="#f7b9cc" stroke="#3b2a38" stroke-width="3" stroke-linejoin="round"/><path d="M20 22c1-3 3-5 6-5" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/></svg>
+    <svg class="stk" width="64" height="74" viewBox="0 0 64 74" role="img" aria-label="A sprout in a pot sticker"><path d="M14 40h36l-5 28H19z" fill="#f8cdb0" stroke="#3b2a38" stroke-width="3" stroke-linejoin="round"/><path d="M32 40V22" stroke="#3b2a38" stroke-width="3" stroke-linecap="round"/><path d="M32 26c-12 0-16-8-16-14 9 0 16 4 16 14zM32 22c0-10 7-14 16-14 0 6-4 14-16 14z" fill="#c5e7d4" stroke="#3b2a38" stroke-width="3" stroke-linejoin="round"/></svg>
+  </div></div>
+  <div class="body"><h3>Stickers with a white edge</h3><dl class="notes">
+    <div><dt>Fits</dt><dd>A small drawn icon next to a point, so the eye has somewhere to land. Hover one.</dd></div>
+    <div><dt>Skip it when</dt><dd>It would stand in for the point itself. An icon is a signpost, not the message.</dd></div>
+    <div><dt>Keep</dt><dd>Drawn SVG, never an emoji (emoji look different on every computer). The white edge is four stacked drop-shadows.</dd></div></dl></div>
+</article>
+
+<article class="spec" id="s-stamp">
+  <div class="stage paper"><div class="card stamp-card a-rise"><b>Next sale: first Saturday of June</b>Same hall, two tables more, card payments this time.<span class="stamp a-stamp">Agreed!</span></div><button class="replay" type="button">Replay</button></div>
+  <div class="body"><h3>A stamp lands on a decision</h3><dl class="notes">
+    <div><dt>Fits</dt><dd>The one thing everyone agreed. It marks the moment talk became a decision.</dd></div>
+    <div><dt>Skip it when</dt><dd>Nothing was decided yet. A stamp on an open question claims too much.</dd></div>
+    <div><dt>Keep</dt><dd>The stamp after the content has arrived, so people read first. One stamp per deck feels earned.</dd></div></dl>
+    <p class="see">Want the stamp on a click instead? sparkle-that-page has one: <a href="https://github.com/wan-huiyan/cutify-this#-sparkle-that-page--cute-page-effects">stamp effect</a>.</p></div>
+</article>
+
+<article class="spec" id="s-check">
+  <div class="stage paper"><ul class="card checklist">
+    <li><button type="button" aria-pressed="true"><span class="box"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4" stroke="#d4536f" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl">Book the hall</span></button></li>
+    <li><button type="button" aria-pressed="false"><span class="box"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4" stroke="#d4536f" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl">Borrow a card reader</span></button></li>
+    <li><button type="button" aria-pressed="false"><span class="box"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4" stroke="#d4536f" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl">Ask two more bakers</span></button></li>
+  </ul></div>
+  <div class="body"><h3>A checklist you tick live</h3><dl class="notes">
+    <div><dt>Fits</dt><dd>Agreeing next steps in the room: tick each as people say yes. Click the boxes.</dd></div>
+    <div><dt>Skip it when</dt><dd>The deck is read alone, without you there to tick.</dd></div>
+    <div><dt>Keep</dt><dd>Real buttons, so a keyboard can tick them too. The tick springs in; the words stay readable when done.</dd></div></dl></div>
+</article>
+</div>
+
+<h2>Cozy quest</h2>
+<p>A little pixel game: a mascot, a dialogue box, progress you can earn. Playful; good for training, onboarding or a long deck that needs a reason to keep going.</p>
+<div class="grid">
+
+<article class="spec" id="s-mascot">
+  <div class="stage grass"><span class="ground"></span><div class="bob"><svg class="px" data-sprite="bun" width="120" height="108" role="img" aria-label="A round pixel bun mascot, bobbing"></svg></div></div>
+  <div class="body"><h3>A mascot that bobs</h3><dl class="notes">
+    <div><dt>Fits</dt><dd>A guide who appears on the opening and closing slides and reacts to what happens.</dd></div>
+    <div><dt>Skip it when</dt><dd>The audience is meeting you for a serious first time and does not know the joke yet.</dd></div>
+    <div><dt>Keep</dt><dd>Two frames, stepped, not smooth: that is what makes it read as pixel. Sharp edges via crisp rendering.</dd></div></dl></div>
+</article>
+
+<article class="spec" id="s-dialogue">
+  <div class="stage night"><div class="pixel-panel dlg"><span class="who">BUN</span><span class="type" data-text="Three tables, ninety visitors, and the lemon bars were gone by eleven. Not bad for a first try!"></span><span class="caret" aria-hidden="true"></span></div><button class="replay" type="button">Replay</button></div>
+  <div class="body"><h3>Dialogue box that types itself</h3><dl class="notes">
+    <div><dt>Fits</dt><dd>The mascot saying the slide's one point, the way a game character would.</dd></div>
+    <div><dt>Skip it when</dt><dd>The text is long. Typing out four lines makes people wait to read.</dd></div>
+    <div><dt>Keep</dt><dd>The full sentence in the page from the start (screen readers get it at once). The blinking arrow says "there is more".</dd></div></dl></div>
+</article>
+
+<article class="spec" id="s-xp">
+  <div class="stage night"><div class="pixel-panel xp"><div class="xp-top"><span>Takeaways</span><span class="xp-num">2 / 5</span></div>
+    <div class="xp-bar" role="progressbar" aria-label="Takeaways covered" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <button class="qbtn" type="button">+1 takeaway</button></div></div>
+  <div class="body"><h3>An XP bar you fill by clicking</h3><dl class="notes">
+    <div><dt>Fits</dt><dd>Progress through a list: one click per takeaway covered. It shows how far along everyone is.</dd></div>
+    <div><dt>Skip it when</dt><dd>The number is a real measure (sales, a score). A game bar makes a real figure look like a toy.</dd></div>
+    <div><dt>Keep</dt><dd>A text count next to the bar, and a progress role so the count is announced.</dd></div></dl></div>
+</article>
+
+<article class="spec" id="s-bag">
+  <div class="stage night"><div class="pixel-panel bag"><h4>Collected so far</h4><div class="slots">
+    <div class="slot"><svg class="px a-pop" data-sprite="lemon" width="36" height="36" role="img" aria-label="Lemon"></svg></div>
+    <div class="slot"><svg class="px a-pop" data-sprite="coin" width="36" height="36" role="img" aria-label="Coin" style="animation-delay:.12s"></svg></div>
+    <div class="slot"><svg class="px a-pop" data-sprite="heart" width="36" height="36" role="img" aria-label="Heart" style="animation-delay:.24s"></svg></div>
+    <div class="slot"><svg class="px a-pop" data-sprite="key" width="36" height="36" role="img" aria-label="Key" style="animation-delay:.36s"></svg></div>
+    <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div></div></div><button class="replay" type="button">Replay</button></div>
+  <div class="body"><h3>Inventory slots</h3><dl class="notes">
+    <div><dt>Fits</dt><dd>A recap: each lesson so far is an item in the bag. Empty slots show what is still to come.</dd></div>
+    <div><dt>Skip it when</dt><dd>The items do not map to anything. A bag of random loot is decoration.</dd></div>
+    <div><dt>Keep</dt><dd>Items pop in one after another, a beat apart, so the eye can count them.</dd></div></dl></div>
+</article>
+
+<article class="spec" id="s-loot">
+  <div class="stage night"><span class="rays"></span>
+    <div class="loot-item"><svg class="px" data-sprite="scroll" width="56" height="56" role="img" aria-label="A scroll"></svg><span>New: a list of regulars</span></div>
+    <button class="chest-btn" type="button" aria-label="Open the chest"><svg class="px" data-sprite="chest" width="96" height="78" aria-hidden="true"></svg></button><button class="replay" type="button">Close</button></div>
+  <div class="body"><h3>Loot reveal on the big finding</h3><dl class="notes">
+    <div><dt>Fits</dt><dd>The one surprise worth celebrating. Click the chest.</dd></div>
+    <div><dt>Skip it when</dt><dd>The finding is bad news, or small. A chest promises treasure.</dd></div>
+    <div><dt>Keep</dt><dd>The prize says what it is in words, not just a picture. Rays turn slowly; without motion they simply show.</dd></div></dl></div>
+</article>
+</div>
+
+<footer>Part of <a href="https://github.com/wan-huiyan/cutify-this">cutify-this</a> (skill: inspire-that-deck). Every drawing here is hand-made SVG; fonts are from Google Fonts (Open Font License).</footer>
+</div>
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  // pixel sprites: one character per pixel, '.' is empty; palette per sprite
+  const S = {
+    bun:{p:{k:'#2b2440',w:'#fff8e7',c:'#f7b9cc',s:'#f0e0c4'},m:[
+      '.....kkkkkk.....','...kkwwwwwwkk...','..kwwwwwwwwwwk..','.kwwwwwwwwwwwwk.','.kwwwwwwwwwwwwk.','kwwwkwwwwwwkwwwk',
+      'kwwwkwwwwwwkwwwk','kwccwwwkkwwwccwk','kwwwwwwwwwwwwwwk','kswwwwwwwwwwwwsk','.kssswwwwwwsssk.','..kkkkkkkkkkkk..']},
+    lemon:{p:{k:'#2b2440',y:'#f5d442',l:'#fff1a6',g:'#7ccf8a'},m:['......gg.','....kkgk.','..kkyyyk.','.kylyyyyk','kyllyyyyk','kyyyyyyyk','.kyyyyyk.','..kkkkk..']},
+    coin:{p:{k:'#2b2440',o:'#f5c542',l:'#fff1a6',d:'#c9962a'},m:['..kkkk..','.kolllk.','kollodok','kolodlok','kolodlok','kollodok','.kooddk.','..kkkk..']},
+    heart:{p:{k:'#2b2440',r:'#ee6f8f',l:'#ffc2d1'},m:['.kk..kk.','krrkkrrk','krlrrrrk','krrrrrrk','.krrrrk.','..krrk..','...kk...']},
+    key:{p:{k:'#2b2440',o:'#f5c542'},m:['.kkk.....','kooak....','ko.okkkkk','kooaooooo','.kkk.k.k.']},
+    scroll:{p:{k:'#2b2440',w:'#fff8e7',t:'#e9dcc0',r:'#ee6f8f'},m:['.kkkkkkkk.','kttwwwwttk','.kwwwwwwk.','.kwkkkkwk.','.kwwwwwwk.','.kwkkkwwk.','.kwwwwwwk.','kttwwrwttk','.kkkkrkkk.']},
+    chest:{p:{k:'#2b2440',b:'#b06a3a',d:'#7e4826',o:'#f5c542'},m:[
+      '..kkkkkkkkkk..','.kbbbbbbbbbbk.','kbdbbbbbbbbdbk','kbdbbbbbbbbdbk','kkkkkkookkkkkk','kbdbbbkokbbdbk','kbdbbbbkbbbdbk','kbdbbbbbbbbdbk','kkkkkkkkkkkkkk']}
+  };
+  document.querySelectorAll('svg[data-sprite]').forEach(svg => {
+    const sp = S[svg.dataset.sprite]; if (!sp) return;
+    const h = sp.m.length, w = Math.max(...sp.m.map(r => r.length));
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    let out = '';
+    sp.m.forEach((row, y) => [...row].forEach((ch, x) => { const c = sp.p[ch === 'a' ? 'o' : ch]; if (c) out += `<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${c}"/>`; }));
+    svg.innerHTML = out;
+  });
+
+  // typewriter: the full sentence is in the DOM for screen readers; the visible typing is a sighted-only layer
+  const typers = [];
+  document.querySelectorAll('.type').forEach(el => {
+    const full = el.dataset.text; el.setAttribute('aria-label', full);
+    const vis = document.createElement('span'); vis.setAttribute('aria-hidden', 'true'); el.appendChild(vis);
+    let timer = null;
+    const run = () => { clearInterval(timer); if (reduce.matches) { vis.textContent = full; return; }
+      let i = 0; vis.textContent = ''; timer = setInterval(() => { vis.textContent = full.slice(0, ++i); if (i >= full.length) clearInterval(timer); }, 32); };
+    typers.push({ stage: el.closest('.stage'), run }); vis.textContent = full;
+  });
+
+  const play = stage => { stage.classList.remove('play'); void stage.offsetWidth; stage.classList.add('play');
+    typers.filter(t => t.stage === stage).forEach(t => t.run()); };
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { play(e.target); io.unobserve(e.target); } }), { threshold: .5 });
+  document.querySelectorAll('.stage').forEach(s => { if (s.querySelector('.replay') && !s.closest('#s-loot')) { io.observe(s); s.querySelector('.replay').addEventListener('click', () => play(s)); } });
+
+  // checklist
+  document.querySelectorAll('.checklist button').forEach(b => b.addEventListener('click', () => b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true')));
+
+  // XP bar: 2 cells per takeaway
+  const bar = document.querySelector('.xp-bar'), num = document.querySelector('.xp-num');
+  document.querySelector('#s-xp .qbtn').addEventListener('click', () => {
+    let n = +bar.getAttribute('aria-valuenow'); n = n >= 5 ? 0 : n + 1;
+    bar.setAttribute('aria-valuenow', n); num.textContent = `${n} / 5`;
+    [...bar.children].forEach((c, i) => c.classList.toggle('on', i < n * 2));
+  });
+
+  // loot chest
+  const loot = document.querySelector('#s-loot .stage');
+  const toggle = open => loot.classList.toggle('open', open);
+  loot.querySelector('.chest-btn').addEventListener('click', () => toggle(true));
+  loot.querySelector('.replay').addEventListener('click', () => toggle(false));
+})();
+</script>
+</body>
+</html>
