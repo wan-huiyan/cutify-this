@@ -103,6 +103,7 @@ browser_suite "sparkle: wand gallery test" tests/sparkle_wands_gallery_smoke.mjs
 browser_suite "sparkle: twinkling dust test" tests/sparkle_dust_smoke.mjs
 browser_suite "sparkle: confetti test" tests/sparkle_confetti_smoke.mjs
 browser_suite "sparkle: floaters test" tests/sparkle_floaters_smoke.mjs
+browser_suite "sparkle: tweak drawer test" tests/sparkle_tweaks_smoke.mjs
 browser_suite "sparkle: scroll companion test" tests/sparkle_scroll_smoke.mjs
 browser_suite "site: Aurora landing page test" tests/site_aurora_smoke.mjs
 browser_suite "site: Bubblegum landing page test" tests/site_bubblegum_smoke.mjs

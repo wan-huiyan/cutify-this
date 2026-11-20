@@ -465,11 +465,24 @@ exposes `start()` / `destroy()` on `window.SparkleThatPage.<name>`:
 | `cute_chrome.css` | selection/wobble/spinner/scrollbar + palette tokens + the sky switch's look | `.stp-wobble`, `.stp-spinner` classes, `--stp-c1…c5` |
 | `references/wands.md` (next to `examples/`) | how to draw a wand cursor: anatomy, quality bar, the 11 families and their small-size traps, palette rules, sources to study with licences | — |
 | `references/confetti.md`, `floaters.md`, `scroll-mascots.md` | the same kind of guide for confetti, floaters and scroll companions | — |
-| `demo.html` | live showcase + verify tool (stamp buttons, a link to hover for the glow, room to scroll to the bottom, the speaker + sun/moon toggles, the secret word; themed from `data-theme`) | — |
+| `demo.html` | live showcase + verify tool (stamp buttons, a link to hover for the glow, room to scroll to the bottom, the speaker + sun/moon toggles, the secret word; themed from `data-theme`) and the **tweak drawer** (below) | `localStorage` `stp:tweaks` |
 | `wands.html` | the wand gallery: all 11 families × 3 palettes on light, dark and the page's own theme, plain and glowing; hover a card to wear that wand | `data-wand`, `data-wand-palette` (set on hover) |
 | `confetti.html` | the confetti gallery: every family × palette, light and dark; click a card to fire it; a motion switch | `burst(x, y, { family, palette, motion })` |
 | `floaters.html` | the floaters gallery: a still picture of each family; click one to make it the page's floaters | `data-floaters` (set on click) |
 | `scroll.html` | the scroll gallery: every look in its four states; click one to put it on the page and scroll | `data-scroll`, `data-scroll-mascot` (set on click) |
+
+### The tweak drawer in `demo.html`
+
+A small tab on the right edge of the demo pulls out a drawer: pick a wand, a trail (and its density),
+a palette, a scroll buddy, petals and sounds, and watch the page change. **Copy my setup** puts the exact
+lines for those choices on the clipboard (and shows them): the `data-*` attributes for your `<html>` tag, plus one
+`<script>` line per effect (and the `cute_chrome.css` link when the palette is neon or meadow). Paths start with
+`/static/`; change them to where you put the files. The drawer drives the "Toggle effects" panel, so the effects
+need no changes: every option goes through the same enable / disable code as the panel. Choices are kept in
+`localStorage` under one key, `stp:tweaks` (inside try/catch, so the page works when storage is blocked). It closes
+with Esc or its close button, keeps Tab inside while open, follows `data-theme`, and skips its slide under
+`prefers-reduced-motion`. `node tests/sparkle_tweaks_smoke.mjs` opens it, changes things, reloads, then puts the copied
+snippet into a blank page and checks that the chosen effects start.
 
 ## Prior art / see also
 
@@ -491,11 +504,22 @@ Internal inspiration: the `neon` palette + glowing fairy-dust come from
 **token-torch** ("neon mission control"); the `meadow` palette comes from a
 colleague's **Common Ground** team warm-up.
 
+The demo's tweak drawer (a pull-out panel of a few grouped options whose defaults are the finished
+design, remembered in `localStorage`) follows the Tweaks idea in **huashu-design**
+(MIT, `references/tweaks-system.md`). The code here is written fresh.
+
 Sibling skill: **`cutify-that-tab`** — the cute favicon half of the
 `cutify-this` bundle. Broader UI guidance: **`frontend-design`**.
 
 ## Changelog
 
+- **v1.5.0** (2026-11-20) — A tweak drawer on the live demo. A tab on the right edge opens a
+  pull-out panel: wand, trail and density, palette, scroll buddy, petals and sounds, grouped, each a labelled
+  control. Everything changes the page live, is remembered under one `stp:tweaks` key, and
+  **Copy my setup** hands you the exact `<html>` attributes and `<script>` lines for your choices
+  (tested by putting them in a blank page). Esc and a close button close it, Tab stays inside, it follows
+  light and dark, fits a 390 px phone and skips the slide under reduced motion. The effect files are
+  unchanged. New `tests/sparkle_tweaks_smoke.mjs`. Idea credited to huashu-design's Tweaks panel.
 - **v1.4.0** (2026-11-11) — Confetti, floaters and the scroll companion get the wand
   treatment: each has a guide in `references/` that tells an agent what makes a good one and
   where to look (licences checked at the source), a gallery page, and far more to pick from.

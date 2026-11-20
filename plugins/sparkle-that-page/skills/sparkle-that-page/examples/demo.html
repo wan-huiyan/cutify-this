@@ -64,6 +64,43 @@
     /* the text box in the secret-word section follows the theme (a bare UA input stays light grey in dark mode); the placeholder uses --note for contrast */
     #secret-field { font: inherit; font-size: 14px; color: inherit; background: var(--field-bg); border: 1px solid var(--field-line); border-radius: 8px; padding: 6px 10px; }
     #secret-field::placeholder { color: var(--note); opacity: 1; font-style: italic; }
+    /* tweak drawer: a pull-out panel on the right edge. It reads and drives the "Toggle effects" panel, so the two always agree. */
+    #tweaks { position: fixed; top: 0; right: 0; bottom: 0; width: min(330px, calc(100vw - 44px)); z-index: 2147483645; pointer-events: none; transform: translateX(100%); transition: transform .28s cubic-bezier(.22,1,.36,1); }
+    #tweaks.open { transform: none; }
+    #tw-tab {
+      pointer-events: auto; position: absolute; left: -42px; bottom: 120px; width: 42px; height: 52px; padding: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; color: var(--panel-h3); background: linear-gradient(var(--panel), var(--panel)), Canvas;
+      border: 1px solid var(--panel-line); border-right: 0; border-radius: 14px 0 0 14px; box-shadow: -4px 4px 14px rgba(168,85,247,.22);
+    }
+    #tw-tab svg, #tw-close svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    #tw-panel {
+      pointer-events: auto; position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; box-sizing: border-box; padding: 16px 18px 24px;
+      background: linear-gradient(var(--panel), var(--panel)), Canvas; color: var(--ink); border-left: 1px solid var(--panel-line); box-shadow: -10px 0 30px rgba(168,85,247,.22);
+      font-size: 14px; line-height: 1.45; visibility: hidden; transition: visibility 0s .28s;
+    }
+    #tweaks.open #tw-panel { visibility: visible; transition-delay: 0s; }
+    .tw-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+    .tw-head h2 { margin: 0; font-size: 17px; color: var(--h2); }
+    #tw-close { cursor: pointer; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; color: var(--ink); background: transparent; border: 1px solid var(--field-line); border-radius: 10px; }
+    .tw-lede { margin: 0 0 6px; font-size: 13px; color: var(--note); }
+    #tw-panel fieldset { margin: 12px 0 0; padding: 0; border: 0; min-width: 0; }
+    #tw-panel legend { padding: 0; margin-bottom: 4px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--lede); }
+    .tw-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 6px 0; }
+    .tw-row label { flex: 0 0 auto; }
+    .tw-row select { flex: 1 1 0; min-width: 0; max-width: 170px; font: inherit; font-size: 14px; color: inherit; background: var(--field-bg); border: 1px solid var(--field-line); border-radius: 8px; padding: 6px 8px; min-height: 36px; }
+    .tw-row select:disabled { opacity: .5; }
+    .tw-check { display: flex; align-items: center; gap: 10px; margin: 6px 0; min-height: 36px; cursor: pointer; }
+    .tw-check input { width: 18px; height: 18px; margin: 0; accent-color: #c084fc; }
+    #tw-panel :focus-visible, #tw-tab:focus-visible { outline: 3px solid #a855f7; outline-offset: 2px; }
+    [data-theme="dark"] #tw-panel :focus-visible, [data-theme="dark"] #tw-tab:focus-visible { outline-color: #f0abfc; }
+    .tw-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 8px; }
+    .tw-actions .btn { margin: 0; padding: 10px 16px; }
+    #tw-reset { cursor: pointer; font: inherit; font-weight: 600; color: var(--ink); background: transparent; border: 1px solid var(--field-line); border-radius: 12px; padding: 10px 16px; }
+    #tw-status { min-height: 1.4em; margin: 0 0 6px; font-size: 13px; color: var(--note); }
+    #tw-snippet { display: block; width: 100%; box-sizing: border-box; height: 190px; resize: vertical; font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--code-ink); background: var(--code-bg); border: 1px solid var(--code-line); border-radius: 10px; padding: 8px 10px; }
+    .tw-snip-label { display: block; margin-top: 12px; margin-bottom: 4px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--lede); }
+    @media (max-width: 640px) { #tw-tab { left: -32px; width: 32px; } }   /* a slimmer tab, so it covers less of the page text on a phone */
+    @media (prefers-reduced-motion: reduce) { #tweaks, #tweaks #tw-panel { transition: none; } }
     /* narrow screens: the sun / moon and speaker buttons are fixed at the left edge (14px + 40px), so keep a 62px gutter there instead of letting text slide under them */
     @media (max-width: 640px) {
       aside#panel { position: static; width: auto; margin: 16px 16px 16px 62px; }
@@ -227,6 +264,196 @@
         more.appendChild(a); box.appendChild(more);
       }
     });
+  </script>
+  <script>
+    // ---- Tweak drawer: try the options live, then copy the exact lines for your own page. ----
+    // It drives the "Toggle effects" panel above (set a control, fire its change event), so the existing enable / disable code does the work.
+    // Choices live under one localStorage key, stp:tweaks; every storage call is wrapped, and the page works without it.
+    (function () {
+      var KEY = "stp:tweaks", root = document.documentElement;
+      var eff = {}; EFFECTS.forEach(function (e) { eff[e.key] = e; });
+      var LISTS = {
+        wand: eff.fairyCursor.variants, trail: eff.sparkleTrail.variants, scroll: eff.scrollIndicator.variants,
+        palette: ["candy", "neon", "meadow", ""], density: ["", "storm"]
+      };
+      var DEFAULTS = { wand: "", trail: "", density: "", palette: "candy", scroll: "", floaters: false, floatersKind: "sakura", sound: false };
+      var state = {}, restoring = false;
+      var $ = function (id) { return document.getElementById(id); };
+      var nice = { "": "off" };
+
+      function load() {
+        var raw = null, o = {};
+        try { raw = JSON.parse(localStorage.getItem(KEY)); } catch (e) { raw = null; }
+        if (!raw || typeof raw !== "object") return null;
+        Object.keys(DEFAULTS).forEach(function (k) {
+          var v = raw[k], d = DEFAULTS[k];
+          if (typeof d === "boolean") o[k] = v === true;
+          else if (k === "floatersKind") o[k] = eff.ambientFloaters.variants.indexOf(v) >= 0 ? v : d;
+          else if (k === "wand" || k === "trail" || k === "scroll") o[k] = LISTS[k].indexOf(v) >= 0 ? v : "";
+          else o[k] = LISTS[k].indexOf(v) >= 0 ? v : d;
+        });
+        return o;
+      }
+      function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* storage blocked: the page still works, nothing is remembered */ } }
+
+      // ---- markup ----
+      var ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.4 7.3C8 6.7 13 7.6 20.6 7.1"/><path d="M9 5.2C10.3 5 11.2 6 11 7.1 10.9 8.2 9.8 8.9 8.8 8.8 7.7 8.6 7 7.6 7.2 6.6 7.4 5.7 8.2 5.3 9 5.2Z"/><path d="M3.5 12.4C9 12.9 14 11.8 20.5 12.3"/><path d="M15.6 10.3C16.9 10.2 17.8 11.2 17.6 12.3 17.5 13.4 16.4 14.1 15.4 14 14.3 13.8 13.6 12.8 13.8 11.8 14 10.9 14.8 10.4 15.6 10.3Z"/><path d="M3.6 17.5C7 17.1 12 18 20.4 17.4"/><path d="M6.8 15.4C8.1 15.3 9 16.3 8.8 17.4 8.7 18.5 7.6 19.2 6.6 19.1 5.5 18.9 4.8 17.9 5 16.9 5.2 16 6 15.5 6.8 15.4Z"/></svg>';
+      var CLOSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6.3C9 9.4 14.7 15.2 18 17.8"/><path d="M17.8 6C14.8 9.2 9.4 14.7 6.2 17.9"/></svg>';
+      function sel(id, label, list, extra) {
+        return '<div class="tw-row"><label for="' + id + '">' + label + '</label><select id="' + id + '">' +
+          list.map(function (v) { return '<option value="' + v + '">' + (nice[v] || v) + '</option>'; }).join("") + '</select></div>';
+      }
+      var wrap = document.createElement("div"); wrap.id = "tweaks";
+      wrap.innerHTML =
+        '<button type="button" id="tw-tab" aria-expanded="false" aria-controls="tw-panel" aria-label="Open the tweak drawer" title="Tweaks">' + ICON + '</button>' +
+        '<div id="tw-panel" role="dialog" aria-labelledby="tw-title">' +
+          '<div class="tw-head"><h2 id="tw-title">Tweaks</h2><button type="button" id="tw-close" aria-label="Close the tweak drawer">' + CLOSE + '</button></div>' +
+          '<p class="tw-lede">Try the options on this page, then copy the lines for yours. Your picks are remembered here.</p>' +
+          '<fieldset><legend>Cursor</legend>' + sel("tw-wand", "Wand", [""].concat(LISTS.wand)) + '</fieldset>' +
+          '<fieldset><legend>Mouse trail</legend>' + sel("tw-trail", "Kind", [""].concat(LISTS.trail)) +
+            '<div class="tw-row"><label for="tw-density">Density</label><select id="tw-density"><option value="">sparse</option><option value="storm">dense</option></select></div></fieldset>' +
+          '<fieldset><legend>Colours</legend>' + sel("tw-palette", "Palette", ["candy", "neon", "meadow", ""]).replace('<option value="">off', '<option value="">each effect\'s own') + '</fieldset>' +
+          '<fieldset><legend>Scroll buddy</legend>' + sel("tw-scroll", "Companion", [""].concat(LISTS.scroll)) + '</fieldset>' +
+          '<fieldset><legend>Extras</legend>' +
+            '<label class="tw-check"><input type="checkbox" id="tw-floaters"> Floating petals in the background</label>' +
+            '<label class="tw-check"><input type="checkbox" id="tw-sound"> Little sounds</label></fieldset>' +
+          '<div class="tw-actions"><button type="button" class="btn" id="tw-copy">Copy my setup</button><button type="button" id="tw-reset">Reset</button></div>' +
+          '<p id="tw-status" role="status" aria-live="polite"></p>' +
+          '<label class="tw-snip-label" for="tw-snippet">Your setup</label><textarea id="tw-snippet" readonly spellcheck="false"></textarea>' +
+        '</div>';
+      document.body.appendChild(wrap);
+      var tab = $("tw-tab"), panel = $("tw-panel"), closeBtn = $("tw-close");
+
+      // ---- open / close, focus kept inside while open ----
+      function isOpen() { return wrap.classList.contains("open"); }
+      function setOpen(on) {
+        wrap.classList.toggle("open", on);
+        tab.setAttribute("aria-expanded", on ? "true" : "false");
+        tab.setAttribute("aria-label", on ? "Close the tweak drawer" : "Open the tweak drawer");
+        if (on) closeBtn.focus(); else if (panel.contains(document.activeElement) || document.activeElement === document.body) tab.focus();
+      }
+      function focusables() { return Array.prototype.filter.call(panel.querySelectorAll("button, select, input, textarea"), function (n) { return !n.disabled; }); }
+      tab.addEventListener("click", function () { setOpen(!isOpen()); });
+      closeBtn.addEventListener("click", function () { setOpen(false); });
+      document.addEventListener("keydown", function (e) {
+        if (!isOpen()) return;
+        if (e.key === "Escape") { e.preventDefault(); setOpen(false); return; }
+        if (e.key !== "Tab") return;
+        var f = focusables(), first = f[0], last = f[f.length - 1], a = document.activeElement;
+        if (!panel.contains(a)) { e.preventDefault(); (e.shiftKey ? last : first).focus(); }
+        else if (e.shiftKey && a === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && a === last) { e.preventDefault(); first.focus(); }
+      });
+
+      // ---- drive the existing panel ----
+      function fire(el) { el.dispatchEvent(new Event("change", { bubbles: true })); }
+      function setEffect(key, kind) {   // kind "" = off; for a switch-only effect pass true / false
+        var chk = $("chk-" + key), s = $("sel-" + key);
+        if (kind === "" || kind === false) { if (chk.checked) { chk.checked = false; fire(chk); } return; }
+        if (s && typeof kind === "string") s.value = kind;
+        if (chk.checked) { if (s) fire(s); } else { chk.checked = true; fire(chk); }
+      }
+      function setPalette(v) { var s = $("sel-palette"); if (s.value !== v) { s.value = v; fire(s); } }
+      function setDensity(v) {
+        if (v) root.dataset.trailDensity = v; else delete root.dataset.trailDensity;
+        if (isOn(eff.sparkleTrail)) { disable(eff.sparkleTrail); enable(eff.sparkleTrail); }
+      }
+      function setSound(on, quiet) {
+        var snd = window.SparkleThatPage && window.SparkleThatPage.sounds; if (!snd) return;
+        snd.setEnabled(on); if (on && !quiet) snd.play("on");
+      }
+      function soundOn() { var snd = window.SparkleThatPage && window.SparkleThatPage.sounds; return !!(snd && snd.enabled()); }
+
+      // ---- the snippet ----
+      var BASE = "/static/";
+      function snippet(s) {
+        var attrs = [], tags = [];
+        if (s.palette && s.palette !== "candy") { attrs.push('data-palette="' + s.palette + '"'); tags.push('<link rel="stylesheet" href="' + BASE + 'cute_chrome.css">'); }
+        if (s.wand) { attrs.push('data-wand="' + s.wand + '"'); tags.push('<script src="' + BASE + 'fairy_cursor.js"><\/script>'); }
+        if (s.trail) {
+          attrs.push('data-trail="' + s.trail + '"');
+          if (s.density) attrs.push('data-trail-density="' + s.density + '"');
+          tags.push('<script src="' + BASE + 'sparkle_trail.js"><\/script>');
+        }
+        if (s.scroll) {
+          var climber = ["bunny", "bear", "frog"].indexOf(s.scroll) >= 0;
+          attrs.push('data-scroll="' + (climber ? "mascot" : s.scroll) + '"');
+          if (climber) attrs.push('data-scroll-mascot="' + s.scroll + '"');
+          tags.push('<script src="' + BASE + 'scroll_indicator.js"><\/script>');
+        }
+        if (s.floaters) { attrs.push('data-floaters="' + s.floatersKind + '"'); tags.push('<script src="' + BASE + 'ambient_floaters.js"><\/script>'); }
+        if (s.sound) tags.push('<script src="' + BASE + 'cute_sounds.js"><\/script>');
+        if (!tags.length) return "<!-- Nothing picked yet. Choose a wand, a trail, a scroll buddy or petals above. -->";
+        var out = "<!-- sparkle-that-page: my setup. Copy the files from examples/ to " + BASE + " (or change the paths). -->\n";
+        out += "<!-- 1. On the html tag of your page: -->\n<html" + (attrs.length ? " " + attrs.join(" ") : "") + ">\n";
+        out += "<!-- 2. Just before </body>: -->\n" + tags.join("\n");
+        if (s.sound) out += "\n<!-- Sounds are off until a visitor presses the speaker. They chime with click_confetti.js and the secret word. -->";
+        return out;
+      }
+
+      // ---- read the page into state, show it in the drawer, remember it ----
+      function sync(persist) {
+        var kinds = { wand: "fairyCursor", trail: "sparkleTrail", scroll: "scrollIndicator" };
+        Object.keys(kinds).forEach(function (k) { state[k] = isOn(eff[kinds[k]]) ? $("sel-" + eff[kinds[k]].key).value : ""; });
+        state.palette = $("sel-palette").value;
+        state.density = root.dataset.trailDensity === "storm" ? "storm" : "";
+        state.floaters = isOn(eff.ambientFloaters);
+        state.floatersKind = $("sel-ambientFloaters").value;
+        state.sound = soundOn();
+        $("tw-wand").value = state.wand; $("tw-trail").value = state.trail; $("tw-scroll").value = state.scroll;
+        $("tw-palette").value = state.palette; $("tw-density").value = state.density; $("tw-density").disabled = !state.trail;
+        $("tw-floaters").checked = state.floaters; $("tw-sound").checked = state.sound;
+        $("tw-snippet").value = snippet(state);
+        if (persist) save();
+      }
+      $("controls").addEventListener("change", function () { if (!restoring) sync(true); });  // the old panel changed (a wand, a palette...)
+      document.addEventListener("click", function (e) { if (e.target.closest && e.target.closest("[data-sound-toggle]")) setTimeout(function () { sync(true); }, 0); });
+
+      // ---- drawer controls ----
+      $("tw-wand").addEventListener("change", function () { setEffect("fairyCursor", this.value); });
+      $("tw-trail").addEventListener("change", function () { setEffect("sparkleTrail", this.value); });
+      $("tw-scroll").addEventListener("change", function () { setEffect("scrollIndicator", this.value); });
+      $("tw-palette").addEventListener("change", function () { setPalette(this.value); });
+      $("tw-density").addEventListener("change", function () { setDensity(this.value); sync(true); });
+      $("tw-floaters").addEventListener("change", function () { setEffect("ambientFloaters", this.checked ? true : false); });
+      $("tw-sound").addEventListener("change", function () { setSound(this.checked); sync(true); });
+      $("tw-reset").addEventListener("click", function () { applyState(DEFAULTS); sync(true); say("Back to the start."); });
+
+      var sayTimer;
+      function say(msg) { var n = $("tw-status"); n.textContent = msg; clearTimeout(sayTimer); sayTimer = setTimeout(function () { n.textContent = ""; }, 3000); }
+      $("tw-copy").addEventListener("click", function () {
+        var ta = $("tw-snippet"), text = ta.value;
+        function fallback() {
+          ta.focus(); ta.select();
+          var ok = false; try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+          say(ok ? "Copied. Paste it into your page." : "Selected. Press Ctrl+C or Cmd+C to copy.");
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { say("Copied. Paste it into your page."); }, fallback);
+        else fallback();
+      });
+
+      function applyState(s) {   // switch things off first: a palette change re-injects every running effect, and a script still loading would outlive a later "off"
+        restoring = true;
+        try {
+          if (!s.wand) setEffect("fairyCursor", "");
+          if (!s.trail) setEffect("sparkleTrail", "");
+          if (!s.scroll) setEffect("scrollIndicator", "");
+          if (!s.floaters) setEffect("ambientFloaters", false);
+          setPalette(s.palette);
+          setDensity(s.density);
+          if (s.wand) setEffect("fairyCursor", s.wand);
+          if (s.trail) setEffect("sparkleTrail", s.trail);
+          if (s.scroll) setEffect("scrollIndicator", s.scroll);
+          $("sel-ambientFloaters").value = s.floatersKind;
+          if (s.floaters) setEffect("ambientFloaters", s.floatersKind);
+          setSound(s.sound, true);
+        } finally { restoring = false; }
+      }
+
+      var saved = load();
+      if (saved) applyState(saved);
+      sync(false);
+    })();
   </script>
 </body>
 </html>
