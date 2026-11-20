@@ -133,6 +133,8 @@ Every picture here was drawn by the skills' own code, not mocked up. Click one t
 
 **▶ [Live demo](https://wan-huiyan.github.io/cutify-this/) · landing pages: [Aurora (dark)](https://wan-huiyan.github.io/cutify-this/site/aurora.html) · [Bubblegum (bright)](https://wan-huiyan.github.io/cutify-this/site/bubblegum.html)**
 
+The [full demo page](plugins/sparkle-that-page/skills/sparkle-that-page/examples/demo.html) has a **tweak drawer**: a tab on the right edge opens it, you try wands, trails, palettes and scroll buddies live, then press **Copy my setup** for the exact lines to paste into your page.
+
 Ten self-contained, **zero-dependency** effects: one short vanilla file each, no npm, no build. Wire them with
 `<script>` / `<link>`, then choose options with `data-*` attributes on `<html>`.
 
@@ -483,7 +485,7 @@ Claude: [reads the repo, drafts the hero, badge row, one bold promise and a feat
 bash scripts/check-all.sh
 ```
 
-One script runs every check, on every push and pull request (the **tests** badge above). Today it runs 622 checks:
+One script runs every check, on every push and pull request (the **tests** badge above). Today it runs 643 checks:
 
 - **Favicons:** the checker's 17-fixture self-test, then every starter SVG on the four Chrome tab colours (0 fail; the
   3 known blobs it can't measure must stay UNCHECKED).
