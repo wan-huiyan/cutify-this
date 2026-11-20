@@ -55,6 +55,7 @@ TAB=plugins/cutify-that-tab/skills/cutify-that-tab
 SPK=plugins/sparkle-that-page/skills/sparkle-that-page
 TERM=plugins/cutify-that-terminal/skills/cutify-that-terminal
 HATCH=plugins/hatch-that-world/skills/hatch-that-world
+POP=plugins/pop-that-readme/skills/pop-that-readme
 
 echo "== cutify-that-tab"
 check "tab: check-favicon.py --self-test (17 fixtures, every FAIL/WARN/UNCHECKED path fires)" "$PY" $TAB/scripts/check-favicon.py --self-test
@@ -120,6 +121,9 @@ esac
 
 echo "== hatch-that-world"
 js_syntax "hatch: node --check scripts/*.cjs" $HATCH/scripts/*.cjs
+
+echo "== pop-that-readme"
+check "pop: record_gif.py --self-test (cursor path starts, ends on target, stays in view, same seed same path)" "$PY" $POP/examples/record_gif.py --self-test
 
 echo "== repo consistency"
 check "repo: marketplace.json valid; versions match plugin.json and SKILL.md" "$PY" tests/repo_consistency.py versions

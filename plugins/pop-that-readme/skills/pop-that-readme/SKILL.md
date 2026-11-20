@@ -111,6 +111,12 @@ uv run --with playwright python examples/record_gif.py deck.html docs/readme/gar
 # first run only: uv run --with playwright playwright install chromium   (ffmpeg must be on PATH)
 ```
 
+- **The pointer.** A headless browser draws no mouse pointer, so a click would look like
+  an invisible hand. When the key script has a `click=` or `move=` step, the recorder draws
+  an arrow that glides to the target and ripples where it clicks (`--cursor auto`, the
+  default; `--cursor off` skips it). `move=SELECTOR:secs` glides there and hovers without
+  clicking, which shows a hover effect. If the page draws its own cursor (the fairy wand),
+  the recorder keeps the page's and does not add an arrow.
 - **Size budget:** each GIF at or under **4 MB** (the script's default `--max-mb`; it
   steps down frame rate, then colours, then width until it fits), and the GIFs on one
   page under about **10 MB** in total. Every visitor downloads every GIF. Three tiles of
@@ -343,6 +349,8 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
       clicks through the moments that show the feature; every live demo page has its own
       tab icon; the story was checked beat by beat against the real source by an agent that
       did not write it.
+- [ ] A recording that clicks something shows a pointer gliding to it (or the page's own cursor), and
+      you looked at a frame of it landing.
 - [ ] After any demo text change, every GIF showing it was re-recorded and the frame with
       the change was looked at; after the push, the Pages build is `built` at your commit and
       the live README's first screen was looked at.
@@ -359,7 +367,7 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
 
 - `README.template.md` — the full fill-in template (every section, `<PLACEHOLDER>`s).
 - `hero_examples.md` — the ASCII box hero + a worked pixel-SVG hero (the fallback), copy-and-edit.
-- `record_gif.py` — records a page or deck as a looping README GIF under a size budget, with a poster PNG.
+- `record_gif.py` — records a page or deck as a looping README GIF under a size budget, with a poster PNG and a drawn pointer for click steps (`--self-test` checks its path maths offline).
 - `badges/` — three hand-drawn status-badge SVGs (robot, girl peeking over a wall, teacup) + how-to.
 
 ## See also
@@ -371,6 +379,12 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
 
 ## Changelog
 
+- **v1.4.0** (2026-11-20) — The recorder draws a pointer. `record_gif.py` glides a drawn
+  arrow to each `click=` target along a slightly wobbly arc and ripples on the click, moving
+  the real mouse so hover effects and sparkle trails show too. New `move=SELECTOR:secs` step,
+  `--cursor auto|on|off`, a seeded path so reruns match, no arrow on a page that draws its
+  own cursor, and `--self-test`. Show it moving step 3 and the checklist say so. Idea from
+  huashu-design's `cursor.jsx` (arc, settling wobble, two-ring ripple), written fresh.
 - **v1.3.0** (2026-11-20) — Pictures are drawn, never emoji: a new section with a line-style
   recipe for hand-drawn icon sets, a two-scale look (each icon at 4x, the picture at 1x on
   white and `#0d1117`) and a non-ASCII character scan instead of an emoji regex (U+23F0
