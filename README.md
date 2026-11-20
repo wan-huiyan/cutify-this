@@ -367,8 +367,8 @@ starts from it:
 | 🗺️ | **The scene is the data** | Pick the axis (hours of today, the last 30 days, a funnel's stages), then map each number to a channel: a running amount → the ground's height, items → objects on it, the overall state → the mascot's mood. Missing data is drawn as missing, never as 0 |
 | 🌍 | **Worlds you can swap** | A world = colour tokens + one scene drawing + one sound voice. Adding one touches nothing else: an 8-step checklist and real code in `references/world-anatomy.md` |
 | 🖱️ | **Clickable, still accessible** | An invisible layer of real links placed from the drawing's geometry; keyboard order follows time order |
-| 🧭 | **Options before building** | An options page with live slices of your real data, and a dated plan per change |
-| ✅ | **Checks that can fail** | 3 Playwright scripts, each shown failing on the old version first: `copy_identical.cjs` (copied text unchanged), `pixel_regress.cjs` (other worlds didn't move a pixel) and `hit_check.cjs` (every drawn thing is clickable and lands on its row) |
+| 🧭 | **Pick one of three** | Before the full build it draws three genuinely different worlds (paper-cut, ink wash, lantern night and more), real screenshots of your hero scene with your real data, on one board, then stops and waits for your pick. The pick is saved in `world-picked.md`. Idea borrowed from [huashu-design](https://github.com/alchaincyf/huashu-design) |
+| ✅ | **Checks that can fail** | 4 Playwright scripts, each shown failing on the old version first: `copy_identical.cjs` (copied text unchanged), `pixel_regress.cjs` (other worlds didn't move a pixel), `hit_check.cjs` (every drawn thing is clickable and lands on its row) and `sketch_board.cjs` (the three-sketch board refuses a blank sketch or a colour-swap clone) |
 
 ```text
 You:    make my sales dashboard cute, like the morning brief

@@ -1,7 +1,7 @@
 {
   "name": "hatch-that-world",
-  "description": "Build a cute app or daily page as a little drawn world: the data drawn as a scene (hills, a draggable sun, a mascot with moods), switchable worlds each light and dark with their own sounds, and clickable things in the drawing. Plus the build process that keeps it safe: an options page before building, and checks that can fail (copy text unchanged, other worlds pixel-identical, geometry and click tests), with three ready Playwright scripts.",
-  "version": "1.0.0",
+  "description": "Build a cute app or daily page as a little drawn world: the data drawn as a scene (hills, a draggable sun, a mascot with moods), switchable worlds each light and dark with their own sounds, and clickable things in the drawing. Plus the build process that keeps it safe: three real sketches to pick from before building, and checks that can fail (copy text unchanged, other worlds pixel-identical, geometry and click tests), with four ready Playwright scripts, one of which boards the three sketches and rejects blank or clone sketches.",
+  "version": "1.1.0",
   "author": { "name": "Huiyan Wan" },
   "repository": "https://github.com/wan-huiyan/cutify-this",
   "license": "MIT",

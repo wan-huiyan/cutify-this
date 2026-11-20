@@ -125,6 +125,27 @@ esac
 echo "== hatch-that-world"
 js_syntax "hatch: node --check scripts/*.cjs" $HATCH/scripts/*.cjs
 
+# sketch_board.cjs: three distinct sketches must PASS and write a board; a blank one and a colour-swap clone must FAIL
+# with the right message (exit 1), and a missing file with exit 2. Each failing case proves the check can fire.
+SKB="node $HATCH/scripts/sketch_board.cjs"; SKF=tests/fixtures/sketches
+sketch_case() { local name=$1 want_rc=$2 want_msg=$3; shift 3; local out rc
+  out=$(PWC="$ROOT/tests/node_modules/playwright" $SKB "$@" --out "$TMP/board" 2>&1); rc=$?
+  if [ $rc -eq 2 ] && [ "$want_rc" != 2 ] && printf '%s' "$out" | grep -q 'no Chrome'; then skip_unless_ci "$name" "no Chrome / Chromium for Playwright"; return; fi
+  if [ $rc -eq "$want_rc" ] && printf '%s' "$out" | grep -q "$want_msg"; then pass "$name"
+  else fail "$name" "expected exit $want_rc with '$want_msg', got exit $rc: $(printf '%s\n' "$out" | tail -4)"; fi; }
+if [ ! -d tests/node_modules/playwright ]; then
+  skip_unless_ci "hatch: sketch_board.cjs fixtures" "Playwright not installed: npm install --prefix tests && npx --prefix tests playwright install chromium"
+else
+  rm -f "$TMP/board.png"
+  sketch_case "hatch: sketch_board passes three distinct sketches" 0 "BOARD OK" $SKF/paper.html $SKF/ink.html $SKF/lantern.html
+  [ -s "$TMP/board.png" ] && pass "hatch: sketch_board wrote the board PNG" || fail "hatch: sketch_board wrote the board PNG" "no $TMP/board.png"
+  rm -f "$TMP/board.png"
+  sketch_case "hatch: sketch_board FAILS a blank sketch (BLANK)" 1 "BLANK: .*blank.html" $SKF/paper.html $SKF/blank.html $SKF/lantern.html
+  sketch_case "hatch: sketch_board FAILS a colour-swap clone pair (CLONE)" 1 "CLONE: .*look like the same sketch" $SKF/paper.html $SKF/paper-swap.html $SKF/lantern.html
+  sketch_case "hatch: sketch_board FAILS a missing file (exit 2)" 2 "MISSING sketch file" $SKF/paper.html $SKF/ink.html $SKF/nope.html
+  [ ! -e "$TMP/board.png" ] && pass "hatch: sketch_board writes no board when a check fails" || fail "hatch: sketch_board writes no board when a check fails" "board.png exists"
+fi
+
 echo "== pop-that-readme"
 check "pop: record_gif.py --self-test (cursor path starts, ends on target, stays in view, same seed same path)" "$PY" $POP/examples/record_gif.py --self-test
 
