@@ -1,6 +1,6 @@
 ---
 name: pop-that-readme
-description: Use when writing or upgrading a GitHub/open-source project's README so it actually pops — a cute, high-signal front page instead of a wall of text. Triggers on "write a README", "make my README pretty/cute/pop/stylish", "polish/redo my repo's README", "README template", "repo front page", "add badges / a hero banner / a feature table / an install section / a demo GIF", "animated demo", "GIF gallery", "showcase styles", "open-source my project's readme", "give my repo a glow-up". Produces a hero that shows the thing moving (a GIF linked to a live page; a pixel hero only when there is nothing to show), a shields.io badge row, a bold one-line value prop, a GIF gallery for variants, a why-it-exists section, an emoji feature/ingredient table, a copy-paste install block, a contributors shoutout, and an honest limitations section. Ships a fill-in template, a GIF recorder, and fallback heroes (ASCII box + pixel SVG). Skip for terse internal repos, strict brand templates, or non-README docs (API refs).
+description: Use when writing or upgrading a GitHub/open-source project's README so it actually pops — a cute, high-signal front page instead of a wall of text. Triggers on "write a README", "make my README pretty/cute/pop/stylish", "polish/redo my repo's README", "README template", "repo front page", "add badges / a hero banner / a feature table / an install section / a demo GIF", "animated demo", "intro video", "explainer animation", "how it works animation", "GIF gallery", "showcase styles", "open-source my project's readme", "give my repo a glow-up". Produces a hero that shows the thing moving (a GIF linked to a live page; a pixel hero only when there is nothing to show), a shields.io badge row, a bold one-line value prop, a GIF gallery for variants, a why-it-exists section, an emoji feature/ingredient table, a copy-paste install block, a contributors shoutout, and an honest limitations section. Ships a fill-in template, a GIF recorder, and fallback heroes (ASCII box + pixel SVG). Skip for terse internal repos, strict brand templates, or non-README docs (API refs).
 ---
 
 # Pop That README ✨
@@ -168,6 +168,66 @@ tile linking to the working deck on GitHub Pages.
   your commit (`gh api repos/OWNER/REPO/pages/builds/latest --jq '.status+" "+.commit'`);
   `curl` each live demo for a sentence you changed; a screenshot of the live README's first
   screen.
+
+## An intro animation that explains the tool
+
+When the tool's value is a **process** rather than a look (a skill that reads your notes
+and writes a debrief, a CLI that checks something), a GIF of its output is not enough: the
+reader needs to see what goes in, what it does and what comes out. A short, looping,
+captioned animation near the top does that. The
+[rewind-that-call README](https://github.com/wan-huiyan/rewind-that-call) is the worked
+example: a scrapbook that opens on what happened in a call, turns to how the deck was made,
+and ends on what to do next time.
+
+**1. Tell the user's story, not the mechanism.** Write three to five beats from the
+reader's side: the situation they are in, what the tool looks at, what they get, what they
+keep. A first draft that showed the tool fixing a misheard number was true but told the
+wrong story; the tool's point was the retro around it. Ask the owner "what is this for, in
+one sentence?" and check every beat serves that sentence.
+
+**2. Real examples, anonymised.** Generic placeholders ("Insight 1") sell nothing. Take
+the examples from a real run of the tool, then paraphrase them so no client, person, figure
+or date survives, and put a small label in the frame: "Based on a real call, details
+changed." Then list every visible string in the finished file and scan it for names.
+
+**3. Draw it in the project's own current style.** If the tool produces decks in a
+scrapbook look, the intro is a scrapbook. A style picked for its own sake (a cassette tape,
+a retro terminal) reads as dated or unrelated; the reader should recognise the intro when
+they open the real output.
+
+**4. Storyboard before drawing.** One line per shot: what is on screen, the words, how
+long it holds. Give each line of text time to be read (about three words a second, plus a
+beat), keep the loop to 30 to 40 seconds, and hold the last frame for a few seconds before
+it fades and restarts. Write the shot list to a file; it is what you check the frames
+against.
+
+**5. Build it as an animated SVG.** CSS keyframes inside an SVG play in a README `<img>`
+with no script, stay sharp at any width and usually weigh 100 to 150 KB, against megabytes
+for a GIF. Inside an `<img>`, external fonts and scripts never load, so subset the fonts
+you use and embed them as base64 `@font-face` (only the characters in the file).
+
+- **No camera zoom.** Keep the whole frame in view all the time. A push-in that looked fine
+  in the editor cropped every page's title on GitHub, and the owner noticed at once.
+- **`@media (max-width)` inside the SVG measures the image, not the screen.** A
+  "phone layout" rule fires whenever the README shows the image under that width, on any
+  device. Do not use it to crop or zoom; design one frame that reads at about 400 px wide.
+- **Reduced motion:** freeze on the most complete frame, e.g.
+  `@media (prefers-reduced-motion:reduce){*{animation-delay:-35s!important;animation-play-state:paused!important}}`.
+- **Pictures are drawn** (section below): no emoji anywhere in the SVG.
+
+**6. Look at it the way visitors will.** Render it inside an `<img>` at the README width
+(often 800 px) and at 390 px, capture a frame every half second, and look at a contact
+sheet: titles in frame, no text cut off, nothing overlapping, every beat on screen long
+enough. Check the reduced-motion frame once, by opening the SVG directly with reduced
+motion on (browser emulation does not always reach inside an `<img>`). After the push, look
+at the live README.
+
+```html
+<p align="center">
+  <img src="docs/readme/how-it-works.svg" width="800" alt="Say every beat in one paragraph: what opens, what each page shows, how it ends."/>
+  <br/><sub>What it shows, in one line. Based on a real run, details changed.</sub>
+</p>
+```
 
 ## Pictures are drawn, never emoji
 
@@ -354,6 +414,10 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
 - [ ] After any demo text change, every GIF showing it was re-recorded and the frame with
       the change was looked at; after the push, the Pages build is `built` at your commit and
       the live README's first screen was looked at.
+- [ ] If the README has an intro animation: it tells the user's story in 3 to 5 beats, uses
+      real examples paraphrased (with a "details changed" label), matches the project's own
+      style, never zooms, freezes for reduced motion, and frames at 800 px and 390 px were
+      looked at with every title in view.
 - [ ] A real **Limitations** section exists (not omitted).
 - [ ] Badge/owner/repo slugs resolve (no 404 shields).
 - [ ] Renders cleanly on GitHub (preview it) — tables aligned, code fences closed,
@@ -379,6 +443,13 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
 
 ## Changelog
 
+- **v1.5.0** (2026-11-20) — An intro animation that explains the tool: a new section on
+  telling the user's story in beats, real examples anonymised, the project's own style, a
+  storyboard with reading time, an animated SVG with embedded font subsets, no camera zoom
+  (a push-in cropped every title on GitHub), `@media` inside an SVG measuring the image
+  rather than the screen, a reduced-motion freeze, and looking at frames at 800 px and
+  390 px. One new checklist item. Prompted by the rewind-that-call intro, which took four
+  rounds: wrong story, placeholder examples, a dated style, then titles cropped by a zoom.
 - **v1.4.0** (2026-11-20) — The recorder draws a pointer. `record_gif.py` glides a drawn
   arrow to each `click=` target along a slightly wobbly arc and ripples on the click, moving
   the real mouse so hover effects and sparkle trails show too. New `move=SELECTOR:secs` step,

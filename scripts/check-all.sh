@@ -108,6 +108,9 @@ browser_suite "site: Aurora landing page test" tests/site_aurora_smoke.mjs
 browser_suite "site: Bubblegum landing page test" tests/site_bubblegum_smoke.mjs
 browser_suite "site: effect bridge quick-click test" tests/site_bridge_smoke.mjs
 
+echo "== inspire-that-deck"
+browser_suite "deck: element gallery test" tests/deck_gallery_smoke.mjs
+
 echo "== cutify-that-terminal"
 check "terminal: bash -n verify-glyphs.sh" bash -n $TERM/scripts/verify-glyphs.sh
 if command -v zsh >/dev/null 2>&1; then check "terminal: zsh -n zshrc-starship-split.sh" zsh -n $TERM/examples/zshrc-starship-split.sh
