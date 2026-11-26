@@ -64,10 +64,10 @@ done
 <tr>
 <td width="33%" align="center"><a href="#-sparkle-that-page--cute-page-effects"><img src="docs/readme/sparkle-stamp.png" alt="A PAID! rubber stamp landing on a pink button with a burst of hearts"/></a><br/><sub><b>sparkle-that-page</b>: a stamp and a burst for the big moments</sub></td>
 <td width="33%" align="center"><a href="#-cutify-that-tab--a-cute-favicon-that-survives-the-tab"><img src="docs/readme/tab-builder.png" alt="The favicon builder with an NES-outline frog shown in four browser tab colours, each marked Reads"/></a><br/><sub><b>cutify-that-tab</b>: build a tab icon and see it pass on all 4 tab colours</sub></td>
-<td width="33%" align="center"><a href="#-hatch-that-world--your-app-as-a-little-world"><img src="https://raw.githubusercontent.com/wan-huiyan/morning-fairy/main/docs/three-worlds.png" alt="The same morning brief drawn in three worlds: a storybook garden, a cosmic orbit and candy pop"/></a><br/><sub><b>hatch-that-world</b>: one app, three switchable worlds (morning-fairy)</sub></td>
+<td width="33%" align="center"><a href="#-hatch-that-world--your-app-as-a-little-world"><img src="https://raw.githubusercontent.com/wan-huiyan/morning-fairy/main/docs/mascot-ticket.gif" alt="The morning brief's ticket mascot clicked five ways: a grin, heart eyes, surprise, a wink, then dizzy after five quick clicks, hopping each time as hearts or stars float up"/></a><br/><sub><b>hatch-that-world</b>: your app as a little world, with a mascot that has moods (morning-fairy)</sub></td>
 </tr>
 <tr>
-<td align="center"><a href="https://github.com/wan-huiyan/wiggle-that-diagram"><img src="https://raw.githubusercontent.com/wan-huiyan/wiggle-that-diagram/main/demos/expenses.gif" alt="A whiteboard animation explaining how an expense claim gets checked, from receipts to payment"/></a><br/><sub><b>wiggle-that-diagram</b> (its own repo now): a diagram that explains itself, step by step</sub></td>
+<td align="center"><a href="https://github.com/wan-huiyan/wiggle-that-diagram"><img src="https://raw.githubusercontent.com/wan-huiyan/wiggle-that-diagram/main/demos/gallery/whiteboard.gif" alt="How an expense claim gets checked, drawn on a whiteboard: a pen draws three receipt cards (hotel $180, dinner $95, taxi $40), an expense policy box wired to each, a coloured reason for each, a manager's Approved note, an expense report with a total of $275, and a Paid tick"/></a><br/><sub><b>wiggle-that-diagram</b> (its own repo now): a diagram that explains itself, step by step</sub></td>
 <td align="center"><a href="#️-cutify-that-terminal--a-cute-terminal-that-provably-renders">⌨️<br/><b>No screenshot yet</b></a><br/><sub><b>cutify-that-terminal</b>: a cute prompt, and a check that the icons really render</sub></td>
 <td align="center"><a href="#-pop-that-readme--a-readme-that-pops"><img src="plugins/pop-that-readme/skills/pop-that-readme/examples/badges/robot-vouched.svg" height="24" alt="Robot vouched badge"/> <img src="plugins/pop-that-readme/skills/pop-that-readme/examples/badges/human-peeked.svg" height="24" alt="A human peeked badge"/></a><br/><sub><b>pop-that-readme</b>: this page, hand-drawn badges included</sub></td>
 </tr>
@@ -104,11 +104,11 @@ Every picture here was drawn by the skills' own code, not mocked up. Click one t
 </tr>
 <tr>
 <td><a href="https://wan-huiyan.github.io/cutify-this/plugins/cutify-that-tab/skills/cutify-that-tab/examples/moods/moods.html"><img src="docs/readme/tab-moods.png" alt="The mochi cat favicon awake and asleep, in tab chips and 64 px enlargements on the four Chrome tab colours; asleep has closed eyes and a small z"/></a></td>
-<td><a href="https://wan-huiyan.github.io/wiggle-that-diagram/expenses.html"><img src="https://raw.githubusercontent.com/wan-huiyan/wiggle-that-diagram/main/demos/expenses-live.gif" alt="The live style, step 3 of 6: three receipt cards, Hotel $180, Dinner $95 and Taxi $40, get a coloured dot and a reason one after another: green Under the limit, amber Over the $60 meal limit, red No photo. The caption reads Each receipt gets a colour and a reason. Same receipt, same answer, above a six-step rail"/></a></td>
+<td><a href="https://wan-huiyan.github.io/wiggle-that-diagram/films.html"><img src="https://raw.githubusercontent.com/wan-huiyan/wiggle-that-diagram/main/demos/films/bike-share.gif" alt="Why the station docks run empty: a city from above at 9:00 on a weekday, three train stations with rows of bike docks, station 1's docks all empty outlines, and two blocks of office docks across a river tagged full. The caption reads: Bikes ride one way: offices fill, stations empty."/></a></td>
 </tr>
 <tr>
 <td><sub><b>cutify-that-tab</b>: a tab icon that closes its eyes after 6 pm and whenever you are on another tab.</sub></td>
-<td><sub><b>wiggle-that-diagram</b> (its own repo now): how an expense claim gets checked, in the live style; each receipt gets a colour and a reason (made-up example).</sub></td>
+<td><sub><b>wiggle-that-diagram</b> (its own repo now): a 58-second film on why the bike docks by the stations run empty by 9:00 (made-up data story).</sub></td>
 </tr>
 </table>
 
@@ -118,12 +118,20 @@ Every picture here was drawn by the skills' own code, not mocked up. Click one t
 
 <table>
 <tr>
-<td width="50%"><a href="https://github.com/wan-huiyan/pomodo"><img src="https://raw.githubusercontent.com/wan-huiyan/pomodo/main/docs/screens/after-hours.png" alt="Pomodo's Recently done list: two rows finished after 6 pm sit under a night-sky strip with a moon, and Pomo the pixel tomato, looking sleepy, tells the team to go to bed"/></a></td>
-<td width="50%"><a href="https://github.com/wan-huiyan/morning-fairy"><img src="https://raw.githubusercontent.com/wan-huiyan/morning-fairy/main/docs/three-worlds.png" alt="The same morning brief drawn in three worlds: a storybook garden, a cosmic orbit and candy pop"/></a></td>
+<td width="50%"><a href="https://github.com/wan-huiyan/pomodo"><img src="https://raw.githubusercontent.com/wan-huiyan/pomodo/main/docs/hero.gif" alt="Pomodo: Pomo the pixel tomato next to a small team board, where a card gets claimed, another moves to Done, and a Board updated button drops in"/></a></td>
+<td width="50%"><a href="https://github.com/wan-huiyan/morning-fairy"><img src="https://raw.githubusercontent.com/wan-huiyan/morning-fairy/main/docs/done-flight.gif" alt="Tapping Done in the morning brief: a heart burst, a pen stroke crosses the card off, and the card flies down into the Resolved list"/></a></td>
 </tr>
 <tr>
-<td><sub><b><a href="https://github.com/wan-huiyan/pomodo">Pomodo</a></b>, a team progress board, runs 6 of the 7 sparkle effects, adapted: the wand, the fairy dust, the stars on a click, the tab peekaboo, the floating dust, and Pomo climbing the scroll rail (that's our scroll buddy).</sub></td>
+<td><sub><b><a href="https://github.com/wan-huiyan/pomodo">Pomodo</a></b>, a team progress board, runs 6 of the 7 sparkle effects, adapted: the wand, the fairy dust, the stars on a click, the tab peekaboo, the floating dust, and Pomo climbing the scroll rail (that's our scroll buddy). Its Robot vouched and A human peeked badges are the pop-that-readme ones.</sub></td>
 <td><sub><b><a href="https://github.com/wan-huiyan/morning-fairy">morning-fairy</a></b>, a daily brief drawn as a little world, is where hatch-that-world's method comes from: one builder, swappable worlds, a mascot with moods. (Made-up data.)</sub></td>
+</tr>
+<tr>
+<td><a href="https://github.com/wan-huiyan/rewind-that-call"><img src="https://raw.githubusercontent.com/wan-huiyan/rewind-that-call/main/docs/readme/garden.gif" alt="Garden style: a smiling seedling under a rainbow and a sun, then the slides turn one by one. Wooden signposts hold the customer's quotes, a watering can stands by a tray of sprouts, a flower grows out of the soil with petals drifting past"/></a></td>
+<td><a href="https://github.com/wan-huiyan/no-ask-left-behind"><img src="https://raw.githubusercontent.com/wan-huiyan/no-ask-left-behind/main/docs/promo.gif" alt="One loop, two skills: the client's asks become a checklist, the loop runs until each ask is met, and AI clients score every slide"/></a></td>
+</tr>
+<tr>
+<td><sub><b><a href="https://github.com/wan-huiyan/rewind-that-call">rewind-that-call</a></b>, a kind debrief after a client call, ends on a cute cheer-up page; sparkle-that-page adds its confetti and floating petals.</sub></td>
+<td><sub><b><a href="https://github.com/wan-huiyan/no-ask-left-behind">no-ask-left-behind</a></b>, two skills that loop until every client ask is answered, explains itself with a short film on its front page.</sub></td>
 </tr>
 </table>
 
@@ -357,8 +365,8 @@ grey inactive tab. The checker catches 1 and 3 before you ship.
 ## 🐛 hatch-that-world — your app as a little world
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/wan-huiyan/morning-fairy/main/docs/caterpillar-world.png" width="720" alt="A morning brief drawn as a leaf: the caterpillar's body runs from 8 AM to now with a mascot on its back, and meeting signs stand on the leaf's humps"/>
-  <br/><sub>Built with this method: <a href="https://github.com/wan-huiyan/morning-fairy">morning-fairy</a>'s caterpillar world. (Made-up demo data.)</sub>
+  <img src="https://raw.githubusercontent.com/wan-huiyan/morning-fairy/main/docs/world-tour.gif" width="720" alt="The morning brief as a little world: dragging the sun across the day and back, a click on the mascot that makes it pull a face, then switching between the garden, cosmic, candy and caterpillar worlds, switching to dark and opening the time machine"/>
+  <br/><sub>Built with this method: <a href="https://github.com/wan-huiyan/morning-fairy">morning-fairy</a>'s four worlds: garden, cosmic, candy and caterpillar. (Made-up demo data.)</sub>
 </p>
 
 The method behind [morning-fairy](https://github.com/wan-huiyan/morning-fairy), written down so your next cute app
@@ -412,7 +420,7 @@ Claude: [writes each slide's point first, then picks three pieces from the galle
 ## 🪱 wiggle-that-diagram — make a diagram explain itself
 
 <p align="center">
-  <a href="https://wan-huiyan.github.io/wiggle-that-diagram/"><img src="https://raw.githubusercontent.com/wan-huiyan/wiggle-that-diagram/main/demos/expenses.gif" width="560" alt="The whiteboard style at double speed: a pen draws a phone and three receipt cards, an expense policy box wired to each card, a coloured reason for each, a manager's Approved note, an expense report with a total of $275, and a Paid tick on the phone."/></a>
+  <a href="https://wan-huiyan.github.io/wiggle-that-diagram/films.html"><img src="https://raw.githubusercontent.com/wan-huiyan/wiggle-that-diagram/main/demos/films/library.gif" width="560" alt="What happened when a library branch closed: a padlocked branch beside three bookcases whose gold spines show the rise in loans since June, 18 at Branch A, 11 at Branch B, 2 at the farther Branch C. The caption reads: Loans rose most at the branches nearest Northgate."/></a>
 </p>
 
 This one has moved to its own repo: **[wan-huiyan/wiggle-that-diagram](https://github.com/wan-huiyan/wiggle-that-diagram)**. It turns a "how it works"
