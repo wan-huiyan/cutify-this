@@ -215,6 +215,43 @@ you use and embed them as base64 `@font-face` (only the characters in the file).
   `@media (prefers-reduced-motion:reduce){*{animation-delay:-35s!important;animation-play-state:paused!important}}`.
 - **Pictures are drawn** (section below): no emoji anywhere in the SVG.
 
+**5b. Or render it as a demo film (MP4 + GIF).** Offer the owner this instead of the SVG
+when the story needs more than keyframes do well: 40 to 60 seconds, dozens of moving pieces
+(dots flying out of a recording to build a person, a waveform that scrolls, questions sorted
+into lanes), an MP4 they also want for slides or Slack, or a sibling repo whose film this one
+should match. The cost is size: a GIF is megabytes, where the SVG is about 150 KB. The
+[clone-an-imposter README](https://github.com/wan-huiyan/clone-an-imposter) is the worked
+example; its source ships in `examples/film/`.
+
+- **The kit.** `examples/film/kit.js` draws the film as one SVG per frame, each a pure
+  function of time, so two renders are identical. A film calls `setupFilm({durs:[...]})`,
+  then `shot(u => ...)` once per shot, and builds its picture from the kit's shapes: `wave`
+  (a recording), `dotFigure` / `dotTarget` (a person assembling from dots), `bubble`,
+  `avatar`, `docCard`, `tape` (a list), `gauge` (a score), `sticky` (feedback), `track` (a
+  loop), `cap` (the caption, one per shot), plus `cam` for a gentle push. The header and
+  caption sit outside the picture, so a push never covers them; keep pushes under about 5%.
+  Copy `examples/film/` next to the project, keep its fonts with their licence, and rewrite
+  `film.html`'s shots for this project's story (step 1's beats, one shot each).
+- **Check before rendering:** `python3 render.py film.html --check` runs every frame in node.
+  A script error leaves the browser page blank with an unhelpful message; the usual one is a
+  `const` that clashes with a kit name (`CAP`, `T`, `G`, `R`, `C`, `W`, `H`).
+- **Stills, then the film:** `uv run --with playwright python render.py film.html --stills 5.5,16,23`
+  at the last frame of every shot, tiled into one contact sheet; fix, then
+  `... render.py film.html --video docs/demo.mp4 --gif docs/demo.gif` (about two minutes for a
+  minute of film; the GIF steps down frame rate and width until it is under `--max-mb`, 4 by
+  default). Then tile a frame every four seconds of the MP4 itself and look once more: the
+  first clone-an-imposter cut had lane boxes off the right edge and magnifying glasses
+  parked on the text, and both showed only on the sheet.
+- **In the README:** the GIF near the top, linked to the MP4 for full resolution, with one
+  line saying the people and numbers in it are examples.
+
+```html
+<p align="center">
+  <img src="docs/demo.gif" width="800" alt="Say every shot in one paragraph."/>
+  <br/><sub>53-second demo (<a href="docs/demo.mp4">MP4, full resolution</a>). The people and questions are examples.</sub>
+</p>
+```
+
 **6. Look at it the way visitors will.** Render it inside an `<img>` at the README width
 (often 800 px) and at 390 px, capture a frame every half second, and look at a contact
 sheet: titles in frame, no text cut off, nothing overlapping, every beat on screen long
@@ -417,7 +454,9 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
 - [ ] If the README has an intro animation: it tells the user's story in 3 to 5 beats, uses
       real examples paraphrased (with a "details changed" label), matches the project's own
       style, never zooms, freezes for reduced motion, and frames at 800 px and 390 px were
-      looked at with every title in view.
+      looked at with every title in view. If it is a rendered film instead: `--check` passed,
+      the last frame of every shot and a frame every four seconds of the MP4 were looked at,
+      the GIF is at or under 4 MB and links to the MP4.
 - [ ] A real **Limitations** section exists (not omitted).
 - [ ] Badge/owner/repo slugs resolve (no 404 shields).
 - [ ] Renders cleanly on GitHub (preview it) — tables aligned, code fences closed,
@@ -431,6 +470,7 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
 
 - `README.template.md` — the full fill-in template (every section, `<PLACEHOLDER>`s).
 - `hero_examples.md` — the ASCII box hero + a worked pixel-SVG hero (the fallback), copy-and-edit.
+- `film/` — the demo-film kit (`kit.js`, `render.py`, Outfit fonts with their OFL licence) and a worked 53-second film (`film.html`, the clone-an-imposter demo). See step 5b of the intro animation.
 - `record_gif.py` — records a page or deck as a looping README GIF under a size budget, with a poster PNG and a drawn pointer for click steps (`--self-test` checks its path maths offline).
 - `badges/` — three hand-drawn status-badge SVGs (robot, girl peeking over a wall, teacup) + how-to.
 
@@ -443,6 +483,11 @@ git clone https://github.com/OWNER/REPO ~/.claude/skills/REPO
 
 ## Changelog
 
+- **v1.6.0** (2026-11-26) — A demo film as the other way to build the intro animation
+  (step 5b): the skill ships `examples/film/` (a frame-by-frame SVG film kit, a render
+  script that checks every frame in node, renders stills, an MP4 and a GIF under a size
+  limit, and the fonts), with the clone-an-imposter demo as the worked example. Offered when
+  the story needs many moving pieces, an MP4 too, or a sibling repo's look. One checklist line.
 - **v1.5.0** (2026-11-20) — An intro animation that explains the tool: a new section on
   telling the user's story in beats, real examples anonymised, the project's own style, a
   storyboard with reading time, an animated SVG with embedded font subsets, no camera zoom

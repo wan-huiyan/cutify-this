@@ -1,0 +1,113 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Outfit;src:url(fonts/Outfit-Regular.ttf);font-weight:400}
+@font-face{font-family:Outfit;src:url(fonts/Outfit-Bold.ttf);font-weight:700}
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#0f1420}
+svg text{font-family:Outfit,sans-serif}
+</style></head><body>
+<svg id="v" width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg"></svg>
+<script src="kit.js"></script>
+<script>
+// Worked example: the demo film in the clone-an-imposter README (https://github.com/wan-huiyan/clone-an-imposter), built on this kit
+// (first made for the no-ask-left-behind film). Shot 2 is that film's "born" shot: call audio and logs -> a dot person.
+// Every name, question and time here is an example; the colleague "Sam" is not a real person.
+const NAME='Sam';
+const CAPS={
+ pain:'You keep sending one colleague the same questions.',
+ born:'/clone-an-imposter builds a stand-in from their own words.',
+ check:'Two checks before you trust it.',
+ route:'The stand-in sorts every question first.',
+ answer:'Every answer says it is a stand-in.',
+ end:'Ask the stand-in first. The real person gets the rest.'};
+const QS=[['Why is the orders table half empty?',2,'live check: still loading until 09:00'],
+          ['What does this field mean?',1,'→ the field\'s business owner'],
+          ['Can we move the load to 05:00?',0,'→ the real Sam, with what you checked'],
+          ['Who built this table?',2,'audit log: Sam, 3 March']];
+const H0='/clone-an-imposter',H1='/imposter-sam';
+const IN=(h,fn)=>u=>{FILM.header=h;return fn(u)};
+setupFilm({durs:[6.5,10.5,7.5,12.0,9.0,7.5],header:H0});
+
+// 1 the pain: question after question flies from you to one busy colleague
+shot(IN(H0,u=>{let g=avatar(260,470,C.gold,1.5)+T(260,570,'you',{size:26,wt:700,fill:C.mut,a:'middle'});
+ g+=dotFigure(1560,440,eo(p(u,0,0.8)),C.teal)+T(1560,620,NAME,{size:30,wt:700,a:'middle'})+T(1560,654,'data engineer',{size:22,fill:C.mut,a:'middle'});
+ QS.forEach(([q],i)=>{const t0=0.6+i*0.9,f=eio(p(u,t0,t0+0.9));if(f<=0)return;
+  const tx=1010,ty=190+i*120,x=L(380,tx,f),y=L(470,ty,f)-Math.sin(f*Math.PI)*80;
+  g+=bubble(x,y,q,f,{size:26,col:C.gold,tail:'right'})});
+ const zk=p(u,4.4,4.9);if(zk>0)g+=T(1560,215,'z z z',{size:34,wt:700,fill:C.mut,a:'middle',op:zk*(0.6+0.4*Math.sin(u*5))});
+ return G(g,cam(L(1,1.04,eio(p(u,0,6.5))),CX,CY))+cap(CAPS.pain,u)}));
+
+// 2 (reused from the no-ask-left-behind film) the stand-in is born: their own lines lift out of the chats and the work log
+shot(IN(H0,u=>{let g='';const WX=160,WW=620,WY=[300,540],LY=690;
+ const spk=i=>{const r=rnd(i*3+1);return r<0.4?0:r<0.7?1:2};   // 0 Sam, 1 you, 2 others
+ const SRC=[['Your DM with '+NAME,'Jan–Nov'],['#project channel','Mar–Nov']];
+ [0,1].forEach(c=>g+=wave(WX,WY[c],SRC[c][0],{w:WW,n:40,h:70,off:u*5+c*300,sp:i=>spk(i+c*977),len:SRC[c][1],ph:0}));
+ // the work log: a short ledger of who changed what, scrolling
+ const lk=eo(p(u,0.3,0.9));let lg=T(WX+38,LY-12,'Work log',{size:28,wt:700})+T(WX+WW,LY-12,'who changed what, when',{size:22,fill:C.mut,a:'end'})+
+  G(R(-12,-16,24,32,{r:4,fill:'none',stroke:C.gold,sw:3})+`<path d="M-6 -6 H6 M-6 2 H6 M-6 10 H2" stroke="${C.gold}" stroke-width="2.5"/>`,`translate(${WX+14} ${LY-20})`);
+ for(let j=0;j<3;j++){const yy=LY+22+j*30,sh=rnd(j+Math.floor(u*1.2)*3);lg+=R(WX,yy,90,12,{r:4,fill:C.mut,op:.5})+R(WX+110,yy,120+sh*160,12,{r:4,fill:j===1?C.gold:C.mut,op:j===1?.85:.4})+R(WX+WW-80,yy,80,12,{r:4,fill:C.mut,op:.35})}
+ g+=G(lg,'',lk);
+ // dots fly from the sources into ONE person; chat dots teal, log dots gold
+ const PX=1375,PY=370,N=30,col=k=>k%3===2?C.gold:C.teal;let got=0;
+ for(let k=0;k<N;k++){const t0=0.8+k*0.2,f=eio(p(u,t0,t0+1.0));if(u>=t0+1.0){got++;continue}if(f<=0)continue;
+  const fromLog=k%3===2,sx=WX+60+((k*97)%520),sy=fromLog?LY+52:WY[k%2],d=dotTarget(k,N),tx=PX+d[0],ty=PY+d[1];
+  const x=L(sx,tx,f),y=L(sy,ty,f)-Math.sin(f*Math.PI)*140;
+  g+=`<circle cx="${x}" cy="${y}" r="7" fill="${col(k)}"/><circle cx="${L(sx,tx,f*0.92)}" cy="${L(sy,ty,f*0.92)-Math.sin(f*0.92*Math.PI)*140}" r="4" fill="${col(k)}" opacity=".45"/>`}
+ const lit=Math.floor(got/N*FIGURE_DOTS.length);
+ FIGURE_DOTS.forEach(([dx,dy],i)=>{g+=i<lit?`<circle cx="${PX+dx}" cy="${PY+dy}" r="5.5" fill="${rnd(i+5)<0.3?C.gold:C.teal}"/>`:`<circle cx="${PX+dx}" cy="${PY+dy}" r="3.5" fill="${C.line}"/>`});
+ const nk=eo(p(got/N,0.95,1));g+=G(T(PX,PY+160,NAME,{size:30,wt:700,a:'middle'})+T(PX,PY+192,'stand-in',{size:20,wt:700,fill:C.teal,a:'middle'}),'',nk);
+ g+=T(PX,PY+250,'every claim tied to a dated quote or log line',{size:24,wt:700,fill:C.mut,a:'middle',op:p(u,7.6,8.2)});
+ g+=T(PX,PY+284,'guesses marked inferred',{size:24,wt:700,fill:C.mut,a:'middle',op:p(u,8.2,8.8)});
+ return G(g,cam(L(1.0,1.04,eio(p(u,0,10))),L(CX,1000,eio(p(u,6.0,8.4))),CY))+cap(CAPS.born,u,0.6)}));
+
+// 3 two checks on the profile: is every quote real and dated? would they call it fair?
+shot(IN(H0,u=>{let g='';const X=960,Y=170,Wd=440,Hd=560;
+ const rows=['Owns','Not theirs → ask whom','How they reason','Live checks','Voice','Impersonation brief','Test questions'];
+ let d=R(X-Wd/2,Y,Wd,Hd,{r:16,fill:C.paper})+T(X-Wd/2+30,Y+56,'profile.md',{size:30,wt:700,fill:C.dark})+`<path d="M${X-Wd/2+24} ${Y+78} H${X+Wd/2-24}" stroke="${C.dark}" stroke-width="2" opacity=".4"/>`;
+ rows.forEach((r,i)=>{const k=eo(p(u,0.2+i*0.18,0.6+i*0.18));d+=G(T(X-Wd/2+30,Y+130+i*62,r,{size:24,wt:700,fill:C.dark})+R(X-Wd/2+30,Y+144+i*62,200+rnd(i)*140,8,{r:4,fill:C.pmut,op:.4}),`translate(${L(20,0,k)} 0)`,k)});
+ g+=d;
+ const side=(cx,title,sub,t0,lx)=>{const k=eo(p(u,t0,t0+0.6));if(k<=0)return '';
+  return G(T(cx,330,title,{size:34,wt:700,a:'middle',fill:C.ink})+T(cx,372,sub[0],{size:24,fill:C.mut,a:'middle'})+T(cx,404,sub[1],{size:24,fill:C.mut,a:'middle'}),`translate(0 ${L(20,0,k)})`,k)+
+   G(lens(0,0,0.9),`translate(${L(cx,lx,eio(p(u,t0+0.4,t0+1.6)))} ${L(520,330+Math.sin(u*2)*40,eio(p(u,t0+0.4,t0+1.6)))})`,k*0.9*(1-p(u,t0+2.0,t0+2.5)))+tick(cx,480,p(u,t0+1.8,t0+2.3),26)};
+ g+=side(330,'Evidence check',['is every quote real,','and dated?'],1.6,880)+side(1590,'Fairness check',['would '+NAME+' read it','and call it fair?'],2.6,1040);
+ g+=T(X,Y+Hd+60,'what fails is dropped or marked inferred',{size:24,wt:700,fill:C.mut,a:'middle',op:p(u,5.0,5.5)});
+ return G(g,cam(L(1.03,1,eio(p(u,0,7.5))),CX,CY))+cap(CAPS.check,u)}));
+
+// 4 the stand-in sorts every question: theirs / someone else's / check it yourself
+shot(IN(H1,u=>{let g='';const FX=380,FY=420;
+ g+=dotFigure(FX,FY,1,C.teal)+T(FX,FY+160,'/imposter-sam',{size:30,wt:700,a:'middle',fill:C.teal})+T(FX,FY+192,'stand-in',{size:20,wt:700,fill:C.mut,a:'middle'});
+ const LN=[[NAME+'\'s: ask the real '+NAME,C.teal],['Someone else\'s: ask the owner',C.gold],['Check it yourself: run the live check',C.green]],BX=700,BW=1010,BY=[130,330,530],BH=170;
+ LN.forEach(([t,c],j)=>{const k=eo(p(u,0.2+j*0.2,0.8+j*0.2));g+=G(R(BX,BY[j],BW,BH,{r:18,fill:C.panel,stroke:c,sw:2.5})+T(BX+28,BY[j]+44,t,{size:26,wt:700,fill:c}),'',k)});
+ const cnt=[0,0,0];
+ QS.forEach(([q,lane,res],i)=>{const t0=0.9+i*2.3,a=eio(p(u,t0,t0+0.8)),b=eio(p(u,t0+1.1,t0+1.9));if(a<=0)return;
+  const slot=cnt[lane]++,sx=BX+250+slot*500,sy=BY[lane]+108;
+  let x,y,s;if(b<=0){x=L(260,FX,a);y=L(130,FY-150,a);s=L(1,0.6,a)}else{x=L(FX,sx,b);y=L(FY-150,sy,b)-Math.sin(b*Math.PI)*60;s=L(0.6,1,b)}
+  g+=G(bubble(0,0,q,1,{size:24,col:C.ink,tail:'none'}),`translate(${x} ${y}) scale(${s})`);
+  const rk=p(u,t0+2.0,t0+2.4);if(rk>0)g+=T(sx,sy+50,res,{size:20,wt:700,fill:LN[lane][1],a:'middle',op:rk})});
+ g+=T(BX+BW/2,770,'only the top row reaches '+NAME,{size:26,wt:700,fill:C.ink,a:'middle',op:p(u,10.2,10.8)});
+ return G(g,cam(L(1.02,1,eio(p(u,0,12))),CX,CY))+cap(CAPS.route,u)}));
+
+// 5 the answer, with the footer that keeps it honest
+shot(IN(H1,u=>{let g=bubble(960,150,QS[0][0],p(u,0.2,0.7),{size:30,col:C.gold,who:'you'});
+ const k=eo(p(u,0.8,1.4));let pnl=R(300,250,1320,470,{r:20,fill:C.panel,stroke:C.line,sw:2.5});
+ const ck=p(u,1.4,1.9);pnl+=G(chip(340,282,'ran the read-only row count first',C.green),'',ck)+tick(330+0,301,0,1);
+ pnl+=T(340,390,'“It\'s still loading. The 06:00 run finishes by 09:00,',{size:30,wt:700,op:p(u,2.2,2.7)})+T(340,432,'so check the count again after nine.”',{size:30,wt:700,op:p(u,2.4,2.9)});
+ pnl+=`<path d="M340 482 H1580" stroke="${C.line}" stroke-width="2"/>`;
+ const FT=['— Stand-in answer, not '+NAME+'. Route: '+NAME+'.','Based on: live check + profile.  Confidence: from evidence (dated).','Ask the real '+NAME+'? Only if it is still short after 09:00.'];
+ FT.forEach((l,i)=>{const fk=p(u,3.4+i*0.6,3.9+i*0.6);pnl+=G(R(340,512+i*58,8,34,{r:3,fill:C.gold})+T(366,538+i*58,l,{size:26,fill:i?C.mut:C.gold,wt:700}),`translate(${L(-16,0,fk)} 0)`,fk)});
+ g+=G(pnl,`translate(0 ${L(30,0,k)})`,k);
+ const no=(x,t,t0)=>{const nk=eo(p(u,t0,t0+0.5));return G(`<circle r="18" fill="none" stroke="${C.red}" stroke-width="4"/><path d="M-12 12 L12 -12" stroke="${C.red}" stroke-width="4"/>`,`translate(${x} 790)`,nk)+T(x+32,799,t,{size:24,wt:700,fill:C.mut,op:nk})};
+ g+=no(420,'never sends a message as '+NAME,5.6)+no(1040,'never stands in for '+NAME+'\'s approval',6.0);
+ return G(g,cam(L(1,1.03,eio(p(u,0,9))),CX,CY))+cap(CAPS.answer,u)}));
+
+// 6 end card
+shot(IN(H0,u=>{let g=dotFigure(560,400,eo(p(u,0,1.2)),C.teal)+T(560,560,'/imposter-<name>',{size:28,wt:700,fill:C.teal,a:'middle',op:p(u,0.8,1.3)});
+ g+=T(1300,300,'/clone-an-imposter',{size:64,wt:700,fill:C.gold,a:'middle',op:p(u,0.3,0.9)});
+ g+=T(1300,370,'builds your own stand-in for one colleague',{size:30,wt:700,a:'middle',op:p(u,0.7,1.3)});
+ const CH=['tell them first','private to you','never speaks for them'],cw=CH.map(t=>tw(t,22)*1.1+34),gap=24;let cx0=1300-(cw.reduce((a,b)=>a+b)+gap*2)/2;
+ CH.forEach((t,i)=>{const k=eo(p(u,1.4+i*0.3,1.9+i*0.3));g+=G(chip(0,0,t,[C.green,C.teal,C.red][i]),`translate(${cx0} ${L(450,430,k)})`,k);cx0+=cw[i]+gap});
+ g+=T(1300,580,'github.com/wan-huiyan/clone-an-imposter',{size:34,wt:700,fill:C.gold,a:'middle',op:p(u,2.4,3.0)});
+ return G(g,cam(L(1.05,1,eio(p(u,0,7.5))),CX,CY))+cap(CAPS.end,u,0.6)}));
+
+renderFrame(0);
+</script></body></html>

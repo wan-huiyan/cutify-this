@@ -149,6 +149,7 @@ fi
 
 echo "== pop-that-readme"
 check "pop: record_gif.py --self-test (cursor path starts, ends on target, stays in view, same seed same path)" "$PY" $POP/examples/record_gif.py --self-test
+check "pop: film kit renders every frame of the worked example in node (render.py --check)" "$PY" $POP/examples/film/render.py $POP/examples/film/film.html --check
 
 echo "== repo consistency"
 check "repo: marketplace.json valid; versions match plugin.json and SKILL.md" "$PY" tests/repo_consistency.py versions
