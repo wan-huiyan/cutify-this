@@ -130,7 +130,7 @@ Every picture here was drawn by the skills' own code, not mocked up. Click one t
 <td><a href="https://github.com/wan-huiyan/no-ask-left-behind"><img src="https://raw.githubusercontent.com/wan-huiyan/no-ask-left-behind/main/docs/promo.gif" alt="One loop, two skills: the client's asks become a checklist, the loop runs until each ask is met, and AI clients score every slide"/></a></td>
 </tr>
 <tr>
-<td><sub><b><a href="https://github.com/wan-huiyan/rewind-that-call">rewind-that-call</a></b>, a kind debrief after a client call, turns the call and the deck's build log into a scrapbook retro, and ends on a cute cheer-up page; sparkle-that-page adds its confetti and floating petals.</sub></td>
+<td><sub><b><a href="https://github.com/wan-huiyan/rewind-that-call">rewind-that-call</a></b>, a kind debrief after a client call, turns the call transcript and the AI's session log into a scrapbook retro, and ends on a cute cheer-up page; sparkle-that-page adds its confetti and floating petals.</sub></td>
 <td><sub><b><a href="https://github.com/wan-huiyan/no-ask-left-behind">no-ask-left-behind</a></b>, two skills that loop until every client ask is answered, explains itself with a short film on its front page.</sub></td>
 </tr>
 </table>
